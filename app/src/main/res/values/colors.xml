@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#FF4E8D</color>
+    <color name="colorPrimaryDark">#FF4E8D</color>
+
+    <color name="mainText">#ffffff</color>
+    <color name="textAlt">#808F97</color>
+    <color name="mainBackground">#323232</color>
+
+    <color name="facebook">#3b5998</color>
+    <color name="twitter">#00acee</color>
+    <color name="rosinha">#FF4E8D</color>
+    <color name="bluecachorro">#5AB0B4</color>
+    <color name="teal_200">#FF03DAC5</color>
+    <color name="teal_700">#FF018786</color>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+</resources>

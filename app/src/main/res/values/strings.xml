@@ -1,0 +1,23 @@
+<resources>
+    <string name="app_name">Miaudota</string>
+    <string name="logo">logo</string>
+    <string name="logar">Login</string>
+    <string name="logarEmail">Login com email</string>
+    <string name="cadastrar">Cadastrar</string>
+    <string name="msgIntro1">Gatineo fazendo arte</string>
+    <string name="msgIntro2">Outra mensagem aqui</string>
+    <string name="floating_google">floating google button</string>
+    <string name="floating_facebook">floating facebook button</string>
+    <string name="floating_twitter">floating twitter button</string>
+    <string name="petTopoDesc">Homem e muher passando a mão nos doguinho</string>
+    <string name="logo_miaudota">logo MiauDota</string>
+    <string name="email">Email</string>
+    <string name="senha">Senha</string>
+    <string name="login">Login</string>
+    <string name="novo_usuario">Novo usuário ?</string>
+    <string name="criar_conta">Criar Conta</string>
+    <string name="gatoTopoDesc">Gato derubando objetos</string>
+    <string name="nome_completo">Nome Completo</string>
+    <string name="numero_do_cpf">Numero do CPF</string>
+    <string name="registrar">Registrar</string>
+</resources>

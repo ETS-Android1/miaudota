@@ -14,22 +14,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Button register = findViewById(R.id.btnRegisterIntro);
-        register.setOnClickListener(this);
-
         Button login = findViewById(R.id.btnLoginIntro);
         login.setOnClickListener(this);
     }
 
 
     public void onClick(View v) {
-        switch (v.getId()){
-            case R.id.btnRegisterIntro:
-                startActivity(new Intent(MainActivity.this, RegisterUser.class));
-                break;
-            case R.id.btnLoginIntro:
-                startActivity(new Intent(MainActivity.this, WelcomeScreen.class));
-                break;
+        if(v.getId() == R.id.btnLoginIntro){
+            startActivity(new Intent(MainActivity.this, WelcomeScreen.class));
         }
     }
 

@@ -90,9 +90,11 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if(task.isSuccessful()){
                     //redirect do corno
+                    progressBar.setVisibility(View.GONE);
                     startActivity(new Intent(Login.this, Profile.class));
                 }
                 else{
+                    progressBar.setVisibility(View.GONE);
                     Toast.makeText(Login.this, "Falha ao logar ! Verifique os dados inseridos.", Toast.LENGTH_LONG).show();
                 }
             }

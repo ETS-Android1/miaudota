@@ -1,0 +1,39 @@
+{
+    "project_info": {
+      "project_number": "175731511537",
+      "project_id": "miaudota-pi",
+      "storage_bucket": "miaudota-pi.appspot.com"
+    },
+    "client": [
+      {
+        "client_info": {
+          "mobilesdk_app_id": "1:175731511537:android:dadd12806c9af0cd7c5950",
+          "android_client_info": {
+            "package_name": "com.paulo.miaudota"
+          }
+        },
+        "oauth_client": [
+          {
+            "client_id": "175731511537-u2dovn18s8aqk9km02jvse09b2kvd6gd.apps.googleusercontent.com",
+            "client_type": 3
+          }
+        ],
+        "api_key": [
+          {
+            "current_key": "AIzaSyCPIzbpicf2bmXMK9P04Zs5tRDW-ddUnaw"
+          }
+        ],
+        "services": {
+          "appinvite_service": {
+            "other_platform_oauth_client": [
+              {
+                "client_id": "175731511537-u2dovn18s8aqk9km02jvse09b2kvd6gd.apps.googleusercontent.com",
+                "client_type": 3
+              }
+            ]
+          }
+        }
+      }
+    ],
+    "configuration_version": "1"
+  }

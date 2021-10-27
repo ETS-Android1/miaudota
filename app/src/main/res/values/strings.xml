@@ -18,6 +18,7 @@
     <string name="criar_conta">Criar Conta</string>
     <string name="gatoTopoDesc">Gato derubando objetos</string>
     <string name="nome_completo">Nome Completo</string>
-    <string name="numero_do_cpf">Numero do CPF</string>
+    <string name="numero_do_cpf">CPF</string>
     <string name="registrar">Registrar</string>
+    <string name="continuar">Continuar</string>
 </resources>

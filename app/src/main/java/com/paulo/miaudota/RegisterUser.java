@@ -119,12 +119,11 @@ public class RegisterUser extends AppCompatActivity implements View.OnClickListe
                                 public void onComplete(@NonNull Task<Void> task) {
                                     if(task.isSuccessful()){
                                         Toast.makeText(RegisterUser.this, "Usuário cadastrado com sucesso !", Toast.LENGTH_LONG).show();
-                                        Log.e("Warning_Activity","caiu no sucess cadastro");
                                         progressBar.setVisibility(View.GONE);
                                         startActivity(new Intent(RegisterUser.this, Login.class));
                                     }else{
                                         Toast.makeText(RegisterUser.this, "Falha ao cadastrar usuário ! Tente novamente !", Toast.LENGTH_LONG).show();
-                                        Log.e("Warning_Activity","caiu no erro cadastro ");
+                                        Log.e("Warning_Activity","Else task.isSucesseful -> Erro ao Registrar");
                                         progressBar.setVisibility(View.GONE);
                                     }
                                 }

@@ -11,7 +11,7 @@
         <entry key="..\:/6-Projetos/Android Studio/Miaudota/app/src/main/res/drawable/ic_launcher_background.xml" value="0.2657407407407407" />
         <entry key="..\:/6-Projetos/Android Studio/Miaudota/app/src/main/res/drawable/view_bg.xml" value="0.21875" />
         <entry key="..\:/6-Projetos/Android Studio/Miaudota/app/src/main/res/layout/activity_login.xml" value="0.25" />
-        <entry key="..\:/6-Projetos/Android Studio/Miaudota/app/src/main/res/layout/activity_main.xml" value="0.25" />
+        <entry key="..\:/6-Projetos/Android Studio/Miaudota/app/src/main/res/layout/activity_main.xml" value="0.5" />
         <entry key="..\:/6-Projetos/Android Studio/Miaudota/app/src/main/res/layout/activity_profile.xml" value="0.25" />
         <entry key="..\:/6-Projetos/Android Studio/Miaudota/app/src/main/res/layout/activity_register_user.xml" value="0.25" />
         <entry key="..\:/6-Projetos/Android Studio/Miaudota/app/src/main/res/layout/activity_welcome_screen.xml" value="0.33" />
@@ -22,6 +22,7 @@
         <entry key="..\:/6-Projetos/Android Studio/Miaudota/app/src/main/res/layout/register_tab.xml" value="0.2869791666666667" />
         <entry key="..\:/6-Projetos/Android Studio/Miaudota/app/src/main/res/layout/register_tab_fragment.xml" value="0.33" />
         <entry key="..\:/6-Projetos/Android Studio/Miaudota/app/src/main/res/layout/register_user.xml" value="0.23385416666666667" />
+        <entry key="..\:/6-Projetos/Android Studio/Miaudota/app/src/main/res/layout/slider_item.xml" value="0.25" />
         <entry key="..\:/6-Projetos/Android Studio/Miaudota/app/src/main/res/layout/welcome_screen.xml" value="0.25" />
         <entry key="..\:/6-Projetos/Android Studio/Miaudota/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.21875" />
       </map>

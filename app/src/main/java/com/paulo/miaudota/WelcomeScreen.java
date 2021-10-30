@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -62,6 +63,7 @@ public class WelcomeScreen extends AppCompatActivity implements View.OnClickList
         switch (v.getId()){
             case R.id.btnRegisterWelcome:
                 startActivity(new Intent(WelcomeScreen.this, RegisterUser.class));
+                android.os.Process.killProcess(android.os.Process.myPid());
                 break;
             case R.id.btnLoginWelcome:
                 startActivity(new Intent(WelcomeScreen.this, Login.class));
@@ -123,5 +125,11 @@ public class WelcomeScreen extends AppCompatActivity implements View.OnClickList
         if(user != null){
             startActivity(new Intent(WelcomeScreen.this, Profile.class));
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        android.os.Process.killProcess(android.os.Process.myPid());
+        System.exit(1);
     }
 }

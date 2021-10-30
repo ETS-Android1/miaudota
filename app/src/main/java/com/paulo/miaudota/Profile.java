@@ -41,7 +41,7 @@ public class Profile extends AppCompatActivity implements View.OnClickListener{
         switch (v.getId()){
             case R.id.btnLogOut:
                 deslogar();
-                startActivity(new Intent(Profile.this, WelcomeScreen.class));
+                System.exit(0);
                 break;
         }
     }
@@ -57,7 +57,8 @@ public class Profile extends AppCompatActivity implements View.OnClickListener{
 
         if(counter == 2){
             deslogar();
-            super.onBackPressed();
+            finish();
+            System.exit(0);
             return;
         }
         else {

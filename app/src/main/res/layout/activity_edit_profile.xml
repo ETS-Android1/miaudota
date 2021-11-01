@@ -13,20 +13,41 @@ tools:context=".EditProfile">
         android:layout_height="128dp"
         android:scaleType="centerCrop"
         android:src="@drawable/profile_placeholder"
+        android:translationZ="10dp"
         app:civ_border_color="@null"
         app:civ_border_width="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintHorizontal_bias="0.505"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.112" />
+        app:layout_constraintVertical_bias="0.092" />
+
+    <ImageButton
+        android:id="@+id/btnProfilePictureEdit"
+        android:layout_width="42dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="86dp"
+        android:background="@drawable/btn_circle_background"
+        android:src="@drawable/ic_edit_picture"
+        android:textColor="@color/mainText"
+        android:textColorHint="@color/mainText"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:translationZ="20dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/profilePictureEdit"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.209"
+        app:layout_constraintWidth_percent=".8" />
 
     <EditText
         android:id="@+id/nomeProfileEdit"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="40dp"
         android:autofillHints="name"
         android:background="@drawable/edit_text_bg"
         android:hint="@string/nome_completo"
@@ -44,31 +65,10 @@ tools:context=".EditProfile">
         app:layout_constraintWidth_percent=".8" />
 
     <EditText
-        android:id="@+id/emailProfileEdit"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="28dp"
-        android:autofillHints="emailAddress"
-        android:background="@drawable/edit_text_bg"
-        android:hint="@string/email"
-        android:inputType="textEmailAddress"
-        android:minHeight="48dp"
-        android:paddingStart="20dp"
-        android:paddingTop="10dp"
-        android:paddingEnd="20dp"
-        android:paddingBottom="10dp"
-        android:textColor="@color/mainText"
-        android:textColorHint="@color/mainText"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/nomeProfileEdit"
-        app:layout_constraintWidth_percent=".8" />
-
-    <EditText
         android:id="@+id/cpfProfileEdit"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="28dp"
+        android:layout_marginTop="24dp"
         android:autofillHints="null"
         android:background="@drawable/edit_text_bg"
         android:hint="@string/numero_do_cpf"
@@ -86,76 +86,10 @@ tools:context=".EditProfile">
         app:layout_constraintWidth_percent=".8" />
 
     <EditText
-        android:id="@+id/cidadeProfileEdit"
-        android:layout_width="230dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="28dp"
-        android:autofillHints="null"
-        android:background="@drawable/edit_text_bg"
-        android:hint="Cidade"
-        android:inputType="text"
-        android:minHeight="48dp"
-        android:paddingStart="20dp"
-        android:paddingTop="10dp"
-        android:paddingEnd="20dp"
-        android:paddingBottom="10dp"
-        android:textColor="@color/mainText"
-        android:textColorHint="@color/mainText"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.226"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cpfProfileEdit"
-        app:layout_constraintWidth_percent=".8" />
-
-    <EditText
-        android:id="@+id/ufProfileEdit"
-        android:layout_width="80dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="28dp"
-        android:layout_marginEnd="40dp"
-        android:autofillHints="null"
-        android:background="@drawable/edit_text_bg"
-        android:hint="UF"
-        android:inputType="text"
-        android:minHeight="48dp"
-        android:paddingStart="20dp"
-        android:paddingTop="10dp"
-        android:paddingEnd="20dp"
-        android:paddingBottom="10dp"
-        android:textColor="@color/mainText"
-        android:textColorHint="@color/mainText"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.95"
-        app:layout_constraintStart_toEndOf="@+id/cidadeProfileEdit"
-        app:layout_constraintTop_toBottomOf="@+id/cpfProfileEdit"
-        app:layout_constraintWidth_percent=".8" />
-
-<!--    <EditText-->
-<!--        android:id="@+id/senhaProfileEdit"-->
-<!--        android:layout_width="0dp"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_marginTop="28dp"-->
-<!--        android:autofillHints="null"-->
-<!--        android:background="@drawable/edit_text_bg"-->
-<!--        android:hint="@string/senha"-->
-<!--        android:inputType="textPassword"-->
-<!--        android:minHeight="48dp"-->
-<!--        android:paddingStart="20dp"-->
-<!--        android:paddingTop="10dp"-->
-<!--        android:paddingEnd="20dp"-->
-<!--        android:paddingBottom="10dp"-->
-<!--        android:textColor="@color/mainText"-->
-<!--        android:textColorHint="@color/mainText"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintTop_toBottomOf="@+id/cidadeProfileEdit"-->
-<!--        app:layout_constraintWidth_percent=".8" />-->
-
-    <EditText
         android:id="@+id/btnDataNascimentoProfileEdit"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="28dp"
+        android:layout_marginTop="24dp"
         android:autofillHints="null"
         android:background="@drawable/edit_text_bg"
         android:clickable="false"
@@ -189,8 +123,74 @@ tools:context=".EditProfile">
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.951"
+        app:layout_constraintTop_toBottomOf="@+id/btnDataNascimentoProfileEdit"
+        app:layout_constraintVertical_bias="0.281"
+        app:layout_constraintWidth_percent=".8" />
+
+    <EditText
+        android:id="@+id/emailProfileEdit"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:autofillHints="emailAddress"
+        android:background="@drawable/edit_text_bg"
+        android:hint="@string/email"
+        android:inputType="textEmailAddress"
+        android:minHeight="48dp"
+        android:paddingStart="20dp"
+        android:paddingTop="10dp"
+        android:paddingEnd="20dp"
+        android:paddingBottom="10dp"
+        android:textColor="@color/mainText"
+        android:textColorHint="@color/mainText"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/nomeProfileEdit"
+        app:layout_constraintWidth_percent=".8" />
+
+    <EditText
+        android:id="@+id/cidadeProfileEdit"
+        android:layout_width="230dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:autofillHints="null"
+        android:background="@drawable/edit_text_bg"
+        android:hint="Cidade"
+        android:inputType="text"
+        android:minHeight="48dp"
+        android:paddingStart="20dp"
+        android:paddingTop="10dp"
+        android:paddingEnd="20dp"
+        android:paddingBottom="10dp"
+        android:textColor="@color/mainText"
+        android:textColorHint="@color/mainText"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.226"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cpfProfileEdit"
+        app:layout_constraintWidth_percent=".8" />
+
+    <EditText
+        android:id="@+id/ufProfileEdit"
+        android:layout_width="80dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="40dp"
+        android:autofillHints="null"
+        android:background="@drawable/edit_text_bg"
+        android:hint="UF"
+        android:inputType="text"
+        android:minHeight="48dp"
+        android:paddingStart="20dp"
+        android:paddingTop="10dp"
+        android:paddingEnd="20dp"
+        android:paddingBottom="10dp"
+        android:textColor="@color/mainText"
+        android:textColorHint="@color/mainText"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.95"
+        app:layout_constraintStart_toEndOf="@+id/cidadeProfileEdit"
+        app:layout_constraintTop_toBottomOf="@+id/cpfProfileEdit"
         app:layout_constraintWidth_percent=".8" />
 
     <ProgressBar

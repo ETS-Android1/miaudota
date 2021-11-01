@@ -7,8 +7,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -23,14 +21,11 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.auth.UserInfo;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-
-import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -123,23 +118,19 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
 
 
     private void loadUser() {
-        Log.e("Warning_Activity","loadUser -> ProfileFragment");
-        //se o usuário for de algum provedor tentar buscar a foto
-        if(user.getProviderId().equals("firebase")){
-            try {
-                profilePicUrl = user.getPhotoUrl().toString();
-                Log.e("Warning_Activity","providerId -> " + user.getProviderId());
-            }
-            catch (Exception ex){
-                Log.e("Warning_Activity","profilePicUrl -> Erro ao buscar foto: " + ex);
-            }
-        }
-
         //Carregar informações do usuário completo
         reference.child(userID).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 User userProfile = snapshot.getValue(User.class);
+
+                try {
+                    profilePicUrl = user.getPhotoUrl().toString();
+                }
+                catch (Exception ex){
+                    Log.e("Warning_Activity","profilePicUrl -> Erro ao buscar foto: " + ex);
+                }
+
                 if(userProfile.Cpf != null){
 
                     String nomeCompleto = userProfile.NomeCompleto;

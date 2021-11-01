@@ -129,6 +129,12 @@ public class RegisterUser extends AppCompatActivity implements View.OnClickListe
             return;
         }
 
+        if(cidade.isEmpty()){
+            editTextCidade.setError("Campo obrigatório !!");
+            editTextCidade.requestFocus();
+            return;
+        }
+
         if(uf.length() > 2){
             editTextUf.setError("A unidade federativa não pode possuir mais que 2 caracteres");
             editTextUf.requestFocus();
@@ -148,6 +154,7 @@ public class RegisterUser extends AppCompatActivity implements View.OnClickListe
         }
 
         if(dataNascimento.equals(dataAtual)){
+            editTextCidade.setError("Campo obrigatório !!");
             editTextDataNascimento.setError("Campo obrigatório !!");
             editTextDataNascimento.requestFocus();
             return;
@@ -207,6 +214,5 @@ public class RegisterUser extends AppCompatActivity implements View.OnClickListe
         if(!dataN.toString().equals(dataAtual)){
             editTextDataNascimento.setText(dataN);
         }
-
     }
 }

@@ -75,6 +75,12 @@ public class WelcomeScreen extends AppCompatActivity implements View.OnClickList
 
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        progressBar.setVisibility(View.INVISIBLE);
+    }
+
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.btnRegisterWelcome:
@@ -116,6 +122,7 @@ public class WelcomeScreen extends AppCompatActivity implements View.OnClickList
                         }
                     }
                 }
+
             });
 
     private void firebaseAuthWithGoogle(String idToken) {
@@ -138,6 +145,7 @@ public class WelcomeScreen extends AppCompatActivity implements View.OnClickList
                             Log.w("googleSignInFail", "signInWithCredential:failure", task.getException());
                         }
                     }
+
                 });
     }
 

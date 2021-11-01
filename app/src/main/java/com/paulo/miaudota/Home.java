@@ -14,7 +14,9 @@ import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 import com.google.firebase.auth.FirebaseAuth;
@@ -30,8 +32,16 @@ public class Home extends AppCompatActivity implements View.OnClickListener{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
+        // Configure Google Sign In
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken("175731511537-u2dovn18s8aqk9km02jvse09b2kvd6gd.apps.googleusercontent.com")
+                .requestEmail()
+                .build();
+
         mAuth = FirebaseAuth.getInstance();
         user = mAuth.getCurrentUser();
+        mGoogleSignInClient = GoogleSignIn.getClient(Home.this, gso);
+
         if (user == null) {
             Log.e("Warning_Activity","onCreate EditProfile userNull-> ");
             startActivity(new Intent(Home.this, WelcomeScreen.class));

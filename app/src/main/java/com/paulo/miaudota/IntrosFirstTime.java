@@ -123,7 +123,7 @@ public class IntrosFirstTime extends AppCompatActivity implements View.OnClickLi
 
         private void updateUI(FirebaseUser user) {
             if(user != null){
-                startActivity(new Intent(IntrosFirstTime.this, Profile.class));
+                startActivity(new Intent(IntrosFirstTime.this, HomeFragment.class));
             }
         }
 

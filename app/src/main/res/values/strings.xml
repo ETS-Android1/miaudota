@@ -21,4 +21,5 @@
     <string name="numero_do_cpf">CPF</string>
     <string name="registrar">Registrar</string>
     <string name="continuar">Continuar</string>
+    <string name="proximo">Próximo</string>
 </resources>

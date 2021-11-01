@@ -3,34 +3,36 @@ package com.paulo.miaudota;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.Button;
+import android.util.Log;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+
+public class MainActivity extends AppCompatActivity {
+
+    private SharedPreferences prefs;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Button register = findViewById(R.id.btnRegisterIntro);
-        register.setOnClickListener(this);
+        prefs = getSharedPreferences("com.opet.miaudota", MODE_PRIVATE);
+        if (prefs.getBoolean("firstrun", true)) {
+            prefs.edit().putBoolean("firstrun", false).apply();
+            startActivity(new Intent(MainActivity.this, IntrosFirstTime.class));
+        }
+        else{
+            startActivity(new Intent(MainActivity.this, WelcomeScreen.class));
+        }
+        Log.i("main", "onCreate fired");
 
-        Button login = findViewById(R.id.btnLoginIntro);
-        login.setOnClickListener(this);
     }
 
-
-    public void onClick(View v) {
-        switch (v.getId()){
-            case R.id.btnRegisterIntro:
-                startActivity(new Intent(MainActivity.this, RegisterUser.class));
-                break;
-            case R.id.btnLoginIntro:
-                startActivity(new Intent(MainActivity.this, WelcomeScreen.class));
-                break;
-        }
+    @Override
+    protected void onResume(){
+        super.onResume();
+        super.onBackPressed();
     }
 
 }

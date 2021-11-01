@@ -10,7 +10,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Miaudota">
         <activity
-            android:name=".Profile"
+            android:name=".EditProfile"
+            android:exported="false" />
+        <activity
+            android:name=".Home"
             android:exported="false" />
         <activity
             android:name=".Login"
@@ -20,6 +23,9 @@
             android:exported="false" />
         <activity
             android:name=".RegisterUser"
+            android:exported="false" />
+        <activity
+            android:name=".IntrosFirstTime"
             android:exported="false" />
         <activity
             android:name=".MainActivity"

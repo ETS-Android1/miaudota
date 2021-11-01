@@ -1,33 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/mainBackground"
-    tools:context=".RegisterUser">
+xmlns:app="http://schemas.android.com/apk/res-auto"
+xmlns:tools="http://schemas.android.com/tools"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+android:background="@color/mainBackground"
+tools:context=".EditProfile">
 
-    <ImageView
-        android:id="@+id/logoRegister"
-        android:layout_width="172dp"
-        android:layout_height="197dp"
-        android:clickable="true"
-        android:contentDescription="@string/logo_miaudota"
-        android:focusable="true"
-        android:src="@drawable/miaudota"
-        android:textColor="@color/mainText"
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/profilePictureEdit"
+        android:layout_width="128dp"
+        android:layout_height="128dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/profile_placeholder"
+        app:civ_border_color="@null"
+        app:civ_border_width="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintVertical_bias="0.112" />
 
     <EditText
-        android:id="@+id/nomeCadastro"
+        android:id="@+id/nomeProfileEdit"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
+        android:layout_marginTop="32dp"
         android:autofillHints="name"
         android:background="@drawable/edit_text_bg"
         android:hint="@string/nome_completo"
@@ -41,11 +40,11 @@
         android:textColorHint="@color/mainText"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/logoRegister"
+        app:layout_constraintTop_toBottomOf="@+id/profilePictureEdit"
         app:layout_constraintWidth_percent=".8" />
 
     <EditText
-        android:id="@+id/emailCadastro"
+        android:id="@+id/emailProfileEdit"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="28dp"
@@ -62,11 +61,11 @@
         android:textColorHint="@color/mainText"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/nomeCadastro"
+        app:layout_constraintTop_toBottomOf="@+id/nomeProfileEdit"
         app:layout_constraintWidth_percent=".8" />
 
     <EditText
-        android:id="@+id/cpfCadastro"
+        android:id="@+id/cpfProfileEdit"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="28dp"
@@ -83,11 +82,11 @@
         android:textColorHint="@color/mainText"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/emailCadastro"
+        app:layout_constraintTop_toBottomOf="@+id/emailProfileEdit"
         app:layout_constraintWidth_percent=".8" />
 
     <EditText
-        android:id="@+id/btnCidade"
+        android:id="@+id/cidadeProfileEdit"
         android:layout_width="230dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="28dp"
@@ -105,11 +104,11 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.226"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cpfCadastro"
+        app:layout_constraintTop_toBottomOf="@+id/cpfProfileEdit"
         app:layout_constraintWidth_percent=".8" />
 
     <EditText
-        android:id="@+id/btnUf"
+        android:id="@+id/ufProfileEdit"
         android:layout_width="80dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="28dp"
@@ -127,33 +126,33 @@
         android:textColorHint="@color/mainText"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.95"
-        app:layout_constraintStart_toEndOf="@+id/btnCidade"
-        app:layout_constraintTop_toBottomOf="@+id/cpfCadastro"
+        app:layout_constraintStart_toEndOf="@+id/cidadeProfileEdit"
+        app:layout_constraintTop_toBottomOf="@+id/cpfProfileEdit"
         app:layout_constraintWidth_percent=".8" />
 
-    <EditText
-        android:id="@+id/senhaCadastro"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="28dp"
-        android:autofillHints="null"
-        android:background="@drawable/edit_text_bg"
-        android:hint="@string/senha"
-        android:inputType="textPassword"
-        android:minHeight="48dp"
-        android:paddingStart="20dp"
-        android:paddingTop="10dp"
-        android:paddingEnd="20dp"
-        android:paddingBottom="10dp"
-        android:textColor="@color/mainText"
-        android:textColorHint="@color/mainText"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnCidade"
-        app:layout_constraintWidth_percent=".8" />
+<!--    <EditText-->
+<!--        android:id="@+id/senhaProfileEdit"-->
+<!--        android:layout_width="0dp"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginTop="28dp"-->
+<!--        android:autofillHints="null"-->
+<!--        android:background="@drawable/edit_text_bg"-->
+<!--        android:hint="@string/senha"-->
+<!--        android:inputType="textPassword"-->
+<!--        android:minHeight="48dp"-->
+<!--        android:paddingStart="20dp"-->
+<!--        android:paddingTop="10dp"-->
+<!--        android:paddingEnd="20dp"-->
+<!--        android:paddingBottom="10dp"-->
+<!--        android:textColor="@color/mainText"-->
+<!--        android:textColorHint="@color/mainText"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/cidadeProfileEdit"-->
+<!--        app:layout_constraintWidth_percent=".8" />-->
 
     <EditText
-        android:id="@+id/btnDataNascimento"
+        android:id="@+id/btnDataNascimentoProfileEdit"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="28dp"
@@ -174,15 +173,15 @@
         android:textColorHint="@color/mainText"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/senhaCadastro"
+        app:layout_constraintTop_toBottomOf="@+id/ufProfileEdit"
         app:layout_constraintWidth_percent=".8" />
 
     <Button
-        android:id="@+id/btnRegister"
+        android:id="@+id/btnUpdate"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:background="@drawable/button_bg"
-        android:text="@string/registrar"
+        android:text="Atualizar"
         android:textColor="@color/mainText"
         android:textColorHint="@color/mainText"
         android:textSize="16sp"
@@ -191,11 +190,11 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.961"
+        app:layout_constraintVertical_bias="0.951"
         app:layout_constraintWidth_percent=".8" />
 
     <ProgressBar
-        android:id="@+id/progressBarRegister"
+        android:id="@+id/progressBarProfileEdit"
         style="?android:attr/progressBarStyleLarge"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

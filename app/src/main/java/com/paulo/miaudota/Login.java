@@ -9,10 +9,12 @@ import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -39,7 +41,6 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
 
         editTextEmail = findViewById(R.id.emailLogin);
         editTextPassword = findViewById(R.id.senhaLogin);
-
         progressBar = findViewById(R.id.progressBarLoginEmail);
     }
 
@@ -90,9 +91,12 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if(task.isSuccessful()){
                     //redirect do corno
-                    startActivity(new Intent(Login.this, Profile.class));
+                    progressBar.setVisibility(View.GONE);
+                    startActivity(new Intent(Login.this, Home.class));
+                    Login.this.finish();
                 }
                 else{
+                    progressBar.setVisibility(View.GONE);
                     Toast.makeText(Login.this, "Falha ao logar ! Verifique os dados inseridos.", Toast.LENGTH_LONG).show();
                 }
             }

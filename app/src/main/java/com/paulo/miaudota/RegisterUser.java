@@ -63,16 +63,11 @@ public class RegisterUser extends AppCompatActivity implements View.OnClickListe
         editTextPassword = findViewById(R.id.senhaCadastro);
         progressBar = findViewById(R.id.progressBarRegister);
 
-        date = new DatePickerDialog.OnDateSetListener() {
-            @Override
-            public void onDateSet(DatePicker view, int year, int monthOfYear,
-                                  int dayOfMonth) {
-                myCalendar.set(Calendar.YEAR, year);
-                myCalendar.set(Calendar.MONTH, monthOfYear);
-                myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-                updateLabel();
-            }
-
+        date = (view, year, monthOfYear, dayOfMonth) -> {
+            myCalendar.set(Calendar.YEAR, year);
+            myCalendar.set(Calendar.MONTH, monthOfYear);
+            myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+            updateLabel();
         };
     }
 
@@ -154,7 +149,7 @@ public class RegisterUser extends AppCompatActivity implements View.OnClickListe
         }
 
         if(dataNascimento.equals(dataAtual)){
-            editTextCidade.setError("Campo obrigatório !!");
+            Toast.makeText(RegisterUser.this,"Você não nasceu hoje porra",Toast.LENGTH_LONG).show();
             editTextDataNascimento.setError("Campo obrigatório !!");
             editTextDataNascimento.requestFocus();
             return;

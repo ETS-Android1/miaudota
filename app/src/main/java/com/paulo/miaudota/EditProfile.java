@@ -10,21 +10,22 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
@@ -33,9 +34,14 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -47,7 +53,6 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class EditProfile extends AppCompatActivity implements View.OnClickListener  {
 
     private EditText editTextFullName,editTextCPF,editTextEmail,editTextCidade,editTextUf,editTextDataNascimento;
-    private ImageButton updateProfilePicture;
     private CircleImageView profilePicture;
     private ProgressBar progressBar;
     private String userID;
@@ -56,6 +61,7 @@ public class EditProfile extends AppCompatActivity implements View.OnClickListen
     private String dataAtual;
     final Calendar myCalendar = Calendar.getInstance();
     private Uri cropImageUri;
+    private Bitmap bitmap = null;
     DatePickerDialog.OnDateSetListener date;
 
     private FirebaseAuth mAuth;
@@ -86,7 +92,7 @@ public class EditProfile extends AppCompatActivity implements View.OnClickListen
         reference = FirebaseDatabase.getInstance().getReference("Users");
         userID = user.getUid();
         profilePicture =  findViewById(R.id.profilePictureEdit);
-        cropImageUri= user.getPhotoUrl();
+        cropImageUri = user.getPhotoUrl();
         editTextFullName = findViewById(R.id.nomeProfileEdit);
         editTextCPF = findViewById(R.id.cpfProfileEdit);
         editTextEmail = findViewById(R.id.emailProfileEdit);
@@ -105,20 +111,15 @@ public class EditProfile extends AppCompatActivity implements View.OnClickListen
         Button updateProfile = findViewById(R.id.btnUpdate);
         updateProfile.setOnClickListener(this);
 
-        updateProfilePicture = findViewById(R.id.btnProfilePictureEdit);
+        ImageButton updateProfilePicture = findViewById(R.id.btnProfilePictureEdit);
         updateProfilePicture.setOnClickListener(this);
         profilePicture.setOnClickListener(this);
 
-        date = new DatePickerDialog.OnDateSetListener() {
-            @Override
-            public void onDateSet(DatePicker view, int year, int monthOfYear,
-                                  int dayOfMonth) {
-                myCalendar.set(Calendar.YEAR, year);
-                myCalendar.set(Calendar.MONTH, monthOfYear);
-                myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-                updateLabel();
-            }
-
+        date = (view, year, monthOfYear, dayOfMonth) -> {
+            myCalendar.set(Calendar.YEAR, year);
+            myCalendar.set(Calendar.MONTH, monthOfYear);
+            myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+            updateLabel();
         };
 
         //Carregar informações do usuário completo
@@ -127,8 +128,8 @@ public class EditProfile extends AppCompatActivity implements View.OnClickListen
             public void onDataChange(@NonNull DataSnapshot snapshot) {
 
                 User userProfile = snapshot.getValue(User.class);
-                String nomeCompleto = "";
-                String email = "";
+                String nomeCompleto;
+                String email;
 
                 try {
                     profilePicUrl = user.getPhotoUrl().toString();
@@ -212,8 +213,6 @@ public class EditProfile extends AppCompatActivity implements View.OnClickListen
                         myCalendar.get(Calendar.DAY_OF_MONTH)).show();
                 break;
             case R.id.btnProfilePictureEdit:
-                updateProfilePicture();
-                break;
             case R.id.profilePictureEdit:
                 updateProfilePicture();
                 break;
@@ -226,6 +225,7 @@ public class EditProfile extends AppCompatActivity implements View.OnClickListen
                 @Override
                 public void onActivityResult(ActivityResult result) {
                     if (result.getResultCode() == Activity.RESULT_OK) {
+
                         Intent data = result.getData();
                         cropImageUri = data.getData();
 
@@ -253,14 +253,22 @@ public class EditProfile extends AppCompatActivity implements View.OnClickListen
             CropImage.ActivityResult result = CropImage.getActivityResult(data);
             if (resultCode == RESULT_OK) {
                 cropImageUri = result.getUri();
+                try {
+                    InputStream inputStream = getContentResolver().openInputStream(cropImageUri);
+                    bitmap = BitmapFactory.decodeStream(inputStream);
+                }
+                catch (Exception ex){
+                    Log.e("TAG","falhou bitmap: ", ex);
+                }
                 Glide.with(EditProfile.this)
-                        .load(cropImageUri) // image url
+                        .load(cropImageUri.toString()) // image url
                         .placeholder(R.drawable.profile_placeholder) // any placeholder to load at start
                         .error(R.drawable.profile_placeholder)  // any image in case of error
                         .override(200, 200) // resizing
                         .centerCrop()
                         .into(profilePicture);  // imageview object
-            } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
+            }
+            else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
                 Exception error = result.getError();
                 Log.e("Warning_Activity","profilePicUrl -> Erro ao cortar foto: " + error);
                 Glide.with(EditProfile.this)
@@ -329,27 +337,58 @@ public class EditProfile extends AppCompatActivity implements View.OnClickListen
             return;
         }
 
+        progressBar.setVisibility(View.VISIBLE);
+
         User usuario = new User(nomeCompleto, cpf , email, cidade, uf, dataNascimento);
         reference.child(userID).setValue(usuario);
+        if(bitmap != null){
+            handleUpload(bitmap);
+        }
+        else{
+            Intent intent = new Intent(EditProfile.this,ProfileFragment.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP); finish();
+            Toast.makeText(EditProfile.this,"Perfil atualizado com sucesso !!",Toast.LENGTH_LONG).show();
+        }
+    }
 
-        UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
-                .setPhotoUri(cropImageUri)
+    private void handleUpload(Bitmap bitmap) {
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+
+        StorageReference ref = FirebaseStorage.getInstance().getReference()
+                .child("profileImages")
+                .child(userID + ".jpeg");
+
+        ref.putBytes(baos.toByteArray())
+                .addOnSuccessListener(taskSnapshot -> getDownloadUrl(ref))
+                .addOnFailureListener(e -> Log.e("TAG","onFailure: ", e.getCause() ));
+    }
+
+    private void getDownloadUrl(StorageReference sReference){
+        sReference.getDownloadUrl()
+                .addOnSuccessListener(uri -> {
+                    Log.e("TAG","onSuccess: " + uri );
+                    setUserProfileUrl(uri);
+                });
+    }
+
+    private void setUserProfileUrl(Uri uri){
+        UserProfileChangeRequest request = new UserProfileChangeRequest.Builder()
+                .setPhotoUri(uri)
                 .build();
 
-        user.updateProfile(profileUpdates)
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if (task.isSuccessful()) {
-                            Log.d("Profile_Photo", "User profile updated.");
-                            progressBar.setVisibility(View.INVISIBLE);
-                            Intent intent = new Intent(EditProfile.this,ProfileFragment.class);
-                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP); finish();
-                        }
-                    }
+        user.updateProfile(request)
+                .addOnSuccessListener(unused -> {
+                    Log.d("Profile_Photo", "User profile updated.");
+                    Intent intent = new Intent(EditProfile.this,ProfileFragment.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP); finish();
+                    Toast.makeText(EditProfile.this,"Perfil atualizado com sucesso !!",Toast.LENGTH_LONG).show();
+                })
+                .addOnFailureListener(e -> {
+                    Log.e("TAG","onFailure: ", e.getCause() );
+                    Toast.makeText(EditProfile.this,"Falha ao enviar imagem do perfil...",Toast.LENGTH_LONG).show();
                 });
-
-
     }
 
     private void validateCPF() {

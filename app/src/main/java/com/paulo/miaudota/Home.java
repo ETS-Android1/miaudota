@@ -62,20 +62,38 @@ public class Home extends AppCompatActivity implements View.OnClickListener{
                 @Override
                 public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                     Fragment selectedFrament = null;
+                    Fragment currentFragment = Home.this.getSupportFragmentManager().findFragmentById(R.id.fragment_container);
+                    int contador=  0;
 
                     switch (item.getItemId()){
                         case R.id.nav_home:
+                            if (currentFragment instanceof HomeFragment) {
+                                contador = 1;
+                                Log.v("tag", "Corno clicando várias vezes na Home");
+                                break;
+                            }
                             selectedFrament = new HomeFragment();
                             break;
                         case R.id.nav_message:
+                            if (currentFragment instanceof MessageFragment) {
+                                contador = 1;
+                                Log.v("tag", "Corno clicando várias vezes na Message");
+                                break;
+                            }
                             selectedFrament = new MessageFragment();
                             break;
                         case R.id.nav_profile:
+                            if (currentFragment instanceof ProfileFragment) {
+                                contador = 1;
+                                Log.v("tag", "Corno clicando várias vezes no Perfil");
+                                break;
+                            }
                             selectedFrament = new ProfileFragment();
                             break;
                     }
-
-                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, selectedFrament).commit();
+                    if(contador == 0){
+                        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, selectedFrament).commit();
+                    }
 
                     return true;
 
@@ -106,7 +124,6 @@ public class Home extends AppCompatActivity implements View.OnClickListener{
             deslogar();
             finish();
             System.exit(1);
-            return;
         }
         else {
             Toast.makeText(getBaseContext(), "Pressione novamente para sair.", Toast.LENGTH_LONG).show();

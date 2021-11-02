@@ -21,6 +21,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserInfo;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -73,8 +74,6 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
         TextDataNascimento = view.findViewById(R.id.dataNascimentoProfile);
         progressBar = view.findViewById(R.id.progressBarProfile);
 
-        progressBar.setVisibility(View.VISIBLE);
-
         if (user == null) {
             Log.e("Warning_Activity","onCreate EditProfile userNull-> ");
             startActivity(new Intent(getActivity(), WelcomeScreen.class));
@@ -87,6 +86,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
 
     @Override
     public void onStart() {
+        progressBar.setVisibility(View.VISIBLE);
         mAuth = FirebaseAuth.getInstance();
         user = mAuth.getCurrentUser();
         Log.e("Warning_Activity","onStart -> ProfileFragment");
@@ -101,6 +101,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
         Log.e("Warning_Activity","onResume -> ProfileFragment");
         super.onResume();
         loadUser();
+        progressBar.setVisibility(View.INVISIBLE);
     }
 
     @Override
@@ -116,9 +117,9 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
         }
     }
 
-
     private void loadUser() {
         //Carregar informações do usuário completo
+        progressBar.setVisibility(View.VISIBLE);
         reference.child(userID).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -153,13 +154,13 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
                             .centerCrop()
                             .into(profilePicture);  // imageview object
 
-                    progressBar.setVisibility(View.INVISIBLE);
+                    //progressBar.setVisibility(View.INVISIBLE);
                 }
                 else{
                     Toast.makeText(getActivity(),"Você precisa finalizar seu cadastro !",Toast.LENGTH_LONG).show();
                     Log.e("Warning_Activity","");
                     redireUserToEditProfile();
-                    progressBar.setVisibility(View.INVISIBLE);
+                    //progressBar.setVisibility(View.INVISIBLE);
                 }
             }
 
@@ -178,7 +179,6 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
     private void deslogar(){
         mAuth.signOut();
         mGoogleSignInClient.signOut();
-        //startActivity(new Intent(getActivity(), WelcomeScreen.class));
     }
 
 }

@@ -95,7 +95,7 @@ public class RegisterUser extends AppCompatActivity implements View.OnClickListe
         String cpf = editTextCPF.getText().toString().trim();
         String senha = editTextPassword.getText().toString().trim();
         String cidade = editTextCidade.getText().toString().trim();
-        String uf = editTextUf.getText().toString().trim();
+        String uf = editTextUf.getText().toString().toUpperCase(Locale.ROOT).trim();
         String dataNascimento = dataN.toString().trim();
 
         if(nomeCompleto.isEmpty()){

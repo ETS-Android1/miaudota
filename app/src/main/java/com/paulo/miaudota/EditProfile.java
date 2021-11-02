@@ -289,7 +289,7 @@ public class EditProfile extends AppCompatActivity implements View.OnClickListen
         String nomeCompleto = editTextFullName.getText().toString().trim();
         String cpf = editTextCPF.getText().toString().trim();
         String cidade = editTextCidade.getText().toString().trim();
-        String uf = editTextUf.getText().toString().trim();
+        String uf = editTextUf.getText().toString().toUpperCase(Locale.ROOT).trim();
         String dataNascimento = dataN.toString().trim();
 
         if(nomeCompleto.isEmpty()){

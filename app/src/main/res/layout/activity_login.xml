@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/mainBackground"
-    tools:context=".Login">
+    tools:context=".Controllers.Login">
 
     <ImageView
         android:id="@+id/logoLogin"
@@ -80,15 +80,16 @@
         app:layout_constraintWidth_percent=".8" />
 
     <TextView
-        android:id="@+id/forgetPassword"
-        android:layout_width="150dp"
+        android:id="@+id/novoUsuario"
+        android:layout_width="120dp"
         android:layout_height="wrap_content"
         android:text="@string/novo_usuario"
+        android:textAlignment="center"
         android:textColor="@color/mainText"
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.379"
+        app:layout_constraintHorizontal_bias="0.316"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btnLogin"
         app:layout_constraintVertical_bias="0.251"
@@ -99,12 +100,13 @@
         android:layout_width="100dp"
         android:layout_height="wrap_content"
         android:text="@string/criar_conta"
+        android:textAlignment="center"
         android:textColor="@color/rosinha"
         android:textSize="16sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.684"
+        app:layout_constraintHorizontal_bias="0.681"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btnLogin"
         app:layout_constraintVertical_bias="0.251" />

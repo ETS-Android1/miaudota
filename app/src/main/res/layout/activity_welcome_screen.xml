@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/mainBackground"
-    tools:context=".WelcomeScreen">
+    tools:context=".Controllers.WelcomeScreen">
 
     <ImageView
         android:layout_width="211dp"
@@ -18,6 +18,22 @@
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <ProgressBar
+        android:id="@+id/progressBarWelcome"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="MissingConstraints"
+        android:indeterminate="true"
+        android:indeterminateTintMode="src_atop"
+        android:indeterminateTint="@color/bluecachorro"
+        android:translationZ="5dp"
+        android:visibility="gone"/>
 
     <Button
         android:id="@+id/btnLoginWelcome"
@@ -98,20 +114,5 @@
         app:layout_constraintTop_toBottomOf="@+id/btnRegisterWelcome"
         app:tint="@null"
         android:contentDescription="@string/floating_twitter" />
-
-    <ProgressBar
-        android:id="@+id/progressBarWelcome"
-        style="?android:attr/progressBarStyleLarge"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="MissingConstraints"
-        android:indeterminate="true"
-        android:indeterminateTintMode="src_atop"
-        android:indeterminateTint="@color/bluecachorro"
-        android:visibility="gone"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

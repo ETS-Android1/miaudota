@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="180dp"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:layout_marginRight="5dp"
+    android:layout_marginLeft="5dp"
+    android:layout_marginTop="5dp"
+    android:layout_marginBottom="5dp"
+    android:backgroundTint="@color/lighterBackground"
+    app:cardCornerRadius="8dp"
+    app:cardElevation="3dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="180dp"
+        android:layout_height="200dp"
+        android:layout_marginBottom="5dp"
+        android:background="@color/lighterBackground">
+
+        <ImageView
+            android:id="@+id/imagemPetHome"
+            android:layout_width="match_parent"
+            android:layout_height="135dp"
+            android:scaleType="centerCrop"
+            app:layout_constraintBottom_toTopOf="@+id/nomePetHome"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/generoHome"
+            android:layout_width="26dp"
+            android:layout_height="34dp"
+            android:layout_below="@id/imagemPetHome"
+            android:layout_marginTop="2dp"
+            android:layout_marginEnd="5dp"
+            android:gravity="center"
+            android:padding="4dp"
+            android:src="@drawable/ic_home_pet"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toEndOf="@+id/nomePetHome"
+            app:layout_constraintTop_toBottomOf="@+id/imagemPetHome"
+            app:layout_constraintVertical_bias="0.0" />
+
+        <TextView
+            android:id="@+id/nomePetHome"
+            android:layout_width="140dp"
+            android:layout_height="40dp"
+            android:layout_below="@id/imagemPetHome"
+            android:layout_marginStart="5dp"
+            android:gravity="start"
+            android:text="Nome do Pet"
+            android:textColor="@color/white"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@+id/cidadeUfHome"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/imagemPetHome" />
+
+        <TextView
+            android:id="@+id/cidadeUfHome"
+            android:layout_width="115dp"
+            android:layout_height="25dp"
+            android:layout_marginStart="5dp"
+            android:layout_marginEnd="2dp"
+            android:text="Cidade/UF"
+            android:textAlignment="viewStart"
+            android:textColor="@color/white"
+            android:textSize="13sp"
+            android:textStyle="bold"
+            android:gravity="start"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/idadeAnosHome"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/nomePetHome" />
+
+        <TextView
+            android:id="@+id/idadeAnosHome"
+            android:layout_width="50dp"
+            android:layout_height="25dp"
+            android:layout_marginStart="4dp"
+            android:layout_marginEnd="5dp"
+            android:text="4 anos"
+            android:textAlignment="viewStart"
+            android:textColor="@color/white"
+            android:textSize="13sp"
+            android:textStyle="bold"
+            android:gravity="start"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toEndOf="@+id/cidadeUfHome"
+            app:layout_constraintTop_toBottomOf="@+id/nomePetHome" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.cardview.widget.CardView>

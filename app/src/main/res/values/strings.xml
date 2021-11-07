@@ -22,4 +22,32 @@
     <string name="registrar">Registrar</string>
     <string name="continuar">Continuar</string>
     <string name="proximo">Próximo</string>
+
+    <string-array name="pets_types">
+        <item>Tipo</item>
+        <item>Gato(a)</item>
+        <item>Cachorro(a)</item>
+        <item>Aves</item>
+        <item>Roedores</item>
+        <item>Outros</item>
+    </string-array>
+
+    <string-array name="pets_gender">
+        <item>Gênero</item>
+        <item>Feminino</item>
+        <item>Masculino</item>
+    </string-array>
+
+    <string-array name="pets_sizes">
+        <item>Tamanho</item>
+        <item>Pequeno-porte</item>
+        <item>Médio-porte</item>
+        <item>Médio-grande-porte</item>
+        <item>Grande-porte</item>
+    </string-array>
+
+    <style name="SpinnerTheme" parent="Theme.AppCompat.Light">
+        <item name="android:colorBackground">@color/white</item>
+    </style>
+
 </resources>

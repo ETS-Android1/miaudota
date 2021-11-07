@@ -1,4 +1,4 @@
-package com.paulo.miaudota;
+package com.paulo.miaudota.Controllers;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
+
+import com.paulo.miaudota.R;
 
 
 public class MainActivity extends AppCompatActivity {

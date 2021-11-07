@@ -1,4 +1,4 @@
-package com.paulo.miaudota;
+package com.paulo.miaudota.Controllers;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -15,6 +15,8 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.paulo.miaudota.R;
+import com.paulo.miaudota.SliderAdapter;
 
 public class IntrosFirstTime extends AppCompatActivity implements View.OnClickListener {
 

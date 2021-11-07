@@ -1,4 +1,4 @@
-package com.paulo.miaudota;
+package com.paulo.miaudota.Controllers;
 
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
@@ -24,8 +24,6 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
@@ -36,7 +34,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
+import com.paulo.miaudota.R;
+import com.paulo.miaudota.Models.User;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 
@@ -100,7 +99,7 @@ public class EditProfile extends AppCompatActivity implements View.OnClickListen
         editTextUf = findViewById(R.id.ufProfileEdit);
         editTextDataNascimento = findViewById(R.id.btnDataNascimentoProfileEdit);
         editTextDataNascimento.setOnClickListener(this);
-        progressBar = findViewById(R.id.progressBarProfileEdit);
+        progressBar = findViewById(R.id.progressBarPRofileEdit);
         progressBar.setVisibility(View.VISIBLE);
 
         if (user == null) {
@@ -219,7 +218,7 @@ public class EditProfile extends AppCompatActivity implements View.OnClickListen
         }
     }
 
-    ActivityResultLauncher<Intent> someActivityResultLauncher = registerForActivityResult(
+    ActivityResultLauncher<Intent> profilePicActivityResultLauncher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
             new ActivityResultCallback<ActivityResult>() {
                 @Override
@@ -243,7 +242,7 @@ public class EditProfile extends AppCompatActivity implements View.OnClickListen
         Intent openGalleryIntent = new Intent();
         openGalleryIntent.setType("image/*");
         openGalleryIntent.setAction(Intent.ACTION_GET_CONTENT);
-        someActivityResultLauncher.launch(openGalleryIntent);
+        profilePicActivityResultLauncher.launch(openGalleryIntent);
     }
 
     @Override

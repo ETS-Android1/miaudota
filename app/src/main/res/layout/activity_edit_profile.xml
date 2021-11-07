@@ -5,7 +5,7 @@ xmlns:tools="http://schemas.android.com/tools"
 android:layout_width="match_parent"
 android:layout_height="match_parent"
 android:background="@color/mainBackground"
-tools:context=".EditProfile">
+tools:context=".Controllers.EditProfile">
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/profilePictureEdit"
@@ -194,7 +194,7 @@ tools:context=".EditProfile">
         app:layout_constraintWidth_percent=".8" />
 
     <ProgressBar
-        android:id="@+id/progressBarProfileEdit"
+        android:id="@+id/progressBarPRofileEdit"
         style="?android:attr/progressBarStyleLarge"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

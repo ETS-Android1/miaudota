@@ -1,7 +1,6 @@
-package com.paulo.miaudota;
+package com.paulo.miaudota.Controllers;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
@@ -10,17 +9,15 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
-import android.widget.FrameLayout;
 import android.widget.Toast;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.android.material.navigation.NavigationBarView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.paulo.miaudota.R;
 
 public class Home extends AppCompatActivity implements View.OnClickListener{
 
@@ -74,13 +71,13 @@ public class Home extends AppCompatActivity implements View.OnClickListener{
                             }
                             selectedFrament = new HomeFragment();
                             break;
-                        case R.id.nav_message:
-                            if (currentFragment instanceof MessageFragment) {
+                        case R.id.nav_addPet:
+                            if (currentFragment instanceof AddPetFragment) {
                                 contador = 1;
                                 Log.v("tag", "Corno clicando várias vezes na Message");
                                 break;
                             }
-                            selectedFrament = new MessageFragment();
+                            selectedFrament = new AddPetFragment();
                             break;
                         case R.id.nav_profile:
                             if (currentFragment instanceof ProfileFragment) {
@@ -89,6 +86,14 @@ public class Home extends AppCompatActivity implements View.OnClickListener{
                                 break;
                             }
                             selectedFrament = new ProfileFragment();
+                            break;
+                        case R.id.nav_meusPets:
+                            if (currentFragment instanceof MyPetsFragment) {
+                                contador = 1;
+                                Log.v("tag", "Corno clicando várias vezes no Perfil");
+                                break;
+                            }
+                            selectedFrament = new MyPetsFragment();
                             break;
                     }
                     if(contador == 0){
@@ -115,19 +120,19 @@ public class Home extends AppCompatActivity implements View.OnClickListener{
         mGoogleSignInClient.signOut();
     }
 
-    @Override
-    public void onBackPressed(){
-        Log.e("Warning_Activity","onBackPressed Home");
-        counter++;
-
-        if(counter == 2){
-            deslogar();
-            finish();
-            System.exit(1);
-        }
-        else {
-            Toast.makeText(getBaseContext(), "Pressione novamente para sair.", Toast.LENGTH_LONG).show();
-        }
-    }
+//    @Override
+//    public void onBackPressed(){
+//        Log.e("Warning_Activity","onBackPressed Home");
+//        counter++;
+//
+//        if(counter == 2){
+//            deslogar();
+//            finish();
+//            System.exit(1);
+//        }
+//        else {
+//            Toast.makeText(getBaseContext(), "Pressione novamente para sair.", Toast.LENGTH_LONG).show();
+//        }
+//    }
 
 }

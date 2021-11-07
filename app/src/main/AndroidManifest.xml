@@ -2,8 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.paulo.miaudota">
 
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.INTERNET"/>
 
     <application
         android:allowBackup="true"
@@ -13,27 +14,31 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Miaudota">
         <activity
-            android:name=".EditProfile"
+            android:name=".Controllers.PetDetails"
             android:exported="false" />
         <activity
-            android:name=".Home"
+            android:name=".Controllers.EditProfile"
             android:exported="false" />
         <activity
-            android:name=".Login"
+            android:name=".Controllers.Home"
             android:exported="false" />
         <activity
-            android:name=".WelcomeScreen"
+            android:name=".Controllers.Login"
             android:exported="false" />
         <activity
-            android:name=".RegisterUser"
+            android:name=".Controllers.WelcomeScreen"
             android:exported="false" />
         <activity
-            android:name=".IntrosFirstTime"
+            android:name=".Controllers.RegisterUser"
             android:exported="false" />
-        <activity android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
-            android:theme="@style/Base.Theme.AppCompat"/>
         <activity
-            android:name=".MainActivity"
+            android:name=".Controllers.IntrosFirstTime"
+            android:exported="false" />
+        <activity
+            android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
+            android:theme="@style/Base.Theme.AppCompat" />
+        <activity
+            android:name=".Controllers.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

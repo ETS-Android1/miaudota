@@ -8,6 +8,7 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.text.InputFilter;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -46,6 +47,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.paulo.miaudota.InputFilterMinMax;
 import com.paulo.miaudota.Models.Cidade;
 import com.paulo.miaudota.Models.Estado;
 import com.paulo.miaudota.Models.Pet;
@@ -65,10 +67,10 @@ public class EditPetFragment extends Fragment implements View.OnClickListener {
     private ArrayList<String> estadosSpinner = new ArrayList<>();
     private SearchableSpinner spinnerCidades = null;
     private Spinner spinnerEstados, spinnerTipo ,spinnerGenero, spinnerTamanho;
-    private String ibgeEstados, ufPet, cidadePet, tipoPet ,generoPet, tamanhoPet, userId, petId, petImageStr;
+    private String ibgeEstados, ufPet, cidadePet, tipoPet ,generoPet, tamanhoPet, userId, petId, petImageStr, ddd, celular;
     private Uri petImageUri;
     private Bitmap bitmap = null;
-    private EditText descricaoEditText, nomePetEditText, idadeAnosEditText, idadeMesesEditText;
+    private EditText descricaoEditText, nomePetEditText, idadeAnosEditText, idadeMesesEditText, dddEditText, celularEditText;
     private Button btnAddpet;
     private ProgressBar progressBar;
     private ImageView petImage;
@@ -111,6 +113,10 @@ public class EditPetFragment extends Fragment implements View.OnClickListener {
         spinnerCidades = view.findViewById(R.id.selectCidadeEdit);
         spinnerCidades.setTitle("Selecione a cidade");
         spinnerCidades.setPositiveButton("OK");
+        dddEditText = view.findViewById(R.id.dddEdit);
+        dddEditText.setFilters(new InputFilter[]{new InputFilterMinMax("0", "99")});
+        celularEditText = view.findViewById(R.id.celularEdit);
+        descricaoEditText = view.findViewById(R.id.descricaoAdd);
         descricaoEditText = view.findViewById(R.id.descricaoEdit);
         btnAddpet = view.findViewById(R.id.btnUpdatePet);
         btnAddpet.setOnClickListener(this);
@@ -130,6 +136,7 @@ public class EditPetFragment extends Fragment implements View.OnClickListener {
     }
 
     private void loadDados() {
+        progressBar.setVisibility(View.VISIBLE);
         Bundle args = getArguments();
         petId = args.getString("PetId");
         Log.e("PET", "petId -> " + petId);
@@ -153,6 +160,8 @@ public class EditPetFragment extends Fragment implements View.OnClickListener {
                     spinnerTamanho.setSelection(((ArrayAdapter<String>) spinnerTamanho.getAdapter()).getPosition(petModel.getTamanhoPet()));
                     spinnerEstados.setSelection(((ArrayAdapter<String>) spinnerEstados.getAdapter()).getPosition(petModel.getUfPet()));
                     solicitaCidades(petModel.getUfPet());
+                    dddEditText.setText(petModel.getDdd());
+                    celularEditText.setText(petModel.getNumCelular());
                     descricaoEditText.setText(petModel.getDescricaoPet());
                     petImageStr = petModel.getPetImg();
 
@@ -179,6 +188,7 @@ public class EditPetFragment extends Fragment implements View.OnClickListener {
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
+                progressBar.setVisibility(View.INVISIBLE);
                 Toast.makeText(getContext(), "Ocorreu um erro ao carregar a página !!", Toast.LENGTH_LONG).show();
             }
         });
@@ -460,7 +470,7 @@ public class EditPetFragment extends Fragment implements View.OnClickListener {
 
                 @Override
                 public void onNothingSelected(AdapterView<?> adapterView) {
-                    //por favor selecione
+
                 }
             });
 
@@ -525,10 +535,12 @@ public class EditPetFragment extends Fragment implements View.OnClickListener {
         idadeMeses = idadeMesesEditText.getText().toString().trim();
         descricao = descricaoEditText.getText().toString().trim();
         dataCadastro = sdf.format(Calendar.getInstance().getTime());
+        ddd = dddEditText.getText().toString().trim();
+        celular = celularEditText.getText().toString().trim();
 
         Log.e("addPetDb", "petId: " + petId);
 
-        if(!validarPreenchimento(nomePet, idadeAnos, idadeMeses, descricao)){
+        if(!validarPreenchimento(nomePet, idadeAnos, idadeMeses, descricao, ddd, celular)){
             Toast.makeText(getContext(), "Por favor preencha todos os campos !", Toast.LENGTH_LONG).show();
             progressBar.setVisibility(View.GONE);
             return;
@@ -546,7 +558,7 @@ public class EditPetFragment extends Fragment implements View.OnClickListener {
 
     private void UpdatePetDb(){
         Log.e("UPDATEpet","image ->" + petImageStr + " ou" + petImage);
-        Pet petModel = new Pet(petImageStr ,nomePet, tipoPet, idadeAnos, idadeMeses ,generoPet, tamanhoPet, ufPet, cidadePet, descricao, petId, dataCadastro, userId);
+        Pet petModel = new Pet(petImageStr ,nomePet, tipoPet, idadeAnos, idadeMeses ,generoPet, tamanhoPet, ufPet, cidadePet, descricao, petId, dataCadastro, userId, ddd, celular);
 
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
@@ -594,7 +606,7 @@ public class EditPetFragment extends Fragment implements View.OnClickListener {
     }
 
 
-    private boolean validarPreenchimento(String nomePet, String idadeAnos, String idadeMeses, String descricao) {
+    private boolean validarPreenchimento(String nomePet, String idadeAnos, String idadeMeses, String descricao, String ddd, String celular) {
 
         if(nomePet.isEmpty()){
             nomePetEditText.setError("Campo obrigatório !!");
@@ -636,6 +648,18 @@ public class EditPetFragment extends Fragment implements View.OnClickListener {
 
         if(cidadePet.equals("Cidade") || cidadePet == null){
             ((TextView)spinnerCidades.getSelectedView()).setError("Error message");
+            return false;
+        }
+
+        if(ddd.isEmpty()){
+            dddEditText.setError("Campo obrigatório !!");
+            dddEditText.requestFocus();
+            return false;
+        }
+
+        if(celular.isEmpty()){
+            celularEditText.setError("Campo obrigatório !!");
+            celularEditText.requestFocus();
             return false;
         }
 

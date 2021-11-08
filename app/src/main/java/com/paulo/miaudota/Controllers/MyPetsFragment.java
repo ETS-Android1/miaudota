@@ -146,7 +146,12 @@ public class MyPetsFragment extends Fragment implements MyPetsRVAdapter.PetClick
             @Override
             public void onSuccess(Void unused) {
                 Toast.makeText(getContext(), "Pet apagado com sucesso", Toast.LENGTH_LONG).show();
-                myPetsRVAdapter.notifyDataSetChanged();
+                Fragment fragmentMyPets =  new MyPetsFragment();
+                FragmentManager fm = getFragmentManager();
+                fm.beginTransaction()
+                        .replace(R.id.fragment_container, fragmentMyPets)
+                        .addToBackStack(fragmentMyPets.getClass().getSimpleName())
+                        .commit();
             }
 
         });

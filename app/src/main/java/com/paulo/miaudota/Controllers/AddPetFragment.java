@@ -7,6 +7,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.InputFilter;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -41,6 +42,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.paulo.miaudota.InputFilterMinMax;
 import com.paulo.miaudota.Models.Cidade;
 import com.paulo.miaudota.Models.Estado;
 import com.paulo.miaudota.Models.Pet;
@@ -63,13 +65,13 @@ public class AddPetFragment extends Fragment implements View.OnClickListener {
     private String ibgeEstados, ufPet, cidadePet, tipoPet ,generoPet, tamanhoPet, userId, petId, petImageStr;
     private Uri petImageUri;
     private Bitmap bitmap = null;
-    private EditText descricaoEditText, nomePetEditText, idadeAnosEditText, idadeMesesEditText;
+    private EditText descricaoEditText, nomePetEditText, idadeAnosEditText, idadeMesesEditText, dddEditText, celularEditText;
     private Button btnAddpet;
     private ProgressBar progressBar;
     private ImageView petImage;
     private FirebaseDatabase firebaseDatabase;
     private DatabaseReference databaseReference;
-    private String nomePet, idadeAnos, idadeMeses, descricao, dataCadastro;
+    private String nomePet, idadeAnos, idadeMeses, descricao, dataCadastro, ddd, celular;
     private SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale.US);
 
     private FirebaseAuth mAuth;
@@ -98,13 +100,18 @@ public class AddPetFragment extends Fragment implements View.OnClickListener {
         nomePetEditText = view.findViewById(R.id.nomePetAdd);
         spinnerTipo = view.findViewById(R.id.selectTipoPet);
         idadeAnosEditText = view.findViewById(R.id.idadeAnosAdd);
+        idadeAnosEditText.setFilters(new InputFilter[]{new InputFilterMinMax("0", "50")});
         idadeMesesEditText = view.findViewById(R.id.idadeMesesAdd);
+        idadeMesesEditText.setFilters(new InputFilter[]{new InputFilterMinMax("0", "12")});
         spinnerGenero = view.findViewById(R.id.selectGeneroAdd);
         spinnerTamanho = view.findViewById(R.id.selectTamanhoAdd);
         spinnerEstados = view.findViewById(R.id.selectEstadoAdd);
         spinnerCidades = view.findViewById(R.id.selectCidadeAdd);
         spinnerCidades.setTitle("Selecione a cidade");
         spinnerCidades.setPositiveButton("OK");
+        dddEditText = view.findViewById(R.id.dddAdd);
+        dddEditText.setFilters(new InputFilter[]{new InputFilterMinMax("0", "99")});
+        celularEditText = view.findViewById(R.id.celularAdd);
         descricaoEditText = view.findViewById(R.id.descricaoAdd);
         btnAddpet = view.findViewById(R.id.btnAddPet);
         btnAddpet.setOnClickListener(this);
@@ -466,10 +473,12 @@ public class AddPetFragment extends Fragment implements View.OnClickListener {
         descricao = descricaoEditText.getText().toString().trim();
         petId = databaseReference.push().getKey();
         dataCadastro = sdf.format(Calendar.getInstance().getTime());
+        ddd = dddEditText.getText().toString().trim();
+        celular = celularEditText.getText().toString().trim();
 
         Log.e("addPetDb", "petId: " + petId);
 
-        if(!validarPreenchimento(nomePet, idadeAnos, idadeMeses, descricao)){
+        if(!validarPreenchimento(nomePet, idadeAnos, idadeMeses, descricao, ddd, celular)){
             Toast.makeText(getContext(), "Por favor preencha todos os campos !", Toast.LENGTH_LONG).show();
             progressBar.setVisibility(View.GONE);
             return;
@@ -486,7 +495,7 @@ public class AddPetFragment extends Fragment implements View.OnClickListener {
 
         Log.d("onPost", "petImageStr " + petImageStr);
 
-        Pet petModel = new Pet(petImageStr ,nomePet, tipoPet, idadeAnos, idadeMeses ,generoPet, tamanhoPet, ufPet, cidadePet, descricao, petId, dataCadastro, userId);
+        Pet petModel = new Pet(petImageStr ,nomePet, tipoPet, idadeAnos, idadeMeses ,generoPet, tamanhoPet, ufPet, cidadePet, descricao, petId, dataCadastro, userId, ddd, celular);
         Log.d("onPost", "pet model: " + petModel);
 
         databaseReference.addValueEventListener(new ValueEventListener() {
@@ -530,7 +539,7 @@ public class AddPetFragment extends Fragment implements View.OnClickListener {
     }
 
 
-    private boolean validarPreenchimento(String nomePet, String idadeAnos, String idadeMeses, String descricao) {
+    private boolean validarPreenchimento(String nomePet, String idadeAnos, String idadeMeses, String descricao, String ddd, String celular) {
 
         if(nomePet.isEmpty()){
             nomePetEditText.setError("Campo obrigatório !!");
@@ -575,8 +584,26 @@ public class AddPetFragment extends Fragment implements View.OnClickListener {
             return false;
         }
 
+        if(ddd.isEmpty()){
+            dddEditText.setError("Campo obrigatório !!");
+            dddEditText.requestFocus();
+            return false;
+        }
+
+        if(celular.isEmpty()){
+            celularEditText.setError("Campo obrigatório !!");
+            celularEditText.requestFocus();
+            return false;
+        }
+
         if(descricao.isEmpty()){
             descricaoEditText.setError("Campo obrigatório !!");
+            descricaoEditText.requestFocus();
+            return false;
+        }
+
+        if(descricao.length() > 240){
+            Toast.makeText(getContext(), "A descrição deve conter no máximo 240 caracteres!", Toast.LENGTH_LONG).show();
             descricaoEditText.requestFocus();
             return false;
         }

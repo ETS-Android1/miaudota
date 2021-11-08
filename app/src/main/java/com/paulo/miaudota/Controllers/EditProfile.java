@@ -12,15 +12,22 @@ import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
+import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
@@ -34,18 +41,25 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.paulo.miaudota.Models.Cidade;
+import com.paulo.miaudota.Models.Estado;
 import com.paulo.miaudota.R;
 import com.paulo.miaudota.Models.User;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
+import com.toptoche.searchablespinnerlibrary.SearchableSpinner;
 
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
+import java.util.concurrent.ExecutionException;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -54,14 +68,14 @@ public class EditProfile extends AppCompatActivity implements View.OnClickListen
     private EditText editTextFullName,editTextCPF,editTextEmail,editTextCidade,editTextUf,editTextDataNascimento;
     private CircleImageView profilePicture;
     private ProgressBar progressBar;
-    private String userID;
-    private String profilePicUrl;
-    private String dataN;
-    private String dataAtual;
+    private String userID, profilePicUrl, dataN, dataAtual, ibgeEstados, cidadePet, ufPet;
     final Calendar myCalendar = Calendar.getInstance();
     private Uri cropImageUri;
     private Bitmap bitmap = null;
     DatePickerDialog.OnDateSetListener date;
+    private Spinner spinnerEstados;
+    private SearchableSpinner spinnerCidades = null;
+    private ArrayList<String> estadosSpinner = new ArrayList<>();
 
     private FirebaseAuth mAuth;
     private FirebaseUser user;
@@ -95,17 +109,79 @@ public class EditProfile extends AppCompatActivity implements View.OnClickListen
         editTextFullName = findViewById(R.id.nomeProfileEdit);
         editTextCPF = findViewById(R.id.cpfProfileEdit);
         editTextEmail = findViewById(R.id.emailProfileEdit);
-        editTextCidade = findViewById(R.id.cidadeProfileEdit);
-        editTextUf = findViewById(R.id.ufProfileEdit);
         editTextDataNascimento = findViewById(R.id.btnDataNascimentoProfileEdit);
         editTextDataNascimento.setOnClickListener(this);
         progressBar = findViewById(R.id.progressBarPRofileEdit);
         progressBar.setVisibility(View.VISIBLE);
+        spinnerEstados = findViewById(R.id.ufProfileEdit);
+        spinnerCidades = findViewById(R.id.cidadeProfileEdit);
+        spinnerCidades.setTitle("Selecione a cidade");
+        spinnerCidades.setPositiveButton("OK");
 
         if (user == null) {
             Log.e("Warning_Activity","onCreate EditProfile userNull-> ");
             startActivity(new Intent(EditProfile.this, WelcomeScreen.class));
         }
+
+        ibgeEstados = buscasSegundoPlano("estado");
+
+        //region Estados
+        Gson jsonEstados = new GsonBuilder().setPrettyPrinting().create();
+        Estado[] estados = jsonEstados.fromJson(String.valueOf(ibgeEstados), Estado[].class);
+
+        for(Estado estado: estados){
+            estadosSpinner.add(estado.getSigla());
+        }
+        estadosSpinner.add(0,"UF");
+
+        ArrayAdapter<String> adapterEstados = new ArrayAdapter<String>(EditProfile.this,
+                R.layout.spinner_style,
+                estadosSpinner){
+            @Override
+            public boolean isEnabled(int position){
+                if(position == 0)
+                {
+                    // Disable the second item from Spinner
+                    return false;
+                }
+                else
+                {
+                    return true;
+                }
+            }
+
+            @Override
+            public View getDropDownView(int position, View convertView,
+                                        ViewGroup parent) {
+                View view = super.getDropDownView(position, convertView, parent);
+                TextView tv = (TextView) view;
+                if(position==0) {
+                    // Set the first item text color
+                    tv.setTextColor(Color.GRAY);
+                }
+                else {
+                    tv.setTextColor(Color.BLACK);
+                }
+                return view;
+            }
+        };
+        spinnerEstados.setAdapter(adapterEstados);
+
+        spinnerEstados.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                solicitaCidades(estadosSpinner.get(i));
+                ufPet = spinnerEstados.getSelectedItem().toString();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+
+        //endregion
+
 
         Button updateProfile = findViewById(R.id.btnUpdate);
         updateProfile.setOnClickListener(this);
@@ -157,8 +233,16 @@ public class EditProfile extends AppCompatActivity implements View.OnClickListen
                     editTextFullName.setText(nomeCompleto);
                     editTextEmail.setText(email);
                     editTextCPF.setText(cpf);
-                    editTextCidade.setText(cidade);
-                    editTextUf.setText(uf);
+                    spinnerEstados.setSelection(((ArrayAdapter<String>) spinnerEstados.getAdapter()).getPosition(uf));
+                    solicitaCidades(uf);
+                    Handler handler = new Handler();
+                    handler.postDelayed(new Runnable() {
+                        public void run() {
+                            spinnerCidades.setSelection(((ArrayAdapter<String>) spinnerCidades.getAdapter()).getPosition(cidade));
+                            progressBar.setVisibility(View.INVISIBLE);
+                        }
+                    }, 3000);
+
                     editTextDataNascimento.setText(dataNascimento);
 
                     Glide.with(EditProfile.this)
@@ -198,6 +282,84 @@ public class EditProfile extends AppCompatActivity implements View.OnClickListen
             }
         });
 
+    }
+
+    private void solicitaCidades(String siglaEstado) {
+
+        String ibgeCidades = buscasSegundoPlano("cidade", siglaEstado);
+
+        Gson jsonCidades = new GsonBuilder().setPrettyPrinting().create();
+        Cidade[] cidades = jsonCidades.fromJson(String.valueOf(ibgeCidades), Cidade[].class);
+
+        ArrayList<String> cidadesSpinner = new ArrayList<>();
+
+        for(Cidade cidade: cidades){
+            cidadesSpinner.add(cidade.getNome());
+        }
+
+        cidadesSpinner.add(0,"Cidade");
+
+        ArrayAdapter<String> adapterCidades = new ArrayAdapter<String>(EditProfile.this,
+                R.layout.spinner_style,
+                cidadesSpinner){
+            @Override
+            public boolean isEnabled(int position){
+                if(position == 0)
+                {
+                    // Disable the first item from Spinner
+                    return false;
+                }
+                else
+                {
+                    return true;
+                }
+            }
+
+            @Override
+            public View getDropDownView(int position, View convertView,
+                                        ViewGroup parent) {
+                View view = super.getDropDownView(position, convertView, parent);
+                TextView tv = (TextView) view;
+                if(position==0) {
+                    // Set the disable item text color
+                    tv.setTextColor(Color.GRAY);
+                }
+                else {
+                    tv.setTextColor(Color.BLACK);
+                }
+                return view;
+            }
+        };
+
+        spinnerCidades.setAdapter(adapterCidades);
+
+        spinnerCidades.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                cidadePet = spinnerCidades.getSelectedItem().toString();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+
+        progressBar.setVisibility(View.INVISIBLE);
+
+    }
+
+    private String buscasSegundoPlano(String ... params) {
+
+        String respostaIbge = null;
+        SegundoPlano segundoPlano = new SegundoPlano();
+        try {
+            respostaIbge = segundoPlano.execute(params).get();
+        }catch (ExecutionException | InterruptedException e){
+            Log.d("onPost", "Erro resposta IBGE: " + e);
+        }
+
+        return respostaIbge;
     }
 
     @Override
@@ -287,8 +449,8 @@ public class EditProfile extends AppCompatActivity implements View.OnClickListen
         String email = editTextEmail.getText().toString().trim();
         String nomeCompleto = editTextFullName.getText().toString().trim();
         String cpf = editTextCPF.getText().toString().trim();
-        String cidade = editTextCidade.getText().toString().trim();
-        String uf = editTextUf.getText().toString().toUpperCase(Locale.ROOT).trim();
+        String cidade = cidadePet;
+        String uf = ufPet;
         String dataNascimento = dataN.toString().trim();
 
         if(nomeCompleto.isEmpty()){
@@ -317,15 +479,13 @@ public class EditProfile extends AppCompatActivity implements View.OnClickListen
             return;
         }
 
-        if(cidade.isEmpty()){
-            editTextCidade.setError("Campo obrigatório !!");
-            editTextCidade.requestFocus();
+        if(ufPet.equals("UF") || ufPet == null){
+            ((TextView)spinnerEstados.getSelectedView()).setError("Error message");
             return;
         }
 
-        if(uf.length() > 2){
-            editTextUf.setError("A unidade federativa não pode possuir mais que 2 caracteres");
-            editTextUf.requestFocus();
+        if(cidadePet.equals("Cidade") || cidadePet == null){
+            ((TextView)spinnerCidades.getSelectedView()).setError("Error message");
             return;
         }
 

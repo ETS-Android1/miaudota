@@ -90,7 +90,8 @@ public class HomeFragment extends Fragment implements PetRVAdapter.PetClickInter
         //passar position ou id pra usar no select dos detalhes
         Intent intent = new Intent(getActivity(),PetDetails.class);
         Pet petModel = petArrayList.get(position);
-        intent.putExtra("pet", petModel);
+        petId = petModel.getPetId();
+        intent.putExtra("petId", petId);
         startActivity(intent);
     }
 

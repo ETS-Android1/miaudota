@@ -22,6 +22,14 @@
         <item name="android:textColorSecondary">@color/colorPrimary</item>    <!--days of the week-->
     </style>
 
+    <style name="dialog_theme" parent="ThemeOverlay.AppCompat.Dialog">
+        <item name="backgroundTint">@color/bluecachorro</item>
+    </style>
+
+    <style name="btn_zap" parent="ThemeOverlay.AppCompat.Dialog">
+        <item name="backgroundTint">@color/zipzop</item>
+    </style>
+
     <style name="ExposedDropdownMenu" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu">
         <item name="boxStrokeColor">#fff</item>
         <item name="boxStrokeWidth">1dp</item>

@@ -105,9 +105,11 @@ tools:context=".Controllers.EditProfile">
         android:paddingBottom="10dp"
         android:textColor="@color/mainText"
         android:textColorHint="@color/mainText"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ufProfileEdit"
+        app:layout_constraintTop_toBottomOf="@+id/cidadeProfileEdit"
+        app:layout_constraintVertical_bias="0.0"
         app:layout_constraintWidth_percent=".8" />
 
     <Button
@@ -124,7 +126,7 @@ tools:context=".Controllers.EditProfile">
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btnDataNascimentoProfileEdit"
-        app:layout_constraintVertical_bias="0.281"
+        app:layout_constraintVertical_bias="0.263"
         app:layout_constraintWidth_percent=".8" />
 
     <EditText
@@ -148,49 +150,38 @@ tools:context=".Controllers.EditProfile">
         app:layout_constraintTop_toBottomOf="@+id/nomeProfileEdit"
         app:layout_constraintWidth_percent=".8" />
 
-    <EditText
+    <com.toptoche.searchablespinnerlibrary.SearchableSpinner
         android:id="@+id/cidadeProfileEdit"
-        android:layout_width="230dp"
-        android:layout_height="wrap_content"
+        android:layout_width="210dp"
+        android:layout_height="46dp"
         android:layout_marginTop="24dp"
-        android:autofillHints="null"
         android:background="@drawable/edit_text_bg"
-        android:hint="Cidade"
-        android:inputType="text"
         android:minHeight="48dp"
-        android:paddingStart="20dp"
-        android:paddingTop="10dp"
-        android:paddingEnd="20dp"
-        android:paddingBottom="10dp"
         android:textColor="@color/mainText"
         android:textColorHint="@color/mainText"
+        android:theme="@style/SpinnerTheme"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.226"
+        app:layout_constraintHorizontal_bias="0.796"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/cpfProfileEdit"
+        app:layout_constraintVertical_bias="0.0"
         app:layout_constraintWidth_percent=".8" />
 
-    <EditText
+    <Spinner
         android:id="@+id/ufProfileEdit"
-        android:layout_width="80dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:layout_marginEnd="40dp"
-        android:autofillHints="null"
+        android:layout_width="85dp"
+        android:layout_height="46dp"
         android:background="@drawable/edit_text_bg"
-        android:hint="UF"
-        android:inputType="text"
-        android:minHeight="48dp"
-        android:paddingStart="20dp"
-        android:paddingTop="10dp"
-        android:paddingEnd="20dp"
-        android:paddingBottom="10dp"
         android:textColor="@color/mainText"
         android:textColorHint="@color/mainText"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.95"
-        app:layout_constraintStart_toEndOf="@+id/cidadeProfileEdit"
+        android:theme="@style/SpinnerTheme"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/cidadeProfileEdit"
+        app:layout_constraintHorizontal_bias="0.546"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/cpfProfileEdit"
+        app:layout_constraintVertical_bias="0.089"
         app:layout_constraintWidth_percent=".8" />
 
     <ProgressBar

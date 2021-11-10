@@ -111,6 +111,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
         switch (v.getId()){
             case R.id.btnLogOut:
                 deslogar();
+                startActivity(new Intent(getActivity(), WelcomeScreen.class));
                 System.exit(0);
                 break;
             case R.id.btnEditProfile:

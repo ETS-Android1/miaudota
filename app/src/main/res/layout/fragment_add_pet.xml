@@ -11,12 +11,13 @@
         android:layout_height="match_parent"
         android:background="@color/mainBackground">
 
+
         <ImageView
             android:id="@+id/petImageAdd"
-            android:layout_width="128dp"
-            android:layout_height="128dp"
+            android:layout_width="157dp"
+            android:layout_height="159dp"
             android:scaleType="centerCrop"
-            android:src="@drawable/ic_home_pet"
+            android:src="@drawable/pet_add_placeholder"
             android:tooltipText="Adicione uma foto do pet"
             android:translationZ="10dp"
             app:civ_border_color="@null"
@@ -26,8 +27,7 @@
             app:layout_constraintHorizontal_bias="0.498"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.008" />
-
+            app:layout_constraintVertical_bias="0.02" />
 
         <EditText
             android:id="@+id/nomePetAdd"

@@ -62,7 +62,7 @@ public class AddPetFragment extends Fragment implements View.OnClickListener {
     private ArrayList<String> estadosSpinner = new ArrayList<>();
     private SearchableSpinner spinnerCidades = null;
     private Spinner spinnerEstados, spinnerTipo ,spinnerGenero, spinnerTamanho;
-    private String ibgeEstados, ufPet, cidadePet, tipoPet ,generoPet, tamanhoPet, userId, petId, petImageStr;
+    private String ibgeEstados, ufPet, cidadePet, tipoPet ,generoPet, tamanhoPet, userId, petId, petImageStr, isAdotado;
     private Uri petImageUri;
     private Bitmap bitmap = null;
     private EditText descricaoEditText, nomePetEditText, idadeAnosEditText, idadeMesesEditText, dddEditText, celularEditText;
@@ -119,6 +119,7 @@ public class AddPetFragment extends Fragment implements View.OnClickListener {
         progressBar.setVisibility(View.VISIBLE);
         mAuth = FirebaseAuth.getInstance();
         userId = mAuth.getCurrentUser().getUid();
+        isAdotado = "false";
 
         firebaseDatabase = FirebaseDatabase.getInstance();
         databaseReference = firebaseDatabase.getReference("Pets");
@@ -161,8 +162,8 @@ public class AddPetFragment extends Fragment implements View.OnClickListener {
 
                         Glide.with(getActivity())
                                 .load(petImageUri.toString()) // image url
-                                .placeholder(R.drawable.profile_placeholder) // any placeholder to load at start
-                                .error(R.drawable.profile_placeholder)  // any image in case of error
+                                .placeholder(R.drawable.pet_add_placeholder) // any placeholder to load at start
+                                .error(R.drawable.pet_add_placeholder)  // any image in case of error
                                 .override(200, 200) // resizing
                                 .centerCrop()
                                 .into(petImage);  // imageview object
@@ -494,8 +495,7 @@ public class AddPetFragment extends Fragment implements View.OnClickListener {
     private void AddPetDb(){
 
         Log.d("onPost", "petImageStr " + petImageStr);
-
-        Pet petModel = new Pet(petImageStr ,nomePet, tipoPet, idadeAnos, idadeMeses ,generoPet, tamanhoPet, ufPet, cidadePet, descricao, petId, dataCadastro, userId, ddd, celular);
+        Pet petModel = new Pet(petImageStr ,nomePet, tipoPet, idadeAnos, idadeMeses ,generoPet, tamanhoPet, ufPet, cidadePet, descricao, petId, dataCadastro, userId, ddd, celular, isAdotado);
         Log.d("onPost", "pet model: " + petModel);
 
         databaseReference.addValueEventListener(new ValueEventListener() {

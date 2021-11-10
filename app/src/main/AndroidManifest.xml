@@ -14,11 +14,6 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Miaudota">
         <activity
-            android:name=".ScrollingActivity"
-            android:exported="false"
-            android:label="@string/title_activity_scrolling"
-            android:theme="@style/Theme.Miaudota.NoActionBar" />
-        <activity
             android:name=".Controllers.PetDetails"
             android:exported="false" />
         <activity

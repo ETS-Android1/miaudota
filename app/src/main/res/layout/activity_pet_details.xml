@@ -138,10 +138,9 @@
             android:textSize="18dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.225"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/idadePetDetails"
-            app:layout_constraintVertical_bias="0.119" />
+            app:layout_constraintVertical_bias="0.089" />
 
         <ImageView
             android:id="@+id/generoDetails"
@@ -152,10 +151,10 @@
             android:src="@drawable/ic_home_pet"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.287"
+            app:layout_constraintHorizontal_bias="0.917"
             app:layout_constraintStart_toEndOf="@+id/tipoPetDetails"
             app:layout_constraintTop_toBottomOf="@+id/nomePetDetails"
-            app:layout_constraintVertical_bias="0.307" />
+            app:layout_constraintVertical_bias="0.044" />
 
         <Button
             android:id="@+id/btnZap"

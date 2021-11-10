@@ -5,14 +5,21 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.DatePickerDialog;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -21,30 +28,37 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.paulo.miaudota.Models.Cidade;
+import com.paulo.miaudota.Models.Estado;
 import com.paulo.miaudota.R;
 import com.paulo.miaudota.Models.User;
+import com.toptoche.searchablespinnerlibrary.SearchableSpinner;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Locale;
+import java.util.concurrent.ExecutionException;
 
 public class RegisterUser extends AppCompatActivity implements View.OnClickListener {
 
-    private EditText editTextFullName,editTextCPF,editTextEmail,editTextCidade,editTextUf,editTextPassword,editTextDataNascimento;
+    private EditText editTextFullName,editTextCPF,editTextEmail,editTextPassword,editTextDataNascimento;
     private FirebaseAuth mAuth;
     private FirebaseUser fUser;
     private ProgressBar progressBar;
     final Calendar myCalendar = Calendar.getInstance();
     DatePickerDialog.OnDateSetListener date;
-    private String dataN;
-    private String dataAtual;
+    private String dataN, dataAtual, ibgeEstados, cidadeReg, ufReg;;
+    private Spinner spinnerEstados;
+    private SearchableSpinner spinnerCidades = null;
+    private ArrayList<String> estadosSpinner = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register_user);
-
-        //metodo pra verificar se o usuário estiver logado, se estiver não deixar acessar a tela de cadastro
 
         mAuth = FirebaseAuth.getInstance();
 
@@ -59,8 +73,10 @@ public class RegisterUser extends AppCompatActivity implements View.OnClickListe
         editTextEmail = findViewById(R.id.emailCadastro);
         editTextDataNascimento = findViewById(R.id.btnDataNascimento);
         editTextDataNascimento.setOnClickListener(this);
-        editTextCidade = findViewById(R.id.btnCidade);
-        editTextUf = findViewById(R.id.btnUf);
+        spinnerCidades = findViewById(R.id.btnCidade);
+        spinnerCidades.setTitle("Selecione a cidade");
+        spinnerCidades.setPositiveButton("OK");
+        spinnerEstados = findViewById(R.id.btnUf);
         editTextPassword = findViewById(R.id.senhaCadastro);
         progressBar = findViewById(R.id.progressBarRegister);
 
@@ -70,6 +86,65 @@ public class RegisterUser extends AppCompatActivity implements View.OnClickListe
             myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
             updateLabel();
         };
+
+        ibgeEstados = buscasSegundoPlano("estado");
+
+        //region Estados
+        Gson jsonEstados = new GsonBuilder().setPrettyPrinting().create();
+        Estado[] estados = jsonEstados.fromJson(String.valueOf(ibgeEstados), Estado[].class);
+
+        for(Estado estado: estados){
+            estadosSpinner.add(estado.getSigla());
+        }
+        estadosSpinner.add(0,"UF");
+
+        ArrayAdapter<String> adapterEstados = new ArrayAdapter<String>(RegisterUser.this,
+                R.layout.spinner_style,
+                estadosSpinner){
+            @Override
+            public boolean isEnabled(int position){
+                if(position == 0)
+                {
+                    // Disable the second item from Spinner
+                    return false;
+                }
+                else
+                {
+                    return true;
+                }
+            }
+
+            @Override
+            public View getDropDownView(int position, View convertView,
+                                        ViewGroup parent) {
+                View view = super.getDropDownView(position, convertView, parent);
+                TextView tv = (TextView) view;
+                if(position==0) {
+                    // Set the first item text color
+                    tv.setTextColor(Color.GRAY);
+                }
+                else {
+                    tv.setTextColor(Color.BLACK);
+                }
+                return view;
+            }
+        };
+        spinnerEstados.setAdapter(adapterEstados);
+
+        spinnerEstados.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                solicitaCidades(estadosSpinner.get(i));
+                ufReg = spinnerEstados.getSelectedItem().toString();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+
+        //endregion
     }
 
     @Override
@@ -95,9 +170,12 @@ public class RegisterUser extends AppCompatActivity implements View.OnClickListe
         String nomeCompleto = editTextFullName.getText().toString().trim();
         String cpf = editTextCPF.getText().toString().trim();
         String senha = editTextPassword.getText().toString().trim();
-        String cidade = editTextCidade.getText().toString().trim();
-        String uf = editTextUf.getText().toString().toUpperCase(Locale.ROOT).trim();
         String dataNascimento = dataN.toString().trim();
+        String cidade = cidadeReg;
+        String uf = ufReg;
+        String ddd = "";
+        String numCelular = "";
+
 
         if(nomeCompleto.isEmpty()){
             editTextFullName.setError("Campo obrigatório !!");
@@ -125,15 +203,13 @@ public class RegisterUser extends AppCompatActivity implements View.OnClickListe
             return;
         }
 
-        if(cidade.isEmpty()){
-            editTextCidade.setError("Campo obrigatório !!");
-            editTextCidade.requestFocus();
+        if(ufReg.equals("UF") || ufReg == null){
+            ((TextView)spinnerEstados.getSelectedView()).setError("Error message");
             return;
         }
 
-        if(uf.length() > 2){
-            editTextUf.setError("A unidade federativa não pode possuir mais que 2 caracteres");
-            editTextUf.requestFocus();
+        if(cidadeReg.equals("Cidade") || cidadeReg == null){
+            ((TextView)spinnerCidades.getSelectedView()).setError("Error message");
             return;
         }
 
@@ -156,6 +232,7 @@ public class RegisterUser extends AppCompatActivity implements View.OnClickListe
             return;
         }
 
+
         progressBar.setVisibility(View.VISIBLE);
         mAuth.createUserWithEmailAndPassword(email, senha)
                 .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
@@ -163,7 +240,7 @@ public class RegisterUser extends AppCompatActivity implements View.OnClickListe
                     public void onComplete(@NonNull Task<AuthResult> task) {
 
                         if(task.isSuccessful()){
-                            User user = new User(nomeCompleto, cpf , email, cidade, uf, dataNascimento);
+                            User user = new User(nomeCompleto, cpf , email, cidade, uf, dataNascimento, ddd, numCelular);
                             FirebaseDatabase.getInstance().getReference("Users")
                                     .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
                                     .setValue(user).addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -211,4 +288,83 @@ public class RegisterUser extends AppCompatActivity implements View.OnClickListe
             editTextDataNascimento.setText(dataN);
         }
     }
+
+    private String buscasSegundoPlano(String ... params) {
+
+        String respostaIbge = null;
+        SegundoPlano segundoPlano = new SegundoPlano();
+        try {
+            respostaIbge = segundoPlano.execute(params).get();
+        }catch (ExecutionException | InterruptedException e){
+            Log.d("onPost", "Erro resposta IBGE: " + e);
+        }
+
+        return respostaIbge;
+    }
+
+    private void solicitaCidades(String siglaEstado) {
+
+        String ibgeCidades = buscasSegundoPlano("cidade", siglaEstado);
+
+        Gson jsonCidades = new GsonBuilder().setPrettyPrinting().create();
+        Cidade[] cidades = jsonCidades.fromJson(String.valueOf(ibgeCidades), Cidade[].class);
+
+        ArrayList<String> cidadesSpinner = new ArrayList<>();
+
+        for(Cidade cidade: cidades){
+            cidadesSpinner.add(cidade.getNome());
+        }
+
+        cidadesSpinner.add(0,"Cidade");
+
+        ArrayAdapter<String> adapterCidades = new ArrayAdapter<String>(RegisterUser.this,
+                R.layout.spinner_style,
+                cidadesSpinner){
+            @Override
+            public boolean isEnabled(int position){
+                if(position == 0)
+                {
+                    // Disable the first item from Spinner
+                    return false;
+                }
+                else
+                {
+                    return true;
+                }
+            }
+
+            @Override
+            public View getDropDownView(int position, View convertView,
+                                        ViewGroup parent) {
+                View view = super.getDropDownView(position, convertView, parent);
+                TextView tv = (TextView) view;
+                if(position==0) {
+                    // Set the disable item text color
+                    tv.setTextColor(Color.GRAY);
+                }
+                else {
+                    tv.setTextColor(Color.BLACK);
+                }
+                return view;
+            }
+        };
+
+        spinnerCidades.setAdapter(adapterCidades);
+
+        spinnerCidades.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                cidadeReg = spinnerCidades.getSelectedItem().toString();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+
+        progressBar.setVisibility(View.INVISIBLE);
+
+    }
+
 }

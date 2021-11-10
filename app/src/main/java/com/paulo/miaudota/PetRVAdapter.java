@@ -1,6 +1,8 @@
 package com.paulo.miaudota;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,6 +20,7 @@ import com.paulo.miaudota.Controllers.EditProfile;
 import com.paulo.miaudota.Models.Pet;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 public class PetRVAdapter extends RecyclerView.Adapter<PetRVAdapter.ViewHolder> {
 
@@ -25,6 +28,7 @@ public class PetRVAdapter extends RecyclerView.Adapter<PetRVAdapter.ViewHolder> 
     private Context context;
     int lastPos = -1;
     private PetClickInterface petClickInterface;
+    private Random random = new Random();
 
     public PetRVAdapter(ArrayList<Pet> petArrayList, Context context, PetClickInterface petClickInterface) {
         this.petArrayList = petArrayList;
@@ -52,10 +56,13 @@ public class PetRVAdapter extends RecyclerView.Adapter<PetRVAdapter.ViewHolder> 
             holder.petGender.setImageResource(R.drawable.female);
         }
 
+        Drawable rdColorPlaceholder =  context.getDrawable(R.drawable.pet_color_background);
+        rdColorPlaceholder.setColorFilter(Color.argb(255, random.nextInt(256), random.nextInt(256), random.nextInt(256)), PorterDuff.Mode.SRC_IN);
+
         Glide.with(context)
                 .load(petRvModel.getPetImg()) // image url
-                .placeholder(R.drawable.profile_placeholder) // any placeholder to load at start
-                .error(R.drawable.profile_placeholder)  // any image in case of error
+                .placeholder(rdColorPlaceholder) // any placeholder to load at start
+                .error(rdColorPlaceholder)  // any image in case of error
                 .override(200, 200) // resizing
                 .centerCrop()
                 .into(holder.petImage);  // imageview object

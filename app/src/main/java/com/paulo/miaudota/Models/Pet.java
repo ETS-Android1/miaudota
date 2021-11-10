@@ -22,11 +22,20 @@ public class Pet implements Parcelable {
     private String userId;
     private String ddd;
     private String numCelular;
+    private String isAdotado;
+
+    public String getIsAdotado() {
+        return isAdotado;
+    }
+
+    public void setIsAdotado(String isAdotado) {
+        this.isAdotado = isAdotado;
+    }
 
     public Pet(){}
 
     public Pet(String petImg,String petName, String tipoPet, String idadeAnosPet, String idadeMesesPet, String generoPet, String tamanhoPet, String ufPet, String cidadePet,
-               String descricaoPet, String petId, String dataCadastro, String userId, String ddd, String numCelular) {
+               String descricaoPet, String petId, String dataCadastro, String userId, String ddd, String numCelular, String isAdotado) {
         this.petImg = petImg;
         this.petName = petName;
         this.tipoPet = tipoPet;
@@ -42,6 +51,7 @@ public class Pet implements Parcelable {
         this.userId = userId;
         this.ddd = ddd;
         this.numCelular = numCelular;
+        this.isAdotado = isAdotado;
     }
 
     protected Pet(Parcel in) {
@@ -60,6 +70,7 @@ public class Pet implements Parcelable {
         userId = in.readString();
         ddd = in.readString();
         numCelular = in.readString();
+        isAdotado = in.readString();
     }
 
     public static final Creator<Pet> CREATOR = new Creator<Pet>() {
@@ -214,5 +225,6 @@ public class Pet implements Parcelable {
         parcel.writeString(petId);
         parcel.writeString(ddd);
         parcel.writeString(numCelular);
+        parcel.writeString(isAdotado);
     }
 }

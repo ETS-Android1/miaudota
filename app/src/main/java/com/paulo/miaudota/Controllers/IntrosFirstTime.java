@@ -87,7 +87,7 @@ public class IntrosFirstTime extends AppCompatActivity implements View.OnClickLi
                     btnIntro.setText("Próximo");
                 }
                 else if(mDots[position] == mDots[2]){
-                    btnIntro.setText("Continuar para o app");
+                    btnIntro.setText("Continuar para o login");
                 }
 
             }

@@ -25,6 +25,7 @@ import android.widget.TextClock;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -34,6 +35,13 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentChange;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.paulo.miaudota.Models.Pet;
 import com.paulo.miaudota.MyPetsRVAdapter;
 import com.paulo.miaudota.PetRVAdapter;
@@ -44,7 +52,7 @@ import org.w3c.dom.Text;
 import java.util.ArrayList;
 
 
-public class MyPetsFragment extends Fragment implements MyPetsRVAdapter.PetClickInterface, MyPetsRVAdapter.PetClickDeleteInterface {
+public class MyPetsFragment extends Fragment implements MyPetsRVAdapter.PetClickInterface, MyPetsRVAdapter.PetClickDeleteInterface, MyPetsRVAdapter.PetClickAdoptInterface {
 
     private RecyclerView petRV;
     private ProgressBar progressBar;
@@ -56,7 +64,8 @@ public class MyPetsFragment extends Fragment implements MyPetsRVAdapter.PetClick
     private DatabaseReference databaseReference;
     private FirebaseAuth mAuth;
     private FirebaseUser user;
-    private Dialog deleteDialog;
+    private FirebaseFirestore db;
+    private Dialog deleteDialog, adoptDialog;
 
     @Nullable
     @Override
@@ -72,16 +81,18 @@ public class MyPetsFragment extends Fragment implements MyPetsRVAdapter.PetClick
             startActivity(new Intent(getActivity(), WelcomeScreen.class));
         }
 
+        db = FirebaseFirestore.getInstance();
         petRV = view.findViewById(R.id.idRvMyPets);
         petArrayList = new ArrayList<>();
         firebaseDatabase = FirebaseDatabase.getInstance();
         databaseReference = firebaseDatabase.getReference("Pets");
-        myPetsRVAdapter = new MyPetsRVAdapter(petArrayList,getContext(),this,this);
+        myPetsRVAdapter = new MyPetsRVAdapter(petArrayList,getContext(),this,this,this);
         petRV.setLayoutManager(new LinearLayoutManager(getContext()));
         petRV.setAdapter(myPetsRVAdapter);
         progressBar = view.findViewById(R.id.progressBarMyPets);
         progressBar.setVisibility(View.VISIBLE);
         deleteDialog = new Dialog(getContext());
+        adoptDialog = new Dialog(getContext());
         swipeRefreshLayout = view.findViewById(R.id.swipeRefreshMyPets);
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -115,6 +126,13 @@ public class MyPetsFragment extends Fragment implements MyPetsRVAdapter.PetClick
         openConfirmDeleteDialog(petId);
     }
 
+    @Override
+    public void onPetClickAdopt(int position) {
+        Pet petModel = petArrayList.get(position);
+        petId = petModel.getPetId();
+        openConfirmAdoptDialog(petId);
+    }
+
     private void openConfirmDeleteDialog(String petId) {
         deleteDialog.setContentView(R.layout.delete_confirmation_dialog);
         deleteDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
@@ -141,6 +159,33 @@ public class MyPetsFragment extends Fragment implements MyPetsRVAdapter.PetClick
         deleteDialog.show();
     }
 
+
+    private void openConfirmAdoptDialog(String petId) {
+        adoptDialog.setContentView(R.layout.adopt_confirmation_dialog);
+        adoptDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+        Button btnAdotarOk, btnAdotarCancelar;
+        btnAdotarOk = adoptDialog.findViewById(R.id.btnConfirmarAdopt);
+        btnAdotarCancelar = adoptDialog.findViewById(R.id.btnCancelarAdopt);
+
+        btnAdotarOk.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                adotarRealOficial(petId);
+                adoptDialog.dismiss();
+            }
+        });
+
+        btnAdotarCancelar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                adoptDialog.dismiss();
+            }
+        });
+
+        adoptDialog.show();
+    }
+
     private void deletarRealOficial(String petId) {
         databaseReference.child(petId).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
@@ -157,6 +202,29 @@ public class MyPetsFragment extends Fragment implements MyPetsRVAdapter.PetClick
         });
     }
 
+    private void adotarRealOficial(String petId) {
+
+        databaseReference.child(petId).child("isAdotado").setValue("true").addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                Toast.makeText(getContext(), "Ficamos feliz que seu pet foi adotado !", Toast.LENGTH_LONG).show();
+                Fragment fragmentMyPets =  new MyPetsFragment();
+                FragmentManager fm = getFragmentManager();
+                fm.beginTransaction()
+                        .replace(R.id.fragment_container, fragmentMyPets)
+                        .addToBackStack(fragmentMyPets.getClass().getSimpleName())
+                        .commit();
+            }
+
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+
+            }
+        });
+
+    }
+
     public void switchFragment(Fragment fragment){
         FragmentManager fm = getFragmentManager();
         fm.beginTransaction()
@@ -166,15 +234,19 @@ public class MyPetsFragment extends Fragment implements MyPetsRVAdapter.PetClick
     }
 
     private void getAllPets() {
+
         petArrayList.clear();
 
-        Query query = databaseReference.orderByChild("userId").equalTo(user.getUid().toString());
+        Query query = databaseReference.orderByChild("userId").equalTo(user.getUid());
         query.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
                 progressBar.setVisibility(View.GONE);
-                petArrayList.add(snapshot.getValue(Pet.class));
-                myPetsRVAdapter.notifyDataSetChanged();
+                if(snapshot.getValue(Pet.class).getIsAdotado().equals("false")){
+                    Log.e("PET", "pet nao adotado-> ");
+                    petArrayList.add(snapshot.getValue(Pet.class));
+                    myPetsRVAdapter.notifyDataSetChanged();
+                }
             }
 
             @Override

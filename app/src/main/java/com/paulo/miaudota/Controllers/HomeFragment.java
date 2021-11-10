@@ -103,26 +103,34 @@ public class HomeFragment extends Fragment implements PetRVAdapter.PetClickInter
             @Override
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
                 progressBar.setVisibility(View.GONE);
-                petArrayList.add(snapshot.getValue(Pet.class));
-                petRVAdapter.notifyDataSetChanged();
+                if(snapshot.getValue(Pet.class).getIsAdotado().equals("false")){
+                    petArrayList.add(snapshot.getValue(Pet.class));
+                    petRVAdapter.notifyDataSetChanged();
+                }
             }
 
             @Override
             public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
                 progressBar.setVisibility(View.GONE);
-                petRVAdapter.notifyDataSetChanged();
+                if(snapshot.getValue(Pet.class).getIsAdotado().equals("false")){
+                    petRVAdapter.notifyDataSetChanged();
+                }
             }
 
             @Override
             public void onChildRemoved(@NonNull DataSnapshot snapshot) {
                 progressBar.setVisibility(View.GONE);
-                petRVAdapter.notifyDataSetChanged();
+                if(snapshot.getValue(Pet.class).getIsAdotado().equals("false")){
+                    petRVAdapter.notifyDataSetChanged();
+                }
             }
 
             @Override
             public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
                 progressBar.setVisibility(View.GONE);
-                petRVAdapter.notifyDataSetChanged();
+                if(snapshot.getValue(Pet.class).getIsAdotado().equals("false")){
+                    petRVAdapter.notifyDataSetChanged();
+                }
             }
 
             @Override

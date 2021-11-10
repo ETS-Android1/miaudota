@@ -152,7 +152,7 @@ tools:context=".Controllers.EditProfile">
 
     <com.toptoche.searchablespinnerlibrary.SearchableSpinner
         android:id="@+id/cidadeProfileEdit"
-        android:layout_width="210dp"
+        android:layout_width="220dp"
         android:layout_height="46dp"
         android:layout_marginTop="24dp"
         android:background="@drawable/edit_text_bg"
@@ -162,7 +162,7 @@ tools:context=".Controllers.EditProfile">
         android:theme="@style/SpinnerTheme"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.796"
+        app:layout_constraintHorizontal_bias="0.773"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/cpfProfileEdit"
         app:layout_constraintVertical_bias="0.0"
@@ -170,7 +170,7 @@ tools:context=".Controllers.EditProfile">
 
     <Spinner
         android:id="@+id/ufProfileEdit"
-        android:layout_width="85dp"
+        android:layout_width="80dp"
         android:layout_height="46dp"
         android:background="@drawable/edit_text_bg"
         android:textColor="@color/mainText"
@@ -178,7 +178,7 @@ tools:context=".Controllers.EditProfile">
         android:theme="@style/SpinnerTheme"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/cidadeProfileEdit"
-        app:layout_constraintHorizontal_bias="0.546"
+        app:layout_constraintHorizontal_bias="0.72"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/cpfProfileEdit"
         app:layout_constraintVertical_bias="0.089"

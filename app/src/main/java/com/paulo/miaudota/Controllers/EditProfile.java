@@ -65,7 +65,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class EditProfile extends AppCompatActivity implements View.OnClickListener  {
 
-    private EditText editTextFullName,editTextCPF,editTextEmail,editTextCidade,editTextUf,editTextDataNascimento;
+    private EditText editTextFullName,editTextCPF,editTextEmail,editTextDataNascimento;
     private CircleImageView profilePicture;
     private ProgressBar progressBar;
     private String userID, profilePicUrl, dataN, dataAtual, ibgeEstados, cidadePet, ufPet;
@@ -452,6 +452,8 @@ public class EditProfile extends AppCompatActivity implements View.OnClickListen
         String cidade = cidadePet;
         String uf = ufPet;
         String dataNascimento = dataN.toString().trim();
+        String ddd = "";
+        String numCelular = "";
 
         if(nomeCompleto.isEmpty()){
             editTextFullName.setError("Campo obrigatório !!");
@@ -498,7 +500,7 @@ public class EditProfile extends AppCompatActivity implements View.OnClickListen
 
         progressBar.setVisibility(View.VISIBLE);
 
-        User usuario = new User(nomeCompleto, cpf , email, cidade, uf, dataNascimento);
+        User usuario = new User(nomeCompleto, cpf , email, cidade, uf, dataNascimento, ddd, numCelular);
         reference.child(userID).setValue(usuario);
         if(bitmap != null){
             handleUpload(bitmap);

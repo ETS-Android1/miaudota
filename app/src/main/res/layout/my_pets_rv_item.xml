@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_gravity="center"
@@ -22,15 +23,15 @@
 
         <ImageView
             android:id="@+id/imagemPetMyPets"
-            android:layout_width="195dp"
-            android:layout_height="205dp"
+            android:layout_width="157dp"
+            android:layout_height="200dp"
             android:scaleType="centerCrop"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.004"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.4" />
+            app:layout_constraintVertical_bias="0.0" />
 
         <TextView
             android:id="@+id/nomePetMyPets"
@@ -45,6 +46,7 @@
             android:textStyle="bold"
             app:layout_constraintBottom_toTopOf="@+id/cidadeUfMyPets"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.161"
             app:layout_constraintStart_toEndOf="@+id/imagemPetMyPets"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -60,6 +62,7 @@
             android:textStyle="bold"
             app:layout_constraintBottom_toTopOf="@+id/dataCadastroMyPets"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.161"
             app:layout_constraintStart_toEndOf="@+id/imagemPetMyPets"
             app:layout_constraintTop_toBottomOf="@+id/nomePetMyPets" />
 
@@ -75,6 +78,7 @@
             android:textStyle="bold"
             app:layout_constraintBottom_toTopOf="@+id/btnExcluirPet"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.166"
             app:layout_constraintStart_toEndOf="@+id/imagemPetMyPets"
             app:layout_constraintTop_toBottomOf="@+id/cidadeUfMyPets" />
 
@@ -94,35 +98,48 @@
             app:layout_constraintTop_toBottomOf="@+id/dataCadastroMyPets"
             app:layout_constraintVertical_bias="0.483" />
 
-        <Button
-            android:id="@+id/btnEditarMyPet"
-            android:layout_width="65dp"
+        <ImageButton
+            android:id="@+id/btnPetAdotadoo"
+            android:layout_width="50dp"
             android:layout_height="50dp"
-            android:layout_marginStart="8dp"
-            android:backgroundTint="@color/lighterBackground"
-            android:drawableTop="@drawable/ic_edit"
+            android:backgroundTint="@color/bluecachorro"
+            android:src="@drawable/ic_check_pet"
+            android:textSize="12dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/btnEditarMyPet"
+            app:layout_constraintHorizontal_bias="0.36"
+            app:layout_constraintStart_toEndOf="@+id/imagemPetMyPets"
+            app:layout_constraintTop_toTopOf="@+id/imagemPetMyPets"
+            app:layout_constraintVertical_bias="0.893" />
+
+        <ImageButton
+            android:id="@+id/btnEditarMyPet"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:backgroundTint="@color/rosinha"
+            android:src="@drawable/ic_edit"
             android:text="Editar Pet"
             android:textSize="12dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.637"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/btnExcluirPet"
+            app:layout_constraintHorizontal_bias="0.775"
+            app:layout_constraintStart_toEndOf="@+id/imagemPetMyPets"
             app:layout_constraintTop_toTopOf="@+id/imagemPetMyPets"
-            app:layout_constraintVertical_bias="0.926" />
+            app:layout_constraintVertical_bias="0.893" />
 
-        <Button
+        <ImageButton
             android:id="@+id/btnExcluirPet"
-            android:layout_width="65dp"
+            android:layout_width="50dp"
             android:layout_height="50dp"
-            android:backgroundTint="@color/lighterBackground"
-            android:drawableTop="@drawable/ic_delete_red"
+            android:backgroundTint="@color/lighterlighterBackground"
+            android:src="@drawable/ic_delete_red"
             android:textSize="16dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.952"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintHorizontal_bias="0.917"
+            app:layout_constraintStart_toEndOf="@+id/imagemPetMyPets"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.926" />
+            app:layout_constraintVertical_bias="0.893" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -60,6 +62,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Locale;
+import java.util.Random;
 import java.util.concurrent.ExecutionException;
 
 public class EditPetFragment extends Fragment implements View.OnClickListener {
@@ -67,7 +70,7 @@ public class EditPetFragment extends Fragment implements View.OnClickListener {
     private ArrayList<String> estadosSpinner = new ArrayList<>();
     private SearchableSpinner spinnerCidades = null;
     private Spinner spinnerEstados, spinnerTipo ,spinnerGenero, spinnerTamanho;
-    private String ibgeEstados, ufPet, cidadePet, tipoPet ,generoPet, tamanhoPet, userId, petId, petImageStr, ddd, celular;
+    private String ibgeEstados, ufPet, cidadePet, tipoPet ,generoPet, tamanhoPet, userId, petId, petImageStr, ddd, celular, isAdotado;
     private Uri petImageUri;
     private Bitmap bitmap = null;
     private EditText descricaoEditText, nomePetEditText, idadeAnosEditText, idadeMesesEditText, dddEditText, celularEditText;
@@ -79,6 +82,7 @@ public class EditPetFragment extends Fragment implements View.OnClickListener {
     private String nomePet, idadeAnos, idadeMeses, descricao, dataCadastro;
     private Pet petModel = null;
     private SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale.US);
+    private Random random = new Random();
 
     private FirebaseAuth mAuth;
     private FirebaseUser user;
@@ -124,6 +128,7 @@ public class EditPetFragment extends Fragment implements View.OnClickListener {
         progressBar.setVisibility(View.VISIBLE);
         mAuth = FirebaseAuth.getInstance();
         userId = mAuth.getCurrentUser().getUid();
+        isAdotado = "false";
 
         firebaseDatabase = FirebaseDatabase.getInstance();
         databaseReference = firebaseDatabase.getReference("Pets");
@@ -165,10 +170,13 @@ public class EditPetFragment extends Fragment implements View.OnClickListener {
                     descricaoEditText.setText(petModel.getDescricaoPet());
                     petImageStr = petModel.getPetImg();
 
+                    Drawable rdColorPlaceholder =  getContext().getDrawable(R.drawable.pet_color_background);
+                    rdColorPlaceholder.setColorFilter(Color.argb(255, random.nextInt(256), random.nextInt(256), random.nextInt(256)), PorterDuff.Mode.SRC_IN);
+
                     Glide.with(getActivity())
                             .load(petModel.getPetImg()) // image url
-                            .placeholder(R.drawable.profile_placeholder) // any placeholder to load at start
-                            .error(R.drawable.profile_placeholder)  // any image in case of error
+                            .placeholder(rdColorPlaceholder) // any placeholder to load at start
+                            .error(rdColorPlaceholder)  // any image in case of error
                             .override(200, 200) // resizing
                             .centerCrop()
                             .into(petImage);  // imageview object
@@ -558,7 +566,7 @@ public class EditPetFragment extends Fragment implements View.OnClickListener {
 
     private void UpdatePetDb(){
         Log.e("UPDATEpet","image ->" + petImageStr + " ou" + petImage);
-        Pet petModel = new Pet(petImageStr ,nomePet, tipoPet, idadeAnos, idadeMeses ,generoPet, tamanhoPet, ufPet, cidadePet, descricao, petId, dataCadastro, userId, ddd, celular);
+        Pet petModel = new Pet(petImageStr ,nomePet, tipoPet, idadeAnos, idadeMeses ,generoPet, tamanhoPet, ufPet, cidadePet, descricao, petId, dataCadastro, userId, ddd, celular, isAdotado);
 
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override

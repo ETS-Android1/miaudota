@@ -31,14 +31,17 @@ public class MyPetsRVAdapter extends RecyclerView.Adapter<MyPetsRVAdapter.ViewHo
     private PetClickInterface petClickInterface;
     private PetClickDeleteInterface petClickDeleteInterface;
     private PetClickAdoptInterface petClickAdoptInterface;
+    private PetClickEditInterface petClickEditInterface;
     private Random random = new Random();
 
-    public MyPetsRVAdapter(ArrayList<Pet> petArrayList, Context context, PetClickInterface petClickInterface, PetClickDeleteInterface petClickDeleteInterface, PetClickAdoptInterface petClickAdoptInterface) {
+    public MyPetsRVAdapter(ArrayList<Pet> petArrayList, Context context, PetClickInterface petClickInterface, PetClickDeleteInterface petClickDeleteInterface,
+                           PetClickAdoptInterface petClickAdoptInterface, PetClickEditInterface petClickEditInterface) {
         this.petArrayList = petArrayList;
         this.context = context;
         this.petClickInterface = petClickInterface;
         this.petClickDeleteInterface = petClickDeleteInterface;
         this.petClickAdoptInterface = petClickAdoptInterface;
+        this.petClickEditInterface = petClickEditInterface;
     }
 
     @NonNull
@@ -71,7 +74,7 @@ public class MyPetsRVAdapter extends RecyclerView.Adapter<MyPetsRVAdapter.ViewHo
         holder.btnEditMyPets.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                petClickInterface.onPetClick(holder.getAdapterPosition());
+                petClickEditInterface.onPetClickEdit(holder.getAdapterPosition());
             }
         });
 
@@ -119,6 +122,10 @@ public class MyPetsRVAdapter extends RecyclerView.Adapter<MyPetsRVAdapter.ViewHo
 
     public interface PetClickDeleteInterface{
         void onPetClickDelete(int position);
+    }
+
+    public interface PetClickEditInterface{
+        void onPetClickEdit(int position);
     }
 
     public interface PetClickAdoptInterface{

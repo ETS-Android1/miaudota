@@ -24,14 +24,6 @@ public class Pet implements Parcelable {
     private String numCelular;
     private String isAdotado;
 
-    public String getIsAdotado() {
-        return isAdotado;
-    }
-
-    public void setIsAdotado(String isAdotado) {
-        this.isAdotado = isAdotado;
-    }
-
     public Pet(){}
 
     public Pet(String petImg,String petName, String tipoPet, String idadeAnosPet, String idadeMesesPet, String generoPet, String tamanhoPet, String ufPet, String cidadePet,
@@ -203,6 +195,14 @@ public class Pet implements Parcelable {
 
     public void setNumCelular(String numCelular) {
         this.numCelular = numCelular;
+    }
+
+    public String getIsAdotado() {
+        return isAdotado;
+    }
+
+    public void setIsAdotado(String isAdotado) {
+        this.isAdotado = isAdotado;
     }
 
     @Override

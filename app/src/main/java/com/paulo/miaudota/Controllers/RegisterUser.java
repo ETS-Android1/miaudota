@@ -6,8 +6,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.text.InputFilter;
 import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
@@ -30,6 +30,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.paulo.miaudota.InputFilterMinMax;
 import com.paulo.miaudota.Models.Cidade;
 import com.paulo.miaudota.Models.Estado;
 import com.paulo.miaudota.R;
@@ -44,7 +45,7 @@ import java.util.concurrent.ExecutionException;
 
 public class RegisterUser extends AppCompatActivity implements View.OnClickListener {
 
-    private EditText editTextFullName,editTextCPF,editTextEmail,editTextPassword,editTextDataNascimento;
+    private EditText editTextFullName,editTextCPF,editTextEmail,editTextPassword,editTextDataNascimento, editTextDdd, editTextNumCelular;
     private FirebaseAuth mAuth;
     private FirebaseUser fUser;
     private ProgressBar progressBar;
@@ -79,6 +80,9 @@ public class RegisterUser extends AppCompatActivity implements View.OnClickListe
         spinnerEstados = findViewById(R.id.btnUf);
         editTextPassword = findViewById(R.id.senhaCadastro);
         progressBar = findViewById(R.id.progressBarRegister);
+        editTextDdd = findViewById(R.id.dddReg);
+        editTextDdd.setFilters(new InputFilter[]{new InputFilterMinMax("0", "99")});
+        editTextNumCelular = findViewById(R.id.numCelularReg);
 
         date = (view, year, monthOfYear, dayOfMonth) -> {
             myCalendar.set(Calendar.YEAR, year);
@@ -173,8 +177,8 @@ public class RegisterUser extends AppCompatActivity implements View.OnClickListe
         String dataNascimento = dataN.toString().trim();
         String cidade = cidadeReg;
         String uf = ufReg;
-        String ddd = "";
-        String numCelular = "";
+        String ddd = editTextDdd.getText().toString().trim();
+        String numCelular = editTextNumCelular.getText().toString().trim();
 
 
         if(nomeCompleto.isEmpty()){

@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="0dp">
+
+<androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/mainBackground">
@@ -19,13 +24,13 @@
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.046" />
+        app:layout_constraintVertical_bias="0.026" />
 
     <TextView
         android:id="@+id/nomeProfile"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="20dp"
         android:autofillHints="name"
         android:background="@drawable/edit_text_bg"
         android:hint="@string/nome_completo"
@@ -47,7 +52,7 @@
         android:id="@+id/emailProfile"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="20dp"
         android:autofillHints="emailAddress"
         android:background="@drawable/edit_text_bg"
         android:hint="@string/email"
@@ -67,33 +72,56 @@
         app:layout_constraintWidth_percent=".8" />
 
     <TextView
-        android:id="@+id/cpfProfile"
+        android:id="@+id/celularProfile"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:autofillHints="null"
+        android:layout_marginTop="20dp"
+        android:autofillHints="emailAddress"
         android:background="@drawable/edit_text_bg"
-        android:hint="@string/numero_do_cpf"
+        android:hint="Celular"
         android:minHeight="48dp"
-        android:textColor="@color/mainText"
-        android:textColorHint="@color/mainText"
-        android:textAlignment="center"
-        android:textSize="18sp"
         android:paddingStart="20dp"
         android:paddingTop="10dp"
         android:paddingEnd="20dp"
         android:paddingBottom="10dp"
+        android:textAlignment="center"
+        android:textColor="@color/mainText"
+        android:textColorHint="@color/mainText"
+        android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.494"
+        app:layout_constraintHorizontal_bias="0.512"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/emailProfile"
+        app:layout_constraintWidth_percent=".8" />
+
+    <TextView
+        android:id="@+id/cpfProfile"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:autofillHints="null"
+        android:background="@drawable/edit_text_bg"
+        android:hint="@string/numero_do_cpf"
+        android:minHeight="48dp"
+        android:paddingStart="20dp"
+        android:paddingTop="10dp"
+        android:paddingEnd="20dp"
+        android:paddingBottom="10dp"
+        android:textAlignment="center"
+        android:textColor="@color/mainText"
+        android:textColorHint="@color/mainText"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.512"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/celularProfile"
         app:layout_constraintWidth_percent=".8" />
 
     <TextView
         android:id="@+id/localizacaoProfile"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="20dp"
         android:autofillHints="null"
         android:background="@drawable/edit_text_bg"
         android:hint="Localizacao"
@@ -115,7 +143,7 @@
         android:id="@+id/dataNascimentoProfile"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="20dp"
         android:autofillHints="null"
         android:background="@drawable/edit_text_bg"
         android:hint="Data nascimento"
@@ -129,6 +157,7 @@
         android:textColorHint="@color/mainText"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.487"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/localizacaoProfile"
         app:layout_constraintWidth_percent=".8" />
@@ -137,7 +166,7 @@
         android:id="@+id/btnEditProfile"
         android:layout_width="330dp"
         android:layout_height="45dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="28dp"
         android:background="@drawable/button_bg"
         android:text="Editar Perfil"
         android:textColor="@color/white"
@@ -152,13 +181,31 @@
         android:id="@+id/btnLogOut"
         android:layout_width="330dp"
         android:layout_height="45dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="20dp"
         android:background="@drawable/button_bg"
         android:text="Sair"
         android:textColor="@color/white"
         android:textSize="16sp"
         app:backgroundTint="@null"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.506"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnEditProfile"
+        app:layout_constraintWidth_percent=".8" />
+
+    <Button
+        android:id="@+id/invisibleSpaceProfile"
+        android:layout_width="330dp"
+        android:layout_height="25dp"
+        android:layout_marginTop="76dp"
+        android:background="@drawable/button_bg"
+        android:text="Sair"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        app:backgroundTint="@null"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.481"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btnEditProfile"
         app:layout_constraintWidth_percent=".8" />
@@ -178,4 +225,5 @@
         android:indeterminateTint="@color/bluecachorro"
         android:visibility="invisible"/>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.core.widget.NestedScrollView>

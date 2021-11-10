@@ -14,6 +14,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Miaudota">
         <activity
+            android:name=".Controllers.Candidaturas"
+            android:exported="false" />
+        <activity
             android:name=".Controllers.PetDetails"
             android:exported="false" />
         <activity

@@ -29,9 +29,9 @@ public class SliderAdapter extends PagerAdapter {
     };
 
     public String[] slide_texts ={
-            "Sua mae Sua mae Sua mae Sua mae Sua mae Sua mae ",
-            "Otario Otario Otario Otario Otario Otario Otario Otario ",
-            "Essa fera meu Essa fera meu Essa fera meu Essa fera meu Essa fera meu Essa fera meu "
+            "Faça seu cadastro rapidamente",
+            "Procure entre os mais de 1000 pets cadastrados",
+            "Adote um companheiro para seu dia"
     };
 
     public String[] slide_btn_texts ={

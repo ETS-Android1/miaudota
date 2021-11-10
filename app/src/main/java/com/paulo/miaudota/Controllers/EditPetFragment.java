@@ -144,7 +144,6 @@ public class EditPetFragment extends Fragment implements View.OnClickListener {
         progressBar.setVisibility(View.VISIBLE);
         Bundle args = getArguments();
         petId = args.getString("PetId");
-        Log.e("PET", "petId -> " + petId);
 
         Query query = databaseReference.orderByChild("petId").equalTo(petId);
         query.addListenerForSingleValueEvent(new ValueEventListener() {

@@ -52,7 +52,7 @@ import org.w3c.dom.Text;
 import java.util.ArrayList;
 
 
-public class MyPetsFragment extends Fragment implements MyPetsRVAdapter.PetClickInterface, MyPetsRVAdapter.PetClickDeleteInterface, MyPetsRVAdapter.PetClickAdoptInterface {
+public class MyPetsFragment extends Fragment implements MyPetsRVAdapter.PetClickInterface, MyPetsRVAdapter.PetClickDeleteInterface, MyPetsRVAdapter.PetClickAdoptInterface, MyPetsRVAdapter.PetClickEditInterface {
 
     private RecyclerView petRV;
     private ProgressBar progressBar;
@@ -86,7 +86,7 @@ public class MyPetsFragment extends Fragment implements MyPetsRVAdapter.PetClick
         petArrayList = new ArrayList<>();
         firebaseDatabase = FirebaseDatabase.getInstance();
         databaseReference = firebaseDatabase.getReference("Pets");
-        myPetsRVAdapter = new MyPetsRVAdapter(petArrayList,getContext(),this,this,this);
+        myPetsRVAdapter = new MyPetsRVAdapter(petArrayList,getContext(),this,this,this,this);
         petRV.setLayoutManager(new LinearLayoutManager(getContext()));
         petRV.setAdapter(myPetsRVAdapter);
         progressBar = view.findViewById(R.id.progressBarMyPets);
@@ -109,13 +109,11 @@ public class MyPetsFragment extends Fragment implements MyPetsRVAdapter.PetClick
 
     @Override
     public void onPetClick(int position) {
-        Fragment fragmentEditPet =  new EditPetFragment();
-        Bundle bundle = new Bundle();
+        Intent intent = new Intent(getActivity(),Candidaturas.class);
         Pet petModel = petArrayList.get(position);
         petId = petModel.getPetId();
-        bundle.putString("PetId", petId);
-        fragmentEditPet.setArguments(bundle);
-        switchFragment(fragmentEditPet);
+        intent.putExtra("petId", petId);
+        startActivity(intent);
     }
 
     @Override
@@ -124,6 +122,17 @@ public class MyPetsFragment extends Fragment implements MyPetsRVAdapter.PetClick
         petId = petModel.getPetId();
         Log.e("Warning_Activity","Deletando conta");
         openConfirmDeleteDialog(petId);
+    }
+
+    @Override
+    public void onPetClickEdit(int position) {
+        Fragment fragmentEditPet =  new EditPetFragment();
+        Bundle bundle = new Bundle();
+        Pet petModel = petArrayList.get(position);
+        petId = petModel.getPetId();
+        bundle.putString("PetId", petId);
+        fragmentEditPet.setArguments(bundle);
+        switchFragment(fragmentEditPet);
     }
 
     @Override

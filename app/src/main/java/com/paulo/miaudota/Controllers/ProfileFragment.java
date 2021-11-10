@@ -33,7 +33,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ProfileFragment extends Fragment implements View.OnClickListener{
 
-    private TextView TextFullName,TextCPF,TextEmail,TextLocalizacao, TextDataNascimento;
+    private TextView TextFullName,TextCPF,TextEmail,TextLocalizacao, TextDataNascimento, TextCelular;
     private CircleImageView profilePicture;
 
     private FirebaseAuth mAuth;
@@ -73,6 +73,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
         TextEmail = view.findViewById(R.id.emailProfile);
         TextLocalizacao = view.findViewById(R.id.localizacaoProfile);
         TextDataNascimento = view.findViewById(R.id.dataNascimentoProfile);
+        TextCelular = view.findViewById(R.id.celularProfile);
         progressBar = view.findViewById(R.id.progressBarProfile);
 
         if (user == null) {
@@ -140,12 +141,14 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
                     String cpf = userProfile.Cpf;
                     String localizacao = userProfile.Cidade + "/" + userProfile.UF;
                     String dataNascimento = userProfile.DataNascimento;
+                    String numCelular = userProfile.Ddd + "/" + userProfile.NumCelular;
 
                     TextFullName.setText(nomeCompleto);
                     TextEmail.setText(email);
                     TextCPF.setText(cpf);
                     TextLocalizacao.setText(localizacao);
                     TextDataNascimento.setText(dataNascimento);
+                    TextCelular.setText(numCelular);
 
                     Glide.with(getActivity())
                             .load(profilePicUrl) // image url

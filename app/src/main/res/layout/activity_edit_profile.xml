@@ -1,11 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-xmlns:app="http://schemas.android.com/apk/res-auto"
-xmlns:tools="http://schemas.android.com/tools"
-android:layout_width="match_parent"
-android:layout_height="match_parent"
-android:background="@color/mainBackground"
-tools:context=".Controllers.EditProfile">
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background=""
+    android:layout_margin="0dp">
+
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/mainBackground"
+    tools:context=".Controllers.EditProfile">
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/profilePictureEdit"
@@ -21,13 +27,12 @@ tools:context=".Controllers.EditProfile">
         app:layout_constraintHorizontal_bias="0.505"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.092" />
+        app:layout_constraintVertical_bias="0.058" />
 
     <ImageButton
         android:id="@+id/btnProfilePictureEdit"
         android:layout_width="42dp"
         android:layout_height="40dp"
-        android:layout_marginStart="86dp"
         android:background="@drawable/btn_circle_background"
         android:src="@drawable/ic_edit_picture"
         android:textColor="@color/mainText"
@@ -37,17 +42,16 @@ tools:context=".Controllers.EditProfile">
         android:translationZ="20dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/profilePictureEdit"
+        app:layout_constraintHorizontal_bias="0.62"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.209"
-        app:layout_constraintWidth_percent=".8" />
+        app:layout_constraintVertical_bias="0.178" />
 
     <EditText
         android:id="@+id/nomeProfileEdit"
-        android:layout_width="0dp"
+        android:layout_width="330dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="28dp"
         android:autofillHints="name"
         android:background="@drawable/edit_text_bg"
         android:hint="@string/nome_completo"
@@ -60,13 +64,15 @@ tools:context=".Controllers.EditProfile">
         android:textColor="@color/mainText"
         android:textColorHint="@color/mainText"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.491"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/btnUpdate"
         app:layout_constraintTop_toBottomOf="@+id/profilePictureEdit"
-        app:layout_constraintWidth_percent=".8" />
+        app:layout_constraintVertical_bias="0.0" />
 
     <EditText
         android:id="@+id/cpfProfileEdit"
-        android:layout_width="0dp"
+        android:layout_width="330dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
         android:autofillHints="null"
@@ -80,16 +86,138 @@ tools:context=".Controllers.EditProfile">
         android:paddingBottom="10dp"
         android:textColor="@color/mainText"
         android:textColorHint="@color/mainText"
+        app:layout_constraintBottom_toTopOf="@+id/emailProfileEdit"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.493"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/emailProfileEdit"
-        app:layout_constraintWidth_percent=".8" />
+        app:layout_constraintTop_toBottomOf="@+id/nomeProfileEdit" />
+
+    <EditText
+        android:id="@+id/emailProfileEdit"
+        android:layout_width="330dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:autofillHints="emailAddress"
+        android:background="@drawable/edit_text_bg"
+        android:hint="@string/email"
+        android:inputType="textEmailAddress"
+        android:minHeight="48dp"
+        android:paddingStart="20dp"
+        android:paddingTop="10dp"
+        android:paddingEnd="20dp"
+        android:paddingBottom="10dp"
+        android:textColor="@color/mainText"
+        android:textColorHint="@color/mainText"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.493"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cpfProfileEdit" />
+
+
+    <Spinner
+        android:id="@+id/ufProfileEdit"
+        android:layout_width="80dp"
+        android:layout_height="46dp"
+        android:layout_marginTop="24dp"
+        android:background="@drawable/edit_text_bg"
+        android:textColor="@color/mainText"
+        android:textColorHint="@color/mainText"
+        android:theme="@style/SpinnerTheme"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.12"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/emailProfileEdit" />
+
+    <com.toptoche.searchablespinnerlibrary.SearchableSpinner
+        android:id="@+id/cidadeProfileEdit"
+        android:layout_width="225dp"
+        android:layout_height="46dp"
+        android:layout_marginTop="24dp"
+        android:background="@drawable/edit_text_bg"
+        android:minHeight="48dp"
+        android:textColor="@color/mainText"
+        android:textColorHint="@color/mainText"
+        android:theme="@style/SpinnerTheme"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.779"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/emailProfileEdit" />
+
+    <EditText
+        android:id="@+id/dddProfileEdit"
+        android:layout_width="80dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:background="@drawable/edit_text_bg"
+        android:hint="DDD"
+        android:inputType="number"
+        android:minHeight="48dp"
+        android:paddingStart="20dp"
+        android:paddingTop="10dp"
+        android:paddingEnd="20dp"
+        android:paddingBottom="10dp"
+        android:textColor="@color/mainText"
+        android:textColorHint="@color/mainText"
+        app:layout_constraintBottom_toTopOf="@+id/btnDataNascimentoProfileEdit"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.12"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ufProfileEdit"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <EditText
+        android:id="@+id/numCelularProfileEdit"
+        android:layout_width="225dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:background="@drawable/edit_text_bg"
+        android:hint="Celular"
+        android:inputType="number"
+        android:maxLength="10"
+        android:minHeight="48dp"
+        android:paddingStart="20dp"
+        android:paddingTop="10dp"
+        android:paddingEnd="20dp"
+        android:paddingBottom="10dp"
+        android:textColor="@color/mainText"
+        android:textColorHint="@color/mainText"
+        app:layout_constraintBottom_toTopOf="@+id/btnDataNascimentoProfileEdit"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.779"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cidadeProfileEdit"
+        app:layout_constraintVertical_bias="0.24" />
+
+    <EditText
+        android:id="@+id/ajusteInvisivel"
+        android:layout_width="330dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="40dp"
+        android:autofillHints="null"
+        android:background="@drawable/edit_text_bg"
+        android:clickable="false"
+        android:cursorVisible="false"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
+        android:minHeight="48dp"
+        android:paddingStart="20dp"
+        android:paddingTop="10dp"
+        android:paddingEnd="20dp"
+        android:paddingBottom="10dp"
+        android:textColor="@color/mainText"
+        android:textColorHint="@color/mainText"
+        android:visibility="invisible"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:layout_editor_absoluteY="735dp" />
 
     <EditText
         android:id="@+id/btnDataNascimentoProfileEdit"
-        android:layout_width="0dp"
+        android:layout_width="330dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="28dp"
+        android:layout_marginEnd="41dp"
+        android:layout_marginBottom="24dp"
         android:autofillHints="null"
         android:background="@drawable/edit_text_bg"
         android:clickable="false"
@@ -105,17 +233,17 @@ tools:context=".Controllers.EditProfile">
         android:paddingBottom="10dp"
         android:textColor="@color/mainText"
         android:textColorHint="@color/mainText"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/btnUpdate"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cidadeProfileEdit"
-        app:layout_constraintVertical_bias="0.0"
-        app:layout_constraintWidth_percent=".8" />
+        app:layout_constraintTop_toBottomOf="@+id/dddProfileEdit" />
 
     <Button
         android:id="@+id/btnUpdate"
-        android:layout_width="0dp"
+        android:layout_width="300dp"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="68dp"
         android:background="@drawable/button_bg"
         android:text="Atualizar"
         android:textColor="@color/mainText"
@@ -124,65 +252,8 @@ tools:context=".Controllers.EditProfile">
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnDataNascimentoProfileEdit"
-        app:layout_constraintVertical_bias="0.263"
-        app:layout_constraintWidth_percent=".8" />
-
-    <EditText
-        android:id="@+id/emailProfileEdit"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:autofillHints="emailAddress"
-        android:background="@drawable/edit_text_bg"
-        android:hint="@string/email"
-        android:inputType="textEmailAddress"
-        android:minHeight="48dp"
-        android:paddingStart="20dp"
-        android:paddingTop="10dp"
-        android:paddingEnd="20dp"
-        android:paddingBottom="10dp"
-        android:textColor="@color/mainText"
-        android:textColorHint="@color/mainText"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/nomeProfileEdit"
-        app:layout_constraintWidth_percent=".8" />
-
-    <com.toptoche.searchablespinnerlibrary.SearchableSpinner
-        android:id="@+id/cidadeProfileEdit"
-        android:layout_width="220dp"
-        android:layout_height="46dp"
-        android:layout_marginTop="24dp"
-        android:background="@drawable/edit_text_bg"
-        android:minHeight="48dp"
-        android:textColor="@color/mainText"
-        android:textColorHint="@color/mainText"
-        android:theme="@style/SpinnerTheme"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.773"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cpfProfileEdit"
-        app:layout_constraintVertical_bias="0.0"
-        app:layout_constraintWidth_percent=".8" />
-
-    <Spinner
-        android:id="@+id/ufProfileEdit"
-        android:layout_width="80dp"
-        android:layout_height="46dp"
-        android:background="@drawable/edit_text_bg"
-        android:textColor="@color/mainText"
-        android:textColorHint="@color/mainText"
-        android:theme="@style/SpinnerTheme"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/cidadeProfileEdit"
-        app:layout_constraintHorizontal_bias="0.72"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cpfProfileEdit"
-        app:layout_constraintVertical_bias="0.089"
-        app:layout_constraintWidth_percent=".8" />
+        app:layout_constraintHorizontal_bias="0.495"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <ProgressBar
         android:id="@+id/progressBarPRofileEdit"
@@ -200,3 +271,4 @@ tools:context=".Controllers.EditProfile">
         android:visibility="invisible"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.core.widget.NestedScrollView>

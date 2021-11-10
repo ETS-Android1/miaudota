@@ -35,4 +35,12 @@
         <item name="boxStrokeWidth">1dp</item>
         <item name="android:textColorHint">#fff</item>
     </style>
+
+    <style name="Theme.Miaudota.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="Theme.Miaudota.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+    <style name="Theme.Miaudota.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 </resources>

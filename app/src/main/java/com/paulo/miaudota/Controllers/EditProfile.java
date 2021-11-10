@@ -16,6 +16,7 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.text.InputFilter;
 import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
@@ -31,6 +32,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
@@ -43,6 +45,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.paulo.miaudota.InputFilterMinMax;
 import com.paulo.miaudota.Models.Cidade;
 import com.paulo.miaudota.Models.Estado;
 import com.paulo.miaudota.R;
@@ -65,7 +68,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class EditProfile extends AppCompatActivity implements View.OnClickListener  {
 
-    private EditText editTextFullName,editTextCPF,editTextEmail,editTextDataNascimento;
+    private EditText editTextFullName,editTextCPF,editTextEmail,editTextDataNascimento, editTextDdd, editTextCelular;
     private CircleImageView profilePicture;
     private ProgressBar progressBar;
     private String userID, profilePicUrl, dataN, dataAtual, ibgeEstados, cidadePet, ufPet;
@@ -76,6 +79,7 @@ public class EditProfile extends AppCompatActivity implements View.OnClickListen
     private Spinner spinnerEstados;
     private SearchableSpinner spinnerCidades = null;
     private ArrayList<String> estadosSpinner = new ArrayList<>();
+    private Boolean usuarioIncompleto;
 
     private FirebaseAuth mAuth;
     private FirebaseUser user;
@@ -111,6 +115,9 @@ public class EditProfile extends AppCompatActivity implements View.OnClickListen
         editTextEmail = findViewById(R.id.emailProfileEdit);
         editTextDataNascimento = findViewById(R.id.btnDataNascimentoProfileEdit);
         editTextDataNascimento.setOnClickListener(this);
+        editTextDdd = findViewById(R.id.dddProfileEdit);
+        editTextDdd.setFilters(new InputFilter[]{new InputFilterMinMax("0", "99")});
+        editTextCelular = findViewById(R.id.numCelularProfileEdit);
         progressBar = findViewById(R.id.progressBarPRofileEdit);
         progressBar.setVisibility(View.VISIBLE);
         spinnerEstados = findViewById(R.id.ufProfileEdit);
@@ -221,6 +228,8 @@ public class EditProfile extends AppCompatActivity implements View.OnClickListen
                     String cidade = userProfile.Cidade;
                     String uf = userProfile.UF;
                     String dataNascimento = userProfile.DataNascimento;
+                    String ddd = userProfile.Ddd;
+                    String nCelular = userProfile.NumCelular;
                     SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
                     Date dataFormatada = null;
                     try {
@@ -244,6 +253,8 @@ public class EditProfile extends AppCompatActivity implements View.OnClickListen
                     }, 3000);
 
                     editTextDataNascimento.setText(dataNascimento);
+                    editTextDdd.setText(ddd);
+                    editTextCelular.setText(nCelular);
 
                     Glide.with(EditProfile.this)
                             .load(profilePicUrl) // image url
@@ -253,10 +264,12 @@ public class EditProfile extends AppCompatActivity implements View.OnClickListen
                             .centerCrop()
                             .into(profilePicture);  // imageview object
 
+                    usuarioIncompleto = false;
                     progressBar.setVisibility(View.INVISIBLE);
                 }
                 else{
                     //se for incompleto carrega email e nome e a foto
+                    usuarioIncompleto = true;
                     nomeCompleto = userProfile.NomeCompleto;
                     email = userProfile.Email;
 
@@ -452,8 +465,8 @@ public class EditProfile extends AppCompatActivity implements View.OnClickListen
         String cidade = cidadePet;
         String uf = ufPet;
         String dataNascimento = dataN.toString().trim();
-        String ddd = "";
-        String numCelular = "";
+        String ddd = editTextDdd.getText().toString().trim();
+        String numCelular = editTextCelular.getText().toString().trim();
 
         if(nomeCompleto.isEmpty()){
             editTextFullName.setError("Campo obrigatório !!");
@@ -501,15 +514,24 @@ public class EditProfile extends AppCompatActivity implements View.OnClickListen
         progressBar.setVisibility(View.VISIBLE);
 
         User usuario = new User(nomeCompleto, cpf , email, cidade, uf, dataNascimento, ddd, numCelular);
-        reference.child(userID).setValue(usuario);
-        if(bitmap != null){
-            handleUpload(bitmap);
-        }
-        else{
-            Intent intent = new Intent(EditProfile.this,ProfileFragment.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP); finish();
-            Toast.makeText(EditProfile.this,"Perfil atualizado com sucesso !!",Toast.LENGTH_LONG).show();
-        }
+        reference.child(userID).setValue(usuario).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void unused) {
+                if(bitmap != null){
+                    handleUpload(bitmap);
+                }
+                else{
+                    Handler handler = new Handler();
+                    handler.postDelayed(new Runnable() {
+                        public void run() {
+                            Intent intent = new Intent(EditProfile.this,Home.class);
+                            startActivity(intent);
+                            Toast.makeText(EditProfile.this,"Perfil atualizado com sucesso !!",Toast.LENGTH_LONG).show();
+                        }
+                    }, 3500);
+                }
+            }
+        });
     }
 
     private void handleUpload(Bitmap bitmap) {
@@ -542,8 +564,9 @@ public class EditProfile extends AppCompatActivity implements View.OnClickListen
         user.updateProfile(request)
                 .addOnSuccessListener(unused -> {
                     Log.d("Profile_Photo", "User profile updated.");
-                    Intent intent = new Intent(EditProfile.this,ProfileFragment.class);
+                    Intent intent = new Intent(EditProfile.this,Home.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP); finish();
+                    startActivity(intent);
                     Toast.makeText(EditProfile.this,"Perfil atualizado com sucesso !!",Toast.LENGTH_LONG).show();
                 })
                 .addOnFailureListener(e -> {
@@ -563,6 +586,18 @@ public class EditProfile extends AppCompatActivity implements View.OnClickListen
         dataAtual = sdf.format(Calendar.getInstance().getTime());
         if(!dataN.toString().equals(dataAtual)){
             editTextDataNascimento.setText(dataN);
+        }
+    }
+
+    @Override
+    public void onBackPressed(){
+        Log.e("Warning_Activity","onBackPressed Home");
+
+        if(usuarioIncompleto == true){
+            startActivity(new Intent(EditProfile.this, Home.class));
+        }
+        else {
+            super.onBackPressed();
         }
     }
 

@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:layout_marginRight="5dp"
+    android:layout_marginLeft="5dp"
+    android:layout_marginTop="5dp"
+    android:layout_marginBottom="5dp"
+    android:backgroundTint="@color/lighterBackground"
+    app:cardCornerRadius="8dp"
+    app:cardElevation="3dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/candidaturasRvLayoutId"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_marginTop="0dp"
+        android:layout_marginBottom="0dp"
+        android:background="@color/lighterBackground">
+
+        <ImageView
+            android:id="@+id/imagemCandidato"
+            android:layout_width="150dp"
+            android:layout_height="208dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/profile_placeholder"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0" />
+
+        <TextView
+            android:id="@+id/nomeCandidato"
+            android:layout_width="175dp"
+            android:layout_height="35dp"
+            android:layout_below="@id/imagemCandidato"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="4dp"
+            android:gravity="start"
+            android:text="Nome Candidato"
+            android:textColor="@color/white"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.028"
+            app:layout_constraintStart_toEndOf="@+id/imagemCandidato"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/emailCandidato"
+            android:layout_width="175dp"
+            android:layout_height="35dp"
+            android:layout_marginStart="8dp"
+            android:gravity="start"
+            android:text="Email"
+            android:textColor="@color/white"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.028"
+            app:layout_constraintStart_toEndOf="@+id/imagemCandidato"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.309" />
+
+        <TextView
+            android:id="@+id/cidadeCandidato"
+            android:layout_width="175dp"
+            android:layout_height="35dp"
+            android:layout_marginStart="8dp"
+            android:gravity="start"
+            android:text="Cidade/UF"
+            android:textColor="@color/white"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.028"
+            app:layout_constraintStart_toEndOf="@+id/imagemCandidato"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.6" />
+
+        <TextView
+            android:id="@+id/dataCandidatura"
+            android:layout_width="175dp"
+            android:layout_height="35dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginBottom="12dp"
+            android:gravity="start"
+            android:text="01/01/2001"
+            android:textColor="@color/white"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.028"
+            app:layout_constraintStart_toEndOf="@+id/imagemCandidato"
+            app:layout_constraintTop_toBottomOf="@+id/cidadeCandidato"
+            app:layout_constraintVertical_bias="0.789" />
+
+        <TextView
+            android:id="@+id/idCandidatura"
+            android:layout_width="10dp"
+            android:layout_height="10dp"
+            android:layout_marginStart="80dp"
+            android:gravity="start"
+            android:textColor="@color/white"
+            android:textSize="8sp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintHorizontal_bias="0.153"
+            app:layout_constraintTop_toBottomOf="@+id/dataCandidatura"
+            app:layout_constraintVertical_bias="0.483"
+            tools:ignore="MissingConstraints" />
+
+        <ImageButton
+            android:id="@+id/btnZapCandidato"
+            style="@style/btn_zap"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="16dp"
+            android:background="@drawable/btn_circle_background"
+            android:backgroundTint="@color/lighterBackground"
+            android:drawableTop="@drawable/ic_zap"
+            android:drawableTint="@color/white"
+            android:src="@drawable/ic_zap"
+            android:tint="@color/white"
+            android:textSize="12dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            tools:ignore="UseAppTint" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.cardview.widget.CardView>

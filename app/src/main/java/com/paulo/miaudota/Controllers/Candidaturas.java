@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -132,6 +133,18 @@ public class Candidaturas extends AppCompatActivity implements CandidaturaRVAdap
 
     @Override
     public void onCandidaturaClick(int position) {
-
+        Candidatura candidaturaModel = candidaturaArrayList.get(position);
+        String texto = "Olá, vi no Miaudota que você tem interesse em adotar o meu pet";
+        String numCelular = "55" +  candidaturaModel.getCelularUsuario();
+        String url="https://api.whatsapp.com/send?phone="+ numCelular + "&text=" + texto;
+        Intent i = new Intent(Intent.ACTION_VIEW);
+        i.setData(Uri.parse(url));
+        try {
+            startActivity(i);
+        }catch (Exception ex){
+            Toast.makeText(Candidaturas.this, "Ocorreu um erro ao tentar abrir o whastsapp !!", Toast.LENGTH_LONG).show();
+        }
     }
+
+
 }

@@ -20,6 +20,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextClock;
 import android.widget.TextView;
@@ -66,6 +67,8 @@ public class MyPetsFragment extends Fragment implements MyPetsRVAdapter.PetClick
     private FirebaseUser user;
     private FirebaseFirestore db;
     private Dialog deleteDialog, adoptDialog;
+    private TextView mensagemSemPet;
+    private ImageView imagemSemPet;
 
     @Nullable
     @Override
@@ -101,6 +104,8 @@ public class MyPetsFragment extends Fragment implements MyPetsRVAdapter.PetClick
                 swipeRefreshLayout.setRefreshing(false);
             }
         });
+        mensagemSemPet = view.findViewById(R.id.mensagemSemMyPet);
+        imagemSemPet = view.findViewById(R.id.imagemSemMyPet);
 
         getAllPets();
 
@@ -256,24 +261,72 @@ public class MyPetsFragment extends Fragment implements MyPetsRVAdapter.PetClick
                     petArrayList.add(snapshot.getValue(Pet.class));
                     myPetsRVAdapter.notifyDataSetChanged();
                 }
+
+                if(petArrayList.size() == 0){
+                    progressBar.setVisibility(View.GONE);
+                    imagemSemPet.setVisibility(View.VISIBLE);
+                    mensagemSemPet.setVisibility(View.VISIBLE);
+
+                }
+                else{
+                    progressBar.setVisibility(View.GONE);
+                    imagemSemPet.setVisibility(View.INVISIBLE);
+                    mensagemSemPet.setVisibility(View.INVISIBLE);
+                }
             }
 
             @Override
             public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
                 progressBar.setVisibility(View.GONE);
                 myPetsRVAdapter.notifyDataSetChanged();
+
+                if(petArrayList.size() == 0){
+                    progressBar.setVisibility(View.GONE);
+                    imagemSemPet.setVisibility(View.VISIBLE);
+                    mensagemSemPet.setVisibility(View.VISIBLE);
+
+                }
+                else{
+                    progressBar.setVisibility(View.GONE);
+                    imagemSemPet.setVisibility(View.INVISIBLE);
+                    mensagemSemPet.setVisibility(View.INVISIBLE);
+                }
             }
 
             @Override
             public void onChildRemoved(@NonNull DataSnapshot snapshot) {
                 progressBar.setVisibility(View.GONE);
                 myPetsRVAdapter.notifyDataSetChanged();
+
+                if(petArrayList.size() == 0){
+                    progressBar.setVisibility(View.GONE);
+                    imagemSemPet.setVisibility(View.VISIBLE);
+                    mensagemSemPet.setVisibility(View.VISIBLE);
+
+                }
+                else{
+                    progressBar.setVisibility(View.GONE);
+                    imagemSemPet.setVisibility(View.INVISIBLE);
+                    mensagemSemPet.setVisibility(View.INVISIBLE);
+                }
             }
 
             @Override
             public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
                 progressBar.setVisibility(View.GONE);
                 myPetsRVAdapter.notifyDataSetChanged();
+
+                if(petArrayList.size() == 0){
+                    progressBar.setVisibility(View.GONE);
+                    imagemSemPet.setVisibility(View.VISIBLE);
+                    mensagemSemPet.setVisibility(View.VISIBLE);
+
+                }
+                else{
+                    progressBar.setVisibility(View.GONE);
+                    imagemSemPet.setVisibility(View.INVISIBLE);
+                    mensagemSemPet.setVisibility(View.INVISIBLE);
+                }
             }
 
             @Override
@@ -282,9 +335,6 @@ public class MyPetsFragment extends Fragment implements MyPetsRVAdapter.PetClick
             }
         });
 
-        if(petArrayList.size() == 0){
-            progressBar.setVisibility(View.GONE);
-        }
     }
 
 }

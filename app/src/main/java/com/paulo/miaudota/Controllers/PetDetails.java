@@ -175,8 +175,12 @@ public class PetDetails extends AppCompatActivity implements View.OnClickListene
                             .centerCrop()
                             .into(imagemPetDetails);  // imageview
 
-                    progressBar.setVisibility(View.INVISIBLE);
-
+                    Handler handler = new Handler();
+                    handler.postDelayed(new Runnable() {
+                        public void run() {
+                            progressBar.setVisibility(View.INVISIBLE);
+                        }
+                    }, 1000);
 
                 } else {
                     Toast.makeText(PetDetails.this, "Ocorreu um erro ao carregar a página !", Toast.LENGTH_LONG).show();
@@ -284,7 +288,7 @@ public class PetDetails extends AppCompatActivity implements View.OnClickListene
                     usuarioIncompleto = false;
                 }
                 emailUsuario = userProfile.Email;
-                localizacaoUsuario = userProfile.Cidade;
+                localizacaoUsuario = userProfile.Cidade + "/" + userProfile.UF;
                 SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.US);
                 dataCandidatura = sdf.format(Calendar.getInstance().getTime());
                 celularUsuario = userProfile.Ddd + userProfile.NumCelular;

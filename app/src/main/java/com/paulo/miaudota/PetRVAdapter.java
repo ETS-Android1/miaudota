@@ -47,6 +47,7 @@ public class PetRVAdapter extends RecyclerView.Adapter<PetRVAdapter.ViewHolder> 
     public void onBindViewHolder(@NonNull PetRVAdapter.ViewHolder holder, int position) {
         Pet petRvModel = petArrayList.get(holder.getAdapterPosition());
         holder.petNameTV.setText(petRvModel.getPetName());
+        holder.petNameTV.setText(petRvModel.getPetName());
         holder.petLocalTv.setText(petRvModel.getCidadePet() + "/" + petRvModel.getUfPet());
 
         if(petRvModel.getGeneroPet().equals("Masculino")){
@@ -113,7 +114,6 @@ public class PetRVAdapter extends RecyclerView.Adapter<PetRVAdapter.ViewHolder> 
             petImage = itemView.findViewById(R.id.imagemPetHome);
             petGender = itemView.findViewById(R.id.generoHome);
             petAge = itemView.findViewById(R.id.idadeAnosHome);
-
         }
     }
 

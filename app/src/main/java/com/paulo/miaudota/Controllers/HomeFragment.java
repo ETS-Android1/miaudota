@@ -6,7 +6,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -40,6 +42,8 @@ public class HomeFragment extends Fragment implements PetRVAdapter.PetClickInter
     private ArrayList<Pet> petArrayList;
     private PetRVAdapter petRVAdapter;
     private String petId;
+    private TextView mensagemSemPet;
+    private ImageView imagemSemPet;
     SwipeRefreshLayout swipeRefreshLayout;
 
     private FirebaseDatabase firebaseDatabase;
@@ -79,6 +83,8 @@ public class HomeFragment extends Fragment implements PetRVAdapter.PetClickInter
                 swipeRefreshLayout.setRefreshing(false);
             }
         });
+        mensagemSemPet = view.findViewById(R.id.mensagemSemPet);
+        imagemSemPet = view.findViewById(R.id.imagemSemPet);
 
         getAllPets();
 
@@ -107,6 +113,17 @@ public class HomeFragment extends Fragment implements PetRVAdapter.PetClickInter
                     petArrayList.add(snapshot.getValue(Pet.class));
                     petRVAdapter.notifyDataSetChanged();
                 }
+
+                if(petArrayList.size() == 0){
+                    progressBar.setVisibility(View.GONE);
+                    imagemSemPet.setVisibility(View.VISIBLE);
+                    mensagemSemPet.setVisibility(View.VISIBLE);
+                }
+                else{
+                    progressBar.setVisibility(View.GONE);
+                    imagemSemPet.setVisibility(View.INVISIBLE);
+                    mensagemSemPet.setVisibility(View.INVISIBLE);
+                }
             }
 
             @Override
@@ -114,6 +131,17 @@ public class HomeFragment extends Fragment implements PetRVAdapter.PetClickInter
                 progressBar.setVisibility(View.GONE);
                 if(snapshot.getValue(Pet.class).getIsAdotado().equals("false")){
                     petRVAdapter.notifyDataSetChanged();
+                }
+
+                if(petArrayList.size() == 0){
+                    progressBar.setVisibility(View.GONE);
+                    imagemSemPet.setVisibility(View.VISIBLE);
+                    mensagemSemPet.setVisibility(View.VISIBLE);
+                }
+                else{
+                    progressBar.setVisibility(View.GONE);
+                    imagemSemPet.setVisibility(View.INVISIBLE);
+                    mensagemSemPet.setVisibility(View.INVISIBLE);
                 }
             }
 
@@ -123,6 +151,16 @@ public class HomeFragment extends Fragment implements PetRVAdapter.PetClickInter
                 if(snapshot.getValue(Pet.class).getIsAdotado().equals("false")){
                     petRVAdapter.notifyDataSetChanged();
                 }
+                if(petArrayList.size() == 0){
+                    progressBar.setVisibility(View.GONE);
+                    imagemSemPet.setVisibility(View.VISIBLE);
+                    mensagemSemPet.setVisibility(View.VISIBLE);
+                }
+                else{
+                    progressBar.setVisibility(View.GONE);
+                    imagemSemPet.setVisibility(View.INVISIBLE);
+                    mensagemSemPet.setVisibility(View.INVISIBLE);
+                }
             }
 
             @Override
@@ -130,6 +168,16 @@ public class HomeFragment extends Fragment implements PetRVAdapter.PetClickInter
                 progressBar.setVisibility(View.GONE);
                 if(snapshot.getValue(Pet.class).getIsAdotado().equals("false")){
                     petRVAdapter.notifyDataSetChanged();
+                }
+                if(petArrayList.size() == 0){
+                    progressBar.setVisibility(View.GONE);
+                    imagemSemPet.setVisibility(View.VISIBLE);
+                    mensagemSemPet.setVisibility(View.VISIBLE);
+                }
+                else{
+                    progressBar.setVisibility(View.GONE);
+                    imagemSemPet.setVisibility(View.INVISIBLE);
+                    mensagemSemPet.setVisibility(View.INVISIBLE);
                 }
             }
 
@@ -139,9 +187,6 @@ public class HomeFragment extends Fragment implements PetRVAdapter.PetClickInter
             }
         });
 
-        if(petArrayList.size() == 0){
-            progressBar.setVisibility(View.GONE);
-        }
     }
 
     private void getOnlyMales() {
@@ -181,6 +226,7 @@ public class HomeFragment extends Fragment implements PetRVAdapter.PetClickInter
         });
 
         if(petArrayList.size() == 0){
+
             progressBar.setVisibility(View.GONE);
         }
     }

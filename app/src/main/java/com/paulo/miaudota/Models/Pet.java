@@ -20,10 +20,14 @@ public class Pet implements Parcelable {
     private String petId;
     private String dataCadastro;
     private String userId;
+    private String ddd;
+    private String numCelular;
+    private String isAdotado;
 
     public Pet(){}
 
-    public Pet(String petImg,String petName, String tipoPet, String idadeAnosPet, String idadeMesesPet, String generoPet, String tamanhoPet, String ufPet, String cidadePet, String descricaoPet, String petId, String dataCadastro, String userId) {
+    public Pet(String petImg,String petName, String tipoPet, String idadeAnosPet, String idadeMesesPet, String generoPet, String tamanhoPet, String ufPet, String cidadePet,
+               String descricaoPet, String petId, String dataCadastro, String userId, String ddd, String numCelular, String isAdotado) {
         this.petImg = petImg;
         this.petName = petName;
         this.tipoPet = tipoPet;
@@ -37,6 +41,9 @@ public class Pet implements Parcelable {
         this.petId = petId;
         this.dataCadastro = dataCadastro;
         this.userId = userId;
+        this.ddd = ddd;
+        this.numCelular = numCelular;
+        this.isAdotado = isAdotado;
     }
 
     protected Pet(Parcel in) {
@@ -53,6 +60,9 @@ public class Pet implements Parcelable {
         petId = in.readString();
         dataCadastro = in.readString();
         userId = in.readString();
+        ddd = in.readString();
+        numCelular = in.readString();
+        isAdotado = in.readString();
     }
 
     public static final Creator<Pet> CREATOR = new Creator<Pet>() {
@@ -171,6 +181,30 @@ public class Pet implements Parcelable {
         this.userId = userId;
     }
 
+    public String getDdd() {
+        return ddd;
+    }
+
+    public void setDdd(String ddd) {
+        this.ddd = ddd;
+    }
+
+    public String getNumCelular() {
+        return numCelular;
+    }
+
+    public void setNumCelular(String numCelular) {
+        this.numCelular = numCelular;
+    }
+
+    public String getIsAdotado() {
+        return isAdotado;
+    }
+
+    public void setIsAdotado(String isAdotado) {
+        this.isAdotado = isAdotado;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -189,5 +223,8 @@ public class Pet implements Parcelable {
         parcel.writeString(cidadePet);
         parcel.writeString(descricaoPet);
         parcel.writeString(petId);
+        parcel.writeString(ddd);
+        parcel.writeString(numCelular);
+        parcel.writeString(isAdotado);
     }
 }

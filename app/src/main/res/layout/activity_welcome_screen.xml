@@ -50,6 +50,19 @@
         app:layout_constraintVertical_bias="0.513"
         app:layout_constraintWidth_percent=".8" />
 
+    <com.facebook.login.widget.LoginButton
+        android:id="@+id/btnfacebookLoggin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="invisible"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="24dp"
+        app:layout_constraintBottom_toTopOf="@+id/fab_google"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnRegisterWelcome"
+        app:layout_constraintVertical_bias="0.461" />
+
     <Button
         android:id="@+id/btnRegisterWelcome"
         android:layout_width="0dp"

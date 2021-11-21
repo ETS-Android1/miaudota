@@ -1,8 +1,231 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Controllers.PetDetails">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/mainBackground">
+
+
+        <ImageView
+            android:id="@+id/imagemPetDetails"
+            android:layout_width="match_parent"
+            android:layout_height="250dp"
+            android:layout_marginStart="2dp"
+            android:layout_marginEnd="2dp"
+            android:src="@drawable/pet_color_background"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0" />
+
+        <TextView
+            android:id="@+id/nomePetDetails"
+            android:layout_width="250dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="20dp"
+            android:gravity="start"
+            android:text="Nome do Pet"
+            android:textColor="@color/white"
+            android:textSize="25sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.099"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/imagemPetDetails"
+            app:layout_constraintVertical_bias="0.0" />
+
+        <TextView
+            android:id="@+id/tipoPetDetails"
+            android:layout_width="160dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="20dp"
+            android:gravity="start"
+            android:text="Tipo pet"
+            android:textColor="@color/white"
+            android:textSize="22sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.065"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/nomePetDetails"
+            app:layout_constraintVertical_bias="0.0" />
+
+        <TextView
+            android:id="@+id/localizacaoPetDetails"
+            android:layout_width="220dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="20dp"
+            android:gravity="start"
+            android:text="Cidade/UF"
+            android:textColor="@color/white"
+            android:textSize="22sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.083"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tipoPetDetails"
+            app:layout_constraintVertical_bias="0.0" />
+
+        <TextView
+            android:id="@+id/idadePetDetails"
+            android:layout_width="215dp"
+            android:layout_height="40dp"
+            android:layout_marginBottom="256dp"
+            android:gravity="start"
+            android:text="0 anos e 00 meses"
+            android:textColor="@color/white"
+            android:textSize="22sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.081"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/localizacaoPetDetails"
+            app:layout_constraintVertical_bias="0.246" />
+
+        <TextView
+            android:id="@+id/donoDoPetDetails"
+            android:layout_width="350dp"
+            android:layout_height="40dp"
+            android:gravity="start"
+            android:text="Anunciante"
+            android:textColor="@color/white"
+            android:textSize="22sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.262"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/descricaoDetails"
+            app:layout_constraintVertical_bias="0.165" />
+
+        <TextView
+            android:id="@+id/dataCadastroPetDetails"
+            android:layout_width="110dp"
+            android:layout_height="40dp"
+            android:gravity="start"
+            android:text="01/01/1921"
+            android:textColor="@color/white"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.946"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/imagemPetDetails"
+            app:layout_constraintVertical_bias="0.04" />
+
+        <TextView
+            android:id="@+id/descricaoDetails"
+            android:layout_width="365dp"
+            android:layout_height="140dp"
+            android:gravity="start"
+            android:inputType="textMultiLine"
+            android:text="Descricao"
+            android:textColor="@color/white"
+            android:textSize="18dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.347"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/idadePetDetails"
+            app:layout_constraintVertical_bias="0.148" />
+
+        <ImageView
+            android:id="@+id/generoDetails"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:gravity="start"
+            android:padding="4dp"
+            android:src="@drawable/ic_home_pet"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.917"
+            app:layout_constraintStart_toEndOf="@+id/tipoPetDetails"
+            app:layout_constraintTop_toBottomOf="@+id/nomePetDetails"
+            app:layout_constraintVertical_bias="0.044" />
+
+        <Button
+            android:id="@+id/btnZap"
+            style="@style/btn_zap"
+            android:layout_width="100dp"
+            android:layout_height="48dp"
+            android:background="@drawable/button_bg"
+            android:backgroundTint="@color/lighterBackground"
+            android:drawableTop="@drawable/ic_zap"
+            android:drawableTint="@color/white"
+            android:textSize="12dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.373"
+            app:layout_constraintStart_toEndOf="@+id/btnAdotar"
+            app:layout_constraintTop_toBottomOf="@+id/donoDoPetDetails"
+            app:layout_constraintVertical_bias="0.387" />
+
+        <Button
+            android:id="@+id/btnAdotar"
+            android:layout_width="220dp"
+            android:layout_height="48dp"
+            android:layout_marginStart="16dp"
+            android:background="@drawable/button_bg"
+            android:text="Adotar"
+            android:textColor="@color/mainText"
+            android:textColorHint="@color/mainText"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/donoDoPetDetails"
+            app:layout_constraintVertical_bias="0.387"
+            app:layout_constraintWidth_percent=".8" />
+
+        <ProgressBar
+            android:id="@+id/progressBarDetails"
+            style="?android:attr/progressBarStyleLarge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:layout_centerInParent="true"
+            android:layout_marginTop="327dp"
+            android:layout_marginEnd="170dp"
+            android:indeterminate="true"
+            android:indeterminateTint="@color/bluecachorro"
+            android:indeterminateTintMode="src_atop"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.143"
+            tools:ignore="MissingConstraints" />
+
+        <Button
+            android:id="@+id/invisibleBtn"
+            android:layout_width="1dp"
+            android:layout_height="795dp"
+            android:textColor="@color/mainText"
+            android:textColorHint="@color/mainText"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0"
+            app:layout_constraintWidth_percent=".8" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.core.widget.NestedScrollView>

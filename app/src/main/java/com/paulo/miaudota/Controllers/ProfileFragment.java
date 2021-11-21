@@ -2,6 +2,7 @@ package com.paulo.miaudota.Controllers;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +17,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
+import com.facebook.login.LoginManager;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
@@ -33,7 +35,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ProfileFragment extends Fragment implements View.OnClickListener{
 
-    private TextView TextFullName,TextCPF,TextEmail,TextLocalizacao, TextDataNascimento;
+    private TextView TextFullName,TextCPF,TextEmail,TextLocalizacao, TextDataNascimento, TextCelular;
     private CircleImageView profilePicture;
 
     private FirebaseAuth mAuth;
@@ -43,6 +45,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
     private String userID;
     private String profilePicUrl;
     private ProgressBar progressBar;
+    private LoginManager loginManager;
 
     @Nullable
     @Override
@@ -73,7 +76,9 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
         TextEmail = view.findViewById(R.id.emailProfile);
         TextLocalizacao = view.findViewById(R.id.localizacaoProfile);
         TextDataNascimento = view.findViewById(R.id.dataNascimentoProfile);
+        TextCelular = view.findViewById(R.id.celularProfile);
         progressBar = view.findViewById(R.id.progressBarProfile);
+        loginManager = LoginManager.getInstance();
 
         if (user == null) {
             Log.e("Warning_Activity","onCreate EditProfile userNull-> ");
@@ -102,7 +107,12 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
         Log.e("Warning_Activity","onResume -> ProfileFragment");
         super.onResume();
         loadUser();
-        progressBar.setVisibility(View.INVISIBLE);
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            public void run() {
+                progressBar.setVisibility(View.INVISIBLE);
+            }
+        }, 0500);
     }
 
     @Override
@@ -110,6 +120,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
         switch (v.getId()){
             case R.id.btnLogOut:
                 deslogar();
+                startActivity(new Intent(getActivity(), WelcomeScreen.class));
                 System.exit(0);
                 break;
             case R.id.btnEditProfile:
@@ -140,12 +151,14 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
                     String cpf = userProfile.Cpf;
                     String localizacao = userProfile.Cidade + "/" + userProfile.UF;
                     String dataNascimento = userProfile.DataNascimento;
+                    String numCelular = "(" +userProfile.Ddd + ") " + userProfile.NumCelular;
 
                     TextFullName.setText(nomeCompleto);
                     TextEmail.setText(email);
                     TextCPF.setText(cpf);
                     TextLocalizacao.setText(localizacao);
                     TextDataNascimento.setText(dataNascimento);
+                    TextCelular.setText(numCelular);
 
                     Glide.with(getActivity())
                             .load(profilePicUrl) // image url
@@ -158,7 +171,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
                     //progressBar.setVisibility(View.INVISIBLE);
                 }
                 else{
-                    Toast.makeText(getActivity(),"Você precisa finalizar seu cadastro !",Toast.LENGTH_LONG).show();
+                    Toast.makeText(getActivity(),"Você precisa finalizar seu cadastro !",Toast.LENGTH_SHORT).show();
                     Log.e("Warning_Activity","");
                     redireUserToEditProfile();
                     //progressBar.setVisibility(View.INVISIBLE);
@@ -168,7 +181,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
                 Log.e("Warning_Activity","loadUser -> erro onCancelled.");
-                Toast.makeText(getActivity(),"Algo deu errado !",Toast.LENGTH_LONG).show();
+                Toast.makeText(getActivity(),"Algo deu errado !",Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -179,6 +192,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
 
     private void deslogar(){
         mAuth.signOut();
+        loginManager.logOut();
         mGoogleSignInClient.signOut();
     }
 

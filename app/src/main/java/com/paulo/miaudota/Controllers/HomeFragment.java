@@ -6,7 +6,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -40,6 +42,8 @@ public class HomeFragment extends Fragment implements PetRVAdapter.PetClickInter
     private ArrayList<Pet> petArrayList;
     private PetRVAdapter petRVAdapter;
     private String petId;
+    private TextView mensagemSemPet;
+    private ImageView imagemSemPet;
     SwipeRefreshLayout swipeRefreshLayout;
 
     private FirebaseDatabase firebaseDatabase;
@@ -79,6 +83,8 @@ public class HomeFragment extends Fragment implements PetRVAdapter.PetClickInter
                 swipeRefreshLayout.setRefreshing(false);
             }
         });
+        mensagemSemPet = view.findViewById(R.id.mensagemSemPet);
+        imagemSemPet = view.findViewById(R.id.imagemSemPet);
 
         getAllPets();
 
@@ -90,7 +96,8 @@ public class HomeFragment extends Fragment implements PetRVAdapter.PetClickInter
         //passar position ou id pra usar no select dos detalhes
         Intent intent = new Intent(getActivity(),PetDetails.class);
         Pet petModel = petArrayList.get(position);
-        intent.putExtra("pet", petModel);
+        petId = petModel.getPetId();
+        intent.putExtra("petId", petId);
         startActivity(intent);
     }
 
@@ -102,26 +109,76 @@ public class HomeFragment extends Fragment implements PetRVAdapter.PetClickInter
             @Override
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
                 progressBar.setVisibility(View.GONE);
-                petArrayList.add(snapshot.getValue(Pet.class));
-                petRVAdapter.notifyDataSetChanged();
+                if(snapshot.getValue(Pet.class).getIsAdotado().equals("false")){
+                    petArrayList.add(snapshot.getValue(Pet.class));
+                    petRVAdapter.notifyDataSetChanged();
+                }
+
+                if(petArrayList.size() == 0){
+                    progressBar.setVisibility(View.GONE);
+                    imagemSemPet.setVisibility(View.VISIBLE);
+                    mensagemSemPet.setVisibility(View.VISIBLE);
+                }
+                else{
+                    progressBar.setVisibility(View.GONE);
+                    imagemSemPet.setVisibility(View.INVISIBLE);
+                    mensagemSemPet.setVisibility(View.INVISIBLE);
+                }
             }
 
             @Override
             public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
                 progressBar.setVisibility(View.GONE);
-                petRVAdapter.notifyDataSetChanged();
+                if(snapshot.getValue(Pet.class).getIsAdotado().equals("false")){
+                    petRVAdapter.notifyDataSetChanged();
+                }
+
+                if(petArrayList.size() == 0){
+                    progressBar.setVisibility(View.GONE);
+                    imagemSemPet.setVisibility(View.VISIBLE);
+                    mensagemSemPet.setVisibility(View.VISIBLE);
+                }
+                else{
+                    progressBar.setVisibility(View.GONE);
+                    imagemSemPet.setVisibility(View.INVISIBLE);
+                    mensagemSemPet.setVisibility(View.INVISIBLE);
+                }
             }
 
             @Override
             public void onChildRemoved(@NonNull DataSnapshot snapshot) {
                 progressBar.setVisibility(View.GONE);
-                petRVAdapter.notifyDataSetChanged();
+                if(snapshot.getValue(Pet.class).getIsAdotado().equals("false")){
+                    petRVAdapter.notifyDataSetChanged();
+                }
+                if(petArrayList.size() == 0){
+                    progressBar.setVisibility(View.GONE);
+                    imagemSemPet.setVisibility(View.VISIBLE);
+                    mensagemSemPet.setVisibility(View.VISIBLE);
+                }
+                else{
+                    progressBar.setVisibility(View.GONE);
+                    imagemSemPet.setVisibility(View.INVISIBLE);
+                    mensagemSemPet.setVisibility(View.INVISIBLE);
+                }
             }
 
             @Override
             public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
                 progressBar.setVisibility(View.GONE);
-                petRVAdapter.notifyDataSetChanged();
+                if(snapshot.getValue(Pet.class).getIsAdotado().equals("false")){
+                    petRVAdapter.notifyDataSetChanged();
+                }
+                if(petArrayList.size() == 0){
+                    progressBar.setVisibility(View.GONE);
+                    imagemSemPet.setVisibility(View.VISIBLE);
+                    mensagemSemPet.setVisibility(View.VISIBLE);
+                }
+                else{
+                    progressBar.setVisibility(View.GONE);
+                    imagemSemPet.setVisibility(View.INVISIBLE);
+                    mensagemSemPet.setVisibility(View.INVISIBLE);
+                }
             }
 
             @Override
@@ -130,9 +187,6 @@ public class HomeFragment extends Fragment implements PetRVAdapter.PetClickInter
             }
         });
 
-        if(petArrayList.size() == 0){
-            progressBar.setVisibility(View.GONE);
-        }
     }
 
     private void getOnlyMales() {
@@ -172,6 +226,7 @@ public class HomeFragment extends Fragment implements PetRVAdapter.PetClickInter
         });
 
         if(petArrayList.size() == 0){
+
             progressBar.setVisibility(View.GONE);
         }
     }

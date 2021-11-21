@@ -1,12 +1,16 @@
 package com.paulo.miaudota;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -17,6 +21,7 @@ import com.bumptech.glide.Glide;
 import com.paulo.miaudota.Models.Pet;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 public class MyPetsRVAdapter extends RecyclerView.Adapter<MyPetsRVAdapter.ViewHolder> {
 
@@ -25,12 +30,18 @@ public class MyPetsRVAdapter extends RecyclerView.Adapter<MyPetsRVAdapter.ViewHo
     int lastPos = -1;
     private PetClickInterface petClickInterface;
     private PetClickDeleteInterface petClickDeleteInterface;
+    private PetClickAdoptInterface petClickAdoptInterface;
+    private PetClickEditInterface petClickEditInterface;
+    private Random random = new Random();
 
-    public MyPetsRVAdapter(ArrayList<Pet> petArrayList, Context context, PetClickInterface petClickInterface, PetClickDeleteInterface petClickDeleteInterface) {
+    public MyPetsRVAdapter(ArrayList<Pet> petArrayList, Context context, PetClickInterface petClickInterface, PetClickDeleteInterface petClickDeleteInterface,
+                           PetClickAdoptInterface petClickAdoptInterface, PetClickEditInterface petClickEditInterface) {
         this.petArrayList = petArrayList;
         this.context = context;
         this.petClickInterface = petClickInterface;
         this.petClickDeleteInterface = petClickDeleteInterface;
+        this.petClickAdoptInterface = petClickAdoptInterface;
+        this.petClickEditInterface = petClickEditInterface;
     }
 
     @NonNull
@@ -45,10 +56,14 @@ public class MyPetsRVAdapter extends RecyclerView.Adapter<MyPetsRVAdapter.ViewHo
         Pet petRvModel = petArrayList.get(holder.getAdapterPosition());
         holder.petNameTV.setText(petRvModel.getPetName());
         holder.petLocalTv.setText(petRvModel.getCidadePet() + "/" + petRvModel.getUfPet());
+
+        Drawable rdColorPlaceholder =  context.getDrawable(R.drawable.pet_color_background);
+        rdColorPlaceholder.setColorFilter(Color.argb(255, random.nextInt(256), random.nextInt(256), random.nextInt(256)), PorterDuff.Mode.SRC_IN);
+
         Glide.with(context)
                 .load(petRvModel.getPetImg()) // image url
-                .placeholder(R.drawable.profile_placeholder) // any placeholder to load at start
-                .error(R.drawable.profile_placeholder)  // any image in case of error
+                .placeholder(rdColorPlaceholder) // any placeholder to load at start
+                .error(rdColorPlaceholder)  // any image in case of error
                 .override(200, 200) // resizing
                 .centerCrop()
                 .into(holder.petImage);  // imageview object
@@ -59,7 +74,7 @@ public class MyPetsRVAdapter extends RecyclerView.Adapter<MyPetsRVAdapter.ViewHo
         holder.btnEditMyPets.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                petClickInterface.onPetClick(holder.getAdapterPosition());
+                petClickEditInterface.onPetClickEdit(holder.getAdapterPosition());
             }
         });
 
@@ -70,6 +85,13 @@ public class MyPetsRVAdapter extends RecyclerView.Adapter<MyPetsRVAdapter.ViewHo
             }
         });
 
+
+        holder.btnPetAdotado.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                petClickAdoptInterface.onPetClickAdopt(holder.getAdapterPosition());
+            }
+        });
 
         setAnimation(holder.itemView, holder.getAdapterPosition());
         holder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -102,11 +124,19 @@ public class MyPetsRVAdapter extends RecyclerView.Adapter<MyPetsRVAdapter.ViewHo
         void onPetClickDelete(int position);
     }
 
+    public interface PetClickEditInterface{
+        void onPetClickEdit(int position);
+    }
+
+    public interface PetClickAdoptInterface{
+        void onPetClickAdopt(int position);
+    }
+
     public class ViewHolder extends RecyclerView.ViewHolder{
 
-        private TextView petNameTV, petLocalTv, petRegistrationDate, petId, petPostion;
+        private TextView petNameTV, petLocalTv, petRegistrationDate, petId;
         private ImageView petImage;
-        private Button btnEditMyPets, btnDeletePet;
+        private ImageButton btnEditMyPets, btnDeletePet, btnPetAdotado;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -118,6 +148,7 @@ public class MyPetsRVAdapter extends RecyclerView.Adapter<MyPetsRVAdapter.ViewHo
             petId = itemView.findViewById(R.id.idMyPets);
             btnEditMyPets = itemView.findViewById(R.id.btnEditarMyPet);
             btnDeletePet = itemView.findViewById(R.id.btnExcluirPet);
+            btnPetAdotado = itemView.findViewById(R.id.btnPetAdotadoo);
         }
     }
 

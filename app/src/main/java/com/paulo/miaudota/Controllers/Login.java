@@ -96,7 +96,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
                 }
                 else{
                     progressBar.setVisibility(View.GONE);
-                    Toast.makeText(Login.this, "Falha ao logar ! Verifique os dados inseridos.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(Login.this, "Falha ao logar ! Verifique os dados inseridos.", Toast.LENGTH_SHORT).show();
                 }
             }
         });

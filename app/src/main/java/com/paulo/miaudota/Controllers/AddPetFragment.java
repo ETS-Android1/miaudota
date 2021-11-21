@@ -7,6 +7,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.InputFilter;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -41,6 +42,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.paulo.miaudota.InputFilterMinMax;
 import com.paulo.miaudota.Models.Cidade;
 import com.paulo.miaudota.Models.Estado;
 import com.paulo.miaudota.Models.Pet;
@@ -60,16 +62,16 @@ public class AddPetFragment extends Fragment implements View.OnClickListener {
     private ArrayList<String> estadosSpinner = new ArrayList<>();
     private SearchableSpinner spinnerCidades = null;
     private Spinner spinnerEstados, spinnerTipo ,spinnerGenero, spinnerTamanho;
-    private String ibgeEstados, ufPet, cidadePet, tipoPet ,generoPet, tamanhoPet, userId, petId, petImageStr;
+    private String ibgeEstados, ufPet, cidadePet, tipoPet ,generoPet, tamanhoPet, userId, petId, petImageStr, isAdotado;
     private Uri petImageUri;
     private Bitmap bitmap = null;
-    private EditText descricaoEditText, nomePetEditText, idadeAnosEditText, idadeMesesEditText;
+    private EditText descricaoEditText, nomePetEditText, idadeAnosEditText, idadeMesesEditText, dddEditText, celularEditText;
     private Button btnAddpet;
     private ProgressBar progressBar;
     private ImageView petImage;
     private FirebaseDatabase firebaseDatabase;
     private DatabaseReference databaseReference;
-    private String nomePet, idadeAnos, idadeMeses, descricao, dataCadastro;
+    private String nomePet, idadeAnos, idadeMeses, descricao, dataCadastro, ddd, celular;
     private SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale.US);
 
     private FirebaseAuth mAuth;
@@ -77,12 +79,12 @@ public class AddPetFragment extends Fragment implements View.OnClickListener {
 
     @Override
     public void onStart() {
-        Log.e("Warning_Activity","onStart addPet -> ");
+        Log.i("Warning_Activity","onStart addPet -> ");
         super.onStart();
         mAuth = FirebaseAuth.getInstance();
         user = mAuth.getCurrentUser();
         if (user == null) {
-            Log.e("Warning_Activity","onStart EditProfile userNull-> ");
+            Log.i("Warning_Activity","onStart EditProfile userNull-> ");
             startActivity(new Intent(getActivity(), WelcomeScreen.class));
         }
     }
@@ -90,7 +92,7 @@ public class AddPetFragment extends Fragment implements View.OnClickListener {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        Log.e("Warning_Activity","onCreateView -> MessageFragment");
+        Log.i("Warning_Activity","onCreateView -> MessageFragment");
 
         View view = inflater.inflate(R.layout.fragment_add_pet, container, false);
         petImage = view.findViewById(R.id.petImageAdd);
@@ -98,13 +100,18 @@ public class AddPetFragment extends Fragment implements View.OnClickListener {
         nomePetEditText = view.findViewById(R.id.nomePetAdd);
         spinnerTipo = view.findViewById(R.id.selectTipoPet);
         idadeAnosEditText = view.findViewById(R.id.idadeAnosAdd);
+        idadeAnosEditText.setFilters(new InputFilter[]{new InputFilterMinMax("0", "50")});
         idadeMesesEditText = view.findViewById(R.id.idadeMesesAdd);
+        idadeMesesEditText.setFilters(new InputFilter[]{new InputFilterMinMax("0", "12")});
         spinnerGenero = view.findViewById(R.id.selectGeneroAdd);
         spinnerTamanho = view.findViewById(R.id.selectTamanhoAdd);
         spinnerEstados = view.findViewById(R.id.selectEstadoAdd);
         spinnerCidades = view.findViewById(R.id.selectCidadeAdd);
         spinnerCidades.setTitle("Selecione a cidade");
         spinnerCidades.setPositiveButton("OK");
+        dddEditText = view.findViewById(R.id.dddAdd);
+        dddEditText.setFilters(new InputFilter[]{new InputFilterMinMax("0", "99")});
+        celularEditText = view.findViewById(R.id.celularAdd);
         descricaoEditText = view.findViewById(R.id.descricaoAdd);
         btnAddpet = view.findViewById(R.id.btnAddPet);
         btnAddpet.setOnClickListener(this);
@@ -112,6 +119,7 @@ public class AddPetFragment extends Fragment implements View.OnClickListener {
         progressBar.setVisibility(View.VISIBLE);
         mAuth = FirebaseAuth.getInstance();
         userId = mAuth.getCurrentUser().getUid();
+        isAdotado = "false";
 
         firebaseDatabase = FirebaseDatabase.getInstance();
         databaseReference = firebaseDatabase.getReference("Pets");
@@ -154,8 +162,8 @@ public class AddPetFragment extends Fragment implements View.OnClickListener {
 
                         Glide.with(getActivity())
                                 .load(petImageUri.toString()) // image url
-                                .placeholder(R.drawable.profile_placeholder) // any placeholder to load at start
-                                .error(R.drawable.profile_placeholder)  // any image in case of error
+                                .placeholder(R.drawable.pet_add_placeholder) // any placeholder to load at start
+                                .error(R.drawable.pet_add_placeholder)  // any image in case of error
                                 .override(200, 200) // resizing
                                 .centerCrop()
                                 .into(petImage);  // imageview object
@@ -243,7 +251,7 @@ public class AddPetFragment extends Fragment implements View.OnClickListener {
         try {
             respostaIbge = segundoPlano.execute(params).get();
         }catch (ExecutionException | InterruptedException e){
-            Log.d("onPost", "Erro resposta IBGE: " + e);
+            Log.e("onPost", "Erro resposta IBGE: " + e);
         }
 
         return respostaIbge;
@@ -466,11 +474,11 @@ public class AddPetFragment extends Fragment implements View.OnClickListener {
         descricao = descricaoEditText.getText().toString().trim();
         petId = databaseReference.push().getKey();
         dataCadastro = sdf.format(Calendar.getInstance().getTime());
+        ddd = dddEditText.getText().toString().trim();
+        celular = celularEditText.getText().toString().trim();
 
-        Log.e("addPetDb", "petId: " + petId);
-
-        if(!validarPreenchimento(nomePet, idadeAnos, idadeMeses, descricao)){
-            Toast.makeText(getContext(), "Por favor preencha todos os campos !", Toast.LENGTH_LONG).show();
+        if(!validarPreenchimento(nomePet, idadeAnos, idadeMeses, descricao, ddd, celular)){
+            Toast.makeText(getContext(), "Por favor preencha todos os campos !", Toast.LENGTH_SHORT).show();
             progressBar.setVisibility(View.GONE);
             return;
         }
@@ -483,24 +491,20 @@ public class AddPetFragment extends Fragment implements View.OnClickListener {
     }
 
     private void AddPetDb(){
-
-        Log.d("onPost", "petImageStr " + petImageStr);
-
-        Pet petModel = new Pet(petImageStr ,nomePet, tipoPet, idadeAnos, idadeMeses ,generoPet, tamanhoPet, ufPet, cidadePet, descricao, petId, dataCadastro, userId);
-        Log.d("onPost", "pet model: " + petModel);
+        Pet petModel = new Pet(petImageStr ,nomePet, tipoPet, idadeAnos, idadeMeses ,generoPet, tamanhoPet, ufPet, cidadePet, descricao, petId, dataCadastro, userId, ddd, celular, isAdotado);
 
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 databaseReference.child(petId).setValue(petModel);
                 progressBar.setVisibility(View.GONE);
-                Toast.makeText(getContext(), "Pet adicionado com sucesso !", Toast.LENGTH_LONG).show();
+                Toast.makeText(getContext(), "Pet adicionado com sucesso !", Toast.LENGTH_SHORT).show();
                 startActivity(new Intent(getActivity(), Home.class));
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                Toast.makeText(getContext(), "Erro ao enviar dados do pet !", Toast.LENGTH_LONG).show();
+                Toast.makeText(getContext(), "Erro ao enviar dados do pet !", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -523,14 +527,14 @@ public class AddPetFragment extends Fragment implements View.OnClickListener {
     private void getDownloadUrl(StorageReference sReference){
         sReference.getDownloadUrl()
                 .addOnSuccessListener(uri -> {
-                    Log.e("TAG","onSuccess: " + uri );
+                    Log.i("TAG","onSuccess: " + uri );
                     petImageStr = uri.toString();
                     AddPetDb();
                 });
     }
 
 
-    private boolean validarPreenchimento(String nomePet, String idadeAnos, String idadeMeses, String descricao) {
+    private boolean validarPreenchimento(String nomePet, String idadeAnos, String idadeMeses, String descricao, String ddd, String celular) {
 
         if(nomePet.isEmpty()){
             nomePetEditText.setError("Campo obrigatório !!");
@@ -575,14 +579,32 @@ public class AddPetFragment extends Fragment implements View.OnClickListener {
             return false;
         }
 
+        if(ddd.isEmpty()){
+            dddEditText.setError("Campo obrigatório !!");
+            dddEditText.requestFocus();
+            return false;
+        }
+
+        if(celular.isEmpty()){
+            celularEditText.setError("Campo obrigatório !!");
+            celularEditText.requestFocus();
+            return false;
+        }
+
         if(descricao.isEmpty()){
             descricaoEditText.setError("Campo obrigatório !!");
             descricaoEditText.requestFocus();
             return false;
         }
 
+        if(descricao.length() > 240){
+            Toast.makeText(getContext(), "A descrição deve conter no máximo 240 caracteres!", Toast.LENGTH_SHORT).show();
+            descricaoEditText.requestFocus();
+            return false;
+        }
+
         if(petImageUri == null){
-            Toast.makeText(getContext(), "Por favor adicione uma imagem do pet !", Toast.LENGTH_LONG).show();
+            Toast.makeText(getContext(), "Por favor adicione uma imagem do pet !", Toast.LENGTH_SHORT).show();
             return false;
         }
 

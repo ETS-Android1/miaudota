@@ -53,19 +53,6 @@ public class IntrosFirstTime extends AppCompatActivity implements View.OnClickLi
 
         }
 
-        @Override
-        public void onStart() {
-            super.onStart();
-            try {
-                // Check if user is signed in (non-null) and update UI accordingly.
-                FirebaseUser currentUser = mAuth.getCurrentUser();
-                updateUI(currentUser);
-            } catch (Exception e) {
-                // Google Sign In failed, update UI appropriately
-                Log.w("userErrorOnStart", "Check failed: ", e);
-            }
-
-        }
 
         public void addDotsIndicator(int position){
             mDots = new TextView[3];
@@ -87,7 +74,7 @@ public class IntrosFirstTime extends AppCompatActivity implements View.OnClickLi
                     btnIntro.setText("Próximo");
                 }
                 else if(mDots[position] == mDots[2]){
-                    btnIntro.setText("Continuar para o app");
+                    btnIntro.setText("Continuar para o login");
                 }
 
             }

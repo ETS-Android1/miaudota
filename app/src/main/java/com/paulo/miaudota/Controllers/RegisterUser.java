@@ -5,14 +5,21 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.DatePickerDialog;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.text.InputFilter;
 import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -21,30 +28,38 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.paulo.miaudota.InputFilterMinMax;
+import com.paulo.miaudota.Models.Cidade;
+import com.paulo.miaudota.Models.Estado;
 import com.paulo.miaudota.R;
 import com.paulo.miaudota.Models.User;
+import com.toptoche.searchablespinnerlibrary.SearchableSpinner;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Locale;
+import java.util.concurrent.ExecutionException;
 
 public class RegisterUser extends AppCompatActivity implements View.OnClickListener {
 
-    private EditText editTextFullName,editTextCPF,editTextEmail,editTextCidade,editTextUf,editTextPassword,editTextDataNascimento;
+    private EditText editTextFullName,editTextCPF,editTextEmail,editTextPassword,editTextDataNascimento, editTextDdd, editTextNumCelular;
     private FirebaseAuth mAuth;
     private FirebaseUser fUser;
     private ProgressBar progressBar;
     final Calendar myCalendar = Calendar.getInstance();
     DatePickerDialog.OnDateSetListener date;
-    private String dataN;
-    private String dataAtual;
+    private String dataN, dataAtual, ibgeEstados, cidadeReg, ufReg;;
+    private Spinner spinnerEstados;
+    private SearchableSpinner spinnerCidades = null;
+    private ArrayList<String> estadosSpinner = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register_user);
-
-        //metodo pra verificar se o usuário estiver logado, se estiver não deixar acessar a tela de cadastro
 
         mAuth = FirebaseAuth.getInstance();
 
@@ -59,10 +74,15 @@ public class RegisterUser extends AppCompatActivity implements View.OnClickListe
         editTextEmail = findViewById(R.id.emailCadastro);
         editTextDataNascimento = findViewById(R.id.btnDataNascimento);
         editTextDataNascimento.setOnClickListener(this);
-        editTextCidade = findViewById(R.id.btnCidade);
-        editTextUf = findViewById(R.id.btnUf);
+        spinnerCidades = findViewById(R.id.btnCidade);
+        spinnerCidades.setTitle("Selecione a cidade");
+        spinnerCidades.setPositiveButton("OK");
+        spinnerEstados = findViewById(R.id.btnUf);
         editTextPassword = findViewById(R.id.senhaCadastro);
         progressBar = findViewById(R.id.progressBarRegister);
+        editTextDdd = findViewById(R.id.dddReg);
+        editTextDdd.setFilters(new InputFilter[]{new InputFilterMinMax("0", "99")});
+        editTextNumCelular = findViewById(R.id.numCelularReg);
 
         date = (view, year, monthOfYear, dayOfMonth) -> {
             myCalendar.set(Calendar.YEAR, year);
@@ -70,6 +90,65 @@ public class RegisterUser extends AppCompatActivity implements View.OnClickListe
             myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
             updateLabel();
         };
+
+        ibgeEstados = buscasSegundoPlano("estado");
+
+        //region Estados
+        Gson jsonEstados = new GsonBuilder().setPrettyPrinting().create();
+        Estado[] estados = jsonEstados.fromJson(String.valueOf(ibgeEstados), Estado[].class);
+
+        for(Estado estado: estados){
+            estadosSpinner.add(estado.getSigla());
+        }
+        estadosSpinner.add(0,"UF");
+
+        ArrayAdapter<String> adapterEstados = new ArrayAdapter<String>(RegisterUser.this,
+                R.layout.spinner_style,
+                estadosSpinner){
+            @Override
+            public boolean isEnabled(int position){
+                if(position == 0)
+                {
+                    // Disable the second item from Spinner
+                    return false;
+                }
+                else
+                {
+                    return true;
+                }
+            }
+
+            @Override
+            public View getDropDownView(int position, View convertView,
+                                        ViewGroup parent) {
+                View view = super.getDropDownView(position, convertView, parent);
+                TextView tv = (TextView) view;
+                if(position==0) {
+                    // Set the first item text color
+                    tv.setTextColor(Color.GRAY);
+                }
+                else {
+                    tv.setTextColor(Color.BLACK);
+                }
+                return view;
+            }
+        };
+        spinnerEstados.setAdapter(adapterEstados);
+
+        spinnerEstados.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                solicitaCidades(estadosSpinner.get(i));
+                ufReg = spinnerEstados.getSelectedItem().toString();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+
+        //endregion
     }
 
     @Override
@@ -95,9 +174,12 @@ public class RegisterUser extends AppCompatActivity implements View.OnClickListe
         String nomeCompleto = editTextFullName.getText().toString().trim();
         String cpf = editTextCPF.getText().toString().trim();
         String senha = editTextPassword.getText().toString().trim();
-        String cidade = editTextCidade.getText().toString().trim();
-        String uf = editTextUf.getText().toString().toUpperCase(Locale.ROOT).trim();
         String dataNascimento = dataN.toString().trim();
+        String cidade = cidadeReg;
+        String uf = ufReg;
+        String ddd = editTextDdd.getText().toString().trim();
+        String numCelular = editTextNumCelular.getText().toString().trim();
+
 
         if(nomeCompleto.isEmpty()){
             editTextFullName.setError("Campo obrigatório !!");
@@ -110,8 +192,12 @@ public class RegisterUser extends AppCompatActivity implements View.OnClickListe
             editTextCPF.requestFocus();
             return;
         }
-        
-        validateCPF();
+
+        if(validateCPF(cpf) == false){
+            editTextCPF.setError("CPF inválido !!");
+            editTextCPF.requestFocus();
+            return;
+        }
 
         if(email.isEmpty()){
             editTextEmail.setError("Campo obrigatório !!");
@@ -125,15 +211,13 @@ public class RegisterUser extends AppCompatActivity implements View.OnClickListe
             return;
         }
 
-        if(cidade.isEmpty()){
-            editTextCidade.setError("Campo obrigatório !!");
-            editTextCidade.requestFocus();
+        if(ufReg.equals("UF") || ufReg == null){
+            ((TextView)spinnerEstados.getSelectedView()).setError("Error message");
             return;
         }
 
-        if(uf.length() > 2){
-            editTextUf.setError("A unidade federativa não pode possuir mais que 2 caracteres");
-            editTextUf.requestFocus();
+        if(cidadeReg.equals("Cidade") || cidadeReg == null){
+            ((TextView)spinnerCidades.getSelectedView()).setError("Error message");
             return;
         }
 
@@ -150,11 +234,12 @@ public class RegisterUser extends AppCompatActivity implements View.OnClickListe
         }
 
         if(dataNascimento.equals(dataAtual)){
-            Toast.makeText(RegisterUser.this,"Você não nasceu hoje porra",Toast.LENGTH_LONG).show();
+            Toast.makeText(RegisterUser.this,"Você não nasceu hoje porra",Toast.LENGTH_SHORT).show();
             editTextDataNascimento.setError("Campo obrigatório !!");
             editTextDataNascimento.requestFocus();
             return;
         }
+
 
         progressBar.setVisibility(View.VISIBLE);
         mAuth.createUserWithEmailAndPassword(email, senha)
@@ -163,23 +248,23 @@ public class RegisterUser extends AppCompatActivity implements View.OnClickListe
                     public void onComplete(@NonNull Task<AuthResult> task) {
 
                         if(task.isSuccessful()){
-                            User user = new User(nomeCompleto, cpf , email, cidade, uf, dataNascimento);
+                            User user = new User(nomeCompleto, cpf , email, cidade, uf, dataNascimento, ddd, numCelular);
                             FirebaseDatabase.getInstance().getReference("Users")
                                     .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
                                     .setValue(user).addOnCompleteListener(new OnCompleteListener<Void>() {
                                 @Override
                                 public void onComplete(@NonNull Task<Void> task) {
                                     if(task.isSuccessful()){
-                                        Toast.makeText(RegisterUser.this, "Usuário cadastrado com sucesso !", Toast.LENGTH_LONG).show();
+                                        Toast.makeText(RegisterUser.this, "Usuário cadastrado com sucesso !", Toast.LENGTH_SHORT).show();
                                         progressBar.setVisibility(View.GONE);
                                         startActivity(new Intent(RegisterUser.this, Login.class));
                                         RegisterUser.this.finish();
                                     }else{
                                         if(task.getException().toString().equals("ERROR_EMAIL_ALREADY_IN_USE")){
                                             Log.e("Warning_Activity","Else task.excpetiuon -> " + task.getException().toString());
-                                            Toast.makeText(RegisterUser.this, "Este email já está sendo utilizado !", Toast.LENGTH_LONG).show();
+                                            Toast.makeText(RegisterUser.this, "Este email já está sendo utilizado !", Toast.LENGTH_SHORT).show();
                                         }
-                                        Toast.makeText(RegisterUser.this, "Falha ao cadastrar usuário ! Tente novamente !", Toast.LENGTH_LONG).show();
+                                        Toast.makeText(RegisterUser.this, "Falha ao cadastrar usuário ! Tente novamente !", Toast.LENGTH_SHORT).show();
                                         Log.e("Warning_Activity","Else task.isSucesseful -> Erro ao Registrar");
                                         progressBar.setVisibility(View.GONE);
                                     }
@@ -189,9 +274,9 @@ public class RegisterUser extends AppCompatActivity implements View.OnClickListe
                         else {
                             if(task.getException().toString().equals("ERROR_EMAIL_ALREADY_IN_USE")){
                                 Log.e("Warning_Activity","Else task.excpetiuon -> " + task.getException());
-                                Toast.makeText(RegisterUser.this, "Este email já está sendo utilizado !", Toast.LENGTH_LONG).show();
+                                Toast.makeText(RegisterUser.this, "Este email já está sendo utilizado !", Toast.LENGTH_SHORT).show();
                             }
-                            Toast.makeText(RegisterUser.this, "Falha ao cadastrar usuário ! Tente novamente !", Toast.LENGTH_LONG).show();
+                            Toast.makeText(RegisterUser.this, "Falha ao cadastrar usuário ! Tente novamente !", Toast.LENGTH_SHORT).show();
                             progressBar.setVisibility(View.GONE);
                         }
                     }
@@ -199,7 +284,57 @@ public class RegisterUser extends AppCompatActivity implements View.OnClickListe
 
     }
 
-    private void validateCPF() {
+    private boolean validateCPF(String CPF) {
+
+        // considera-se erro CPF's formados por uma sequencia de numeros iguais
+        if (CPF.equals("00000000000") ||
+                CPF.equals("11111111111") ||
+                CPF.equals("22222222222") || CPF.equals("33333333333") ||
+                CPF.equals("44444444444") || CPF.equals("55555555555") ||
+                CPF.equals("66666666666") || CPF.equals("77777777777") ||
+                CPF.equals("88888888888") || CPF.equals("99999999999") ||
+                (CPF.length() != 11))
+            return(false);
+
+        char dig10, dig11;
+        int sm, i, r, num, peso;
+
+        try {
+            // Calculo do 1o. Digito Verificador
+            sm = 0;
+            peso = 10;
+            for (i=0; i<9; i++) {
+                num = (int)(CPF.charAt(i) - 48);
+                sm = sm + (num * peso);
+                peso = peso - 1;
+            }
+
+            r = 11 - (sm % 11);
+            if ((r == 10) || (r == 11))
+                dig10 = '0';
+            else dig10 = (char)(r + 48); // converte no respectivo caractere numerico
+
+            // Calculo do 2o. Digito Verificador
+            sm = 0;
+            peso = 11;
+            for(i=0; i<10; i++) {
+                num = (int)(CPF.charAt(i) - 48);
+                sm = sm + (num * peso);
+                peso = peso - 1;
+            }
+
+            r = 11 - (sm % 11);
+            if ((r == 10) || (r == 11))
+                dig11 = '0';
+            else dig11 = (char)(r + 48);
+
+            // Verifica se os digitos calculados conferem com os digitos informados.
+            if ((dig10 == CPF.charAt(9)) && (dig11 == CPF.charAt(10)))
+                return(true);
+            else return(false);
+        } catch (Exception erro) {
+            return(false);
+        }
     }
 
     private void updateLabel() {
@@ -211,4 +346,83 @@ public class RegisterUser extends AppCompatActivity implements View.OnClickListe
             editTextDataNascimento.setText(dataN);
         }
     }
+
+    private String buscasSegundoPlano(String ... params) {
+
+        String respostaIbge = null;
+        SegundoPlano segundoPlano = new SegundoPlano();
+        try {
+            respostaIbge = segundoPlano.execute(params).get();
+        }catch (ExecutionException | InterruptedException e){
+            Log.d("onPost", "Erro resposta IBGE: " + e);
+        }
+
+        return respostaIbge;
+    }
+
+    private void solicitaCidades(String siglaEstado) {
+
+        String ibgeCidades = buscasSegundoPlano("cidade", siglaEstado);
+
+        Gson jsonCidades = new GsonBuilder().setPrettyPrinting().create();
+        Cidade[] cidades = jsonCidades.fromJson(String.valueOf(ibgeCidades), Cidade[].class);
+
+        ArrayList<String> cidadesSpinner = new ArrayList<>();
+
+        for(Cidade cidade: cidades){
+            cidadesSpinner.add(cidade.getNome());
+        }
+
+        cidadesSpinner.add(0,"Cidade");
+
+        ArrayAdapter<String> adapterCidades = new ArrayAdapter<String>(RegisterUser.this,
+                R.layout.spinner_style,
+                cidadesSpinner){
+            @Override
+            public boolean isEnabled(int position){
+                if(position == 0)
+                {
+                    // Disable the first item from Spinner
+                    return false;
+                }
+                else
+                {
+                    return true;
+                }
+            }
+
+            @Override
+            public View getDropDownView(int position, View convertView,
+                                        ViewGroup parent) {
+                View view = super.getDropDownView(position, convertView, parent);
+                TextView tv = (TextView) view;
+                if(position==0) {
+                    // Set the disable item text color
+                    tv.setTextColor(Color.GRAY);
+                }
+                else {
+                    tv.setTextColor(Color.BLACK);
+                }
+                return view;
+            }
+        };
+
+        spinnerCidades.setAdapter(adapterCidades);
+
+        spinnerCidades.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                cidadeReg = spinnerCidades.getSelectedItem().toString();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+
+        progressBar.setVisibility(View.INVISIBLE);
+
+    }
+
 }

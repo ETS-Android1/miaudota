@@ -16,19 +16,30 @@ import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.facebook.AccessToken;
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.login.LoginManager;
+import com.facebook.login.LoginResult;
+import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.auth.OAuthProvider;
 import com.google.firebase.auth.UserInfo;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -37,6 +48,9 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.paulo.miaudota.Models.User;
 import com.paulo.miaudota.R;
+import com.facebook.FacebookSdk;
+import com.facebook.appevents.AppEventsLogger;
+
 
 public class WelcomeScreen extends AppCompatActivity implements View.OnClickListener {
 
@@ -46,6 +60,9 @@ public class WelcomeScreen extends AppCompatActivity implements View.OnClickList
     private DatabaseReference rootRef;
     private DatabaseReference uidRef;
     private ProgressBar progressBar;
+    private CallbackManager mCallbackManager;
+    private LoginButton loginButton;
+    private LoginManager loginManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +80,11 @@ public class WelcomeScreen extends AppCompatActivity implements View.OnClickList
         mAuth = FirebaseAuth.getInstance();
         fUser = mAuth.getCurrentUser();
 
+        FacebookSdk.sdkInitialize(getApplicationContext());
+        mCallbackManager = CallbackManager.Factory.create();
+        loginManager = LoginManager.getInstance();
+        loginManager.logOut();
+
         Button register = findViewById(R.id.btnRegisterWelcome);
         register.setOnClickListener(this);
 
@@ -72,6 +94,13 @@ public class WelcomeScreen extends AppCompatActivity implements View.OnClickList
         FloatingActionButton google = findViewById(R.id.fab_google);
         google.setOnClickListener(this);
 
+        FloatingActionButton facebook = findViewById(R.id.fab_facebook);
+        facebook.setOnClickListener(this);
+
+        FloatingActionButton twitter = findViewById(R.id.fab_twitter);
+        twitter.setOnClickListener(this);
+
+        loginButton = findViewById(R.id.btnfacebookLoggin);
         progressBar = findViewById(R.id.progressBarWelcome);
 
     }
@@ -80,6 +109,7 @@ public class WelcomeScreen extends AppCompatActivity implements View.OnClickList
     protected void onResume() {
         super.onResume();
         progressBar.setVisibility(View.INVISIBLE);
+        loginManager.logOut();
     }
 
     public void onClick(View v) {
@@ -91,15 +121,132 @@ public class WelcomeScreen extends AppCompatActivity implements View.OnClickList
                 startActivity(new Intent(WelcomeScreen.this, Login.class));
                 break;
             case R.id.fab_google:
-                signIn();
+                signInGoogle();
+                break;
+            case R.id.fab_facebook:
+                signInFacebook();
+                break;
+            case R.id.fab_twitter:
+                signInTwitter();
                 break;
         }
     }
 
-    private void signIn() {
+    private void signInTwitter() {
+
+        OAuthProvider.Builder provider = OAuthProvider.newBuilder("twitter.com");
+        provider.addCustomParameter("lang", "pt");
+
+        Task<AuthResult> pendingResultTask = mAuth.getPendingAuthResult();
+        if (pendingResultTask != null) {
+            // There's something already here! Finish the sign-in for your user.
+            pendingResultTask
+                    .addOnSuccessListener(
+                            new OnSuccessListener<AuthResult>() {
+                                @Override
+                                public void onSuccess(AuthResult authResult) {
+                                    fUser = mAuth.getCurrentUser();
+                                    validateUserByUID(fUser);
+                                    Log.d("googleSignInSuccess", "signInWithCredential:success");
+                                    progressBar.setVisibility(View.GONE);
+                                    redirectUser(fUser);
+                                }
+                            })
+                    .addOnFailureListener(
+                            new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Log.d("twitter", "twitter:onError login ", e);
+                                    Toast.makeText(WelcomeScreen.this, "Falha ao autentificar com o twitter.", Toast.LENGTH_SHORT).show();
+                                }
+                            });
+        } else {
+            mAuth
+                    .startActivityForSignInWithProvider(/* activity= */ this, provider.build())
+                    .addOnSuccessListener(
+                            new OnSuccessListener<AuthResult>() {
+                                @Override
+                                public void onSuccess(AuthResult authResult) {
+                                    fUser = mAuth.getCurrentUser();
+                                    validateUserByUID(fUser);
+                                    Log.d("googleSignInSuccess", "signInWithCredential:success");
+                                    progressBar.setVisibility(View.GONE);
+                                    redirectUser(fUser);
+                                }
+                            })
+                    .addOnFailureListener(
+                            new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Log.d("twitter", "twitter:onError login ", e);
+                                    Toast.makeText(WelcomeScreen.this, "Falha ao autentificar com o twitter", Toast.LENGTH_SHORT).show();
+                                }
+                            });
+        }
+
+    }
+
+    private void signInFacebook() {
+        progressBar.setVisibility(View.VISIBLE);
+        loginButton.setReadPermissions("email", "public_profile");
+        loginButton.registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
+            @Override
+            public void onSuccess(LoginResult loginResult) {
+                Log.d("FACEBOOK", "facebook:onSuccess:" + loginResult);
+                handleFacebookAccessToken(loginResult.getAccessToken());
+            }
+
+            @Override
+            public void onCancel() {
+                Log.d("FACEBOOK", "facebook:onCancel");
+            }
+
+            @Override
+            public void onError(FacebookException error) {
+                Log.d("FACEBOOK", "facebook:onError", error);
+            }
+        });
+        loginButton.callOnClick();
+
+    }
+
+    private void signInGoogle() {
         progressBar.setVisibility(View.VISIBLE);
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
         launchSomeActivity.launch(signInIntent);
+    }
+
+    private void handleFacebookAccessToken(AccessToken token) {
+        Log.d("FACEBOOK", "handleFacebookAccessToken:" + token);
+
+        AuthCredential credential = FacebookAuthProvider.getCredential(token.getToken());
+        mAuth.signInWithCredential(credential)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            // Sign in success, update UI with the signed-in user's information
+                            Log.d("FACEBOOK", "signInWithCredential:success");
+                            fUser = mAuth.getCurrentUser();
+                            validateUserByUID(fUser);
+                            progressBar.setVisibility(View.GONE);
+                            redirectUser(fUser);
+                        } else {
+                            // If sign in fails, display a message to the user.
+                            Log.w("FACEBOOK", "signInWithCredential:failure", task.getException());
+                            Toast.makeText(WelcomeScreen.this, "Falha na autentificação.",
+                                    Toast.LENGTH_SHORT).show();
+                            redirectUser(null);
+                        }
+                    }
+                });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        // Pass the activity result back to the Facebook SDK
+        mCallbackManager.onActivityResult(requestCode, resultCode, data);
     }
 
     // Create lanucher variable inside onAttach or onCreate or global
@@ -142,7 +289,7 @@ public class WelcomeScreen extends AppCompatActivity implements View.OnClickList
                         } else {
                             // If sign in fails, display a message to the user.
                             progressBar.setVisibility(View.GONE);
-                            Toast.makeText(WelcomeScreen.this, "Falha ao tentar logar!", Toast.LENGTH_LONG).show();
+                            Toast.makeText(WelcomeScreen.this, "Falha ao tentar logar!", Toast.LENGTH_SHORT).show();
                             Log.w("googleSignInFail", "signInWithCredential:failure", task.getException());
                         }
                     }

@@ -7,9 +7,11 @@
     <color name="textAlt">#808F97</color>
     <color name="mainBackground">#1f1f1f</color>
     <color name="lighterBackground">#303030</color>
+    <color name="lighterlighterBackground">#404040</color>
 
     <color name="facebook">#3b5998</color>
     <color name="twitter">#00acee</color>
+    <color name="zipzop">#1bb353</color>
     <color name="rosinha">#FF4E8D</color>
     <color name="bluecachorro">#5AB0B4</color>
     <color name="teal_200">#FF03DAC5</color>

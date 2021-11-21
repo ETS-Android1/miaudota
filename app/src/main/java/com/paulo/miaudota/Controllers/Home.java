@@ -11,6 +11,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import com.facebook.login.LoginManager;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
@@ -118,6 +119,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener{
     private void deslogar(){
         mAuth.signOut();
         mGoogleSignInClient.signOut();
+        LoginManager.getInstance().logOut();
     }
 
 //    @Override
@@ -131,7 +133,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener{
 //            System.exit(1);
 //        }
 //        else {
-//            Toast.makeText(getBaseContext(), "Pressione novamente para sair.", Toast.LENGTH_LONG).show();
+//            Toast.makeText(getBaseContext(), "Pressione novamente para sair.", Toast.LENGTH_SHORT).show();
 //        }
 //    }
 

@@ -189,14 +189,14 @@ public class EditPetFragment extends Fragment implements View.OnClickListener {
                     }, 3000);
 
                 } else {
-                    Toast.makeText(getContext(), "Ocorreu um erro ao carregar a página !", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getContext(), "Ocorreu um erro ao carregar a página !", Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
                 progressBar.setVisibility(View.INVISIBLE);
-                Toast.makeText(getContext(), "Ocorreu um erro ao carregar a página !!", Toast.LENGTH_LONG).show();
+                Toast.makeText(getContext(), "Ocorreu um erro ao carregar a página !!", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -548,7 +548,7 @@ public class EditPetFragment extends Fragment implements View.OnClickListener {
         Log.e("addPetDb", "petId: " + petId);
 
         if(!validarPreenchimento(nomePet, idadeAnos, idadeMeses, descricao, ddd, celular)){
-            Toast.makeText(getContext(), "Por favor preencha todos os campos !", Toast.LENGTH_LONG).show();
+            Toast.makeText(getContext(), "Por favor preencha todos os campos !", Toast.LENGTH_SHORT).show();
             progressBar.setVisibility(View.GONE);
             return;
         }
@@ -572,7 +572,7 @@ public class EditPetFragment extends Fragment implements View.OnClickListener {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 databaseReference.child(petId).setValue(petModel);
                 progressBar.setVisibility(View.GONE);
-                Toast.makeText(getContext(), "Pet atualizado com sucesso !", Toast.LENGTH_LONG).show();
+                Toast.makeText(getContext(), "Pet atualizado com sucesso !", Toast.LENGTH_SHORT).show();
                 Fragment fragmentMyPets =  new MyPetsFragment();
                 FragmentManager fm = getFragmentManager();
                 fm.beginTransaction()
@@ -583,7 +583,7 @@ public class EditPetFragment extends Fragment implements View.OnClickListener {
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                Toast.makeText(getContext(), "Erro ao enviar dados do pet !", Toast.LENGTH_LONG).show();
+                Toast.makeText(getContext(), "Erro ao enviar dados do pet !", Toast.LENGTH_SHORT).show();
             }
         });
 

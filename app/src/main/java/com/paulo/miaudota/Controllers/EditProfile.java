@@ -98,6 +98,18 @@ public class EditProfile extends AppCompatActivity implements View.OnClickListen
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        Log.e("Warning_Activity", "onResume -> EditProfile");
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            public void run() {
+                progressBar.setVisibility(View.INVISIBLE);
+            }
+        }, 2000);
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         Log.e("Warning_Activity","onCreate EditProfile -> ");
         super.onCreate(savedInstanceState);
@@ -248,7 +260,6 @@ public class EditProfile extends AppCompatActivity implements View.OnClickListen
                     handler.postDelayed(new Runnable() {
                         public void run() {
                             spinnerCidades.setSelection(((ArrayAdapter<String>) spinnerCidades.getAdapter()).getPosition(cidade));
-                            progressBar.setVisibility(View.INVISIBLE);
                         }
                     }, 3000);
 
@@ -265,7 +276,6 @@ public class EditProfile extends AppCompatActivity implements View.OnClickListen
                             .into(profilePicture);  // imageview object
 
                     usuarioIncompleto = false;
-                    progressBar.setVisibility(View.INVISIBLE);
                 }
                 else{
                     //se for incompleto carrega email e nome e a foto
@@ -283,15 +293,13 @@ public class EditProfile extends AppCompatActivity implements View.OnClickListen
                             .override(200, 200) // resizing
                             .centerCrop()
                             .into(profilePicture);  // imageview object
-
-                    progressBar.setVisibility(View.INVISIBLE);
                 }
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
                 Log.e("Warning_Activity","loadUser -> erro onCancelled.");
-                Toast.makeText(EditProfile.this,"Algo deu errado !",Toast.LENGTH_LONG).show();
+                Toast.makeText(EditProfile.this,"Algo deu errado !",Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -357,8 +365,6 @@ public class EditProfile extends AppCompatActivity implements View.OnClickListen
 
             }
         });
-
-        progressBar.setVisibility(View.INVISIBLE);
 
     }
 
@@ -508,7 +514,7 @@ public class EditProfile extends AppCompatActivity implements View.OnClickListen
         }
 
         if(dataNascimento.equals(dataAtual)){
-            Toast.makeText(EditProfile.this,"Você não nasceu hoje porra",Toast.LENGTH_LONG).show();
+            Toast.makeText(EditProfile.this,"Você não nasceu hoje porra",Toast.LENGTH_SHORT).show();
             editTextDataNascimento.setError("Campo obrigatório !!");
             editTextDataNascimento.requestFocus();
             return;
@@ -529,7 +535,7 @@ public class EditProfile extends AppCompatActivity implements View.OnClickListen
                         public void run() {
                             Intent intent = new Intent(EditProfile.this,Home.class);
                             startActivity(intent);
-                            Toast.makeText(EditProfile.this,"Perfil atualizado com sucesso !!",Toast.LENGTH_LONG).show();
+                            Toast.makeText(EditProfile.this,"Perfil atualizado com sucesso !!",Toast.LENGTH_SHORT).show();
                         }
                     }, 3500);
                 }
@@ -570,11 +576,11 @@ public class EditProfile extends AppCompatActivity implements View.OnClickListen
                     Intent intent = new Intent(EditProfile.this,Home.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP); finish();
                     startActivity(intent);
-                    Toast.makeText(EditProfile.this,"Perfil atualizado com sucesso !!",Toast.LENGTH_LONG).show();
+                    Toast.makeText(EditProfile.this,"Perfil atualizado com sucesso !!",Toast.LENGTH_SHORT).show();
                 })
                 .addOnFailureListener(e -> {
                     Log.e("TAG","onFailure: ", e.getCause() );
-                    Toast.makeText(EditProfile.this,"Falha ao enviar imagem do perfil...",Toast.LENGTH_LONG).show();
+                    Toast.makeText(EditProfile.this,"Falha ao enviar imagem do perfil...",Toast.LENGTH_SHORT).show();
                 });
     }
 

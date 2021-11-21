@@ -20,6 +20,7 @@ import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
+import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -61,6 +62,7 @@ public class WelcomeScreen extends AppCompatActivity implements View.OnClickList
     private ProgressBar progressBar;
     private CallbackManager mCallbackManager;
     private LoginButton loginButton;
+    private LoginManager loginManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,6 +82,8 @@ public class WelcomeScreen extends AppCompatActivity implements View.OnClickList
 
         FacebookSdk.sdkInitialize(getApplicationContext());
         mCallbackManager = CallbackManager.Factory.create();
+        loginManager = LoginManager.getInstance();
+        loginManager.logOut();
 
         Button register = findViewById(R.id.btnRegisterWelcome);
         register.setOnClickListener(this);
@@ -105,6 +109,7 @@ public class WelcomeScreen extends AppCompatActivity implements View.OnClickList
     protected void onResume() {
         super.onResume();
         progressBar.setVisibility(View.INVISIBLE);
+        loginManager.logOut();
     }
 
     public void onClick(View v) {
@@ -130,7 +135,7 @@ public class WelcomeScreen extends AppCompatActivity implements View.OnClickList
     private void signInTwitter() {
 
         OAuthProvider.Builder provider = OAuthProvider.newBuilder("twitter.com");
-        provider.addCustomParameter("lang", "fr");
+        provider.addCustomParameter("lang", "pt");
 
         Task<AuthResult> pendingResultTask = mAuth.getPendingAuthResult();
         if (pendingResultTask != null) {
@@ -284,7 +289,7 @@ public class WelcomeScreen extends AppCompatActivity implements View.OnClickList
                         } else {
                             // If sign in fails, display a message to the user.
                             progressBar.setVisibility(View.GONE);
-                            Toast.makeText(WelcomeScreen.this, "Falha ao tentar logar!", Toast.LENGTH_LONG).show();
+                            Toast.makeText(WelcomeScreen.this, "Falha ao tentar logar!", Toast.LENGTH_SHORT).show();
                             Log.w("googleSignInFail", "signInWithCredential:failure", task.getException());
                         }
                     }

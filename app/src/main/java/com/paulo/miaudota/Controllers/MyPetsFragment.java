@@ -15,10 +15,12 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -69,6 +71,7 @@ public class MyPetsFragment extends Fragment implements MyPetsRVAdapter.PetClick
     private Dialog deleteDialog, adoptDialog;
     private TextView mensagemSemPet;
     private ImageView imagemSemPet;
+    public int counter;
 
     @Nullable
     @Override
@@ -106,6 +109,7 @@ public class MyPetsFragment extends Fragment implements MyPetsRVAdapter.PetClick
         });
         mensagemSemPet = view.findViewById(R.id.mensagemSemMyPet);
         imagemSemPet = view.findViewById(R.id.imagemSemMyPet);
+        counter = 0;
 
         getAllPets();
 
@@ -204,7 +208,7 @@ public class MyPetsFragment extends Fragment implements MyPetsRVAdapter.PetClick
         databaseReference.child(petId).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void unused) {
-                Toast.makeText(getContext(), "Pet apagado com sucesso", Toast.LENGTH_LONG).show();
+                Toast.makeText(getContext(), "Pet apagado com sucesso", Toast.LENGTH_SHORT).show();
                 Fragment fragmentMyPets =  new MyPetsFragment();
                 FragmentManager fm = getFragmentManager();
                 fm.beginTransaction()
@@ -221,7 +225,7 @@ public class MyPetsFragment extends Fragment implements MyPetsRVAdapter.PetClick
         databaseReference.child(petId).child("isAdotado").setValue("true").addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
-                Toast.makeText(getContext(), "Ficamos feliz que seu pet foi adotado !", Toast.LENGTH_LONG).show();
+                Toast.makeText(getContext(), "Ficamos feliz que seu pet foi adotado !", Toast.LENGTH_SHORT).show();
                 Fragment fragmentMyPets =  new MyPetsFragment();
                 FragmentManager fm = getFragmentManager();
                 fm.beginTransaction()
@@ -248,14 +252,14 @@ public class MyPetsFragment extends Fragment implements MyPetsRVAdapter.PetClick
     }
 
     private void getAllPets() {
-
         petArrayList.clear();
 
         Query query = databaseReference.orderByChild("userId").equalTo(user.getUid());
         query.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-                progressBar.setVisibility(View.GONE);
+                //artificio documentado para evitar que mensagem de sem pets aparece rapidamente ao dar load na pagina
+                counter = 1;
                 if(snapshot.getValue(Pet.class).getIsAdotado().equals("false")){
                     Log.e("PET", "pet nao adotado-> ");
                     petArrayList.add(snapshot.getValue(Pet.class));
@@ -263,77 +267,102 @@ public class MyPetsFragment extends Fragment implements MyPetsRVAdapter.PetClick
                 }
 
                 if(petArrayList.size() == 0){
-                    progressBar.setVisibility(View.GONE);
                     imagemSemPet.setVisibility(View.VISIBLE);
                     mensagemSemPet.setVisibility(View.VISIBLE);
 
                 }
                 else{
-                    progressBar.setVisibility(View.GONE);
                     imagemSemPet.setVisibility(View.INVISIBLE);
                     mensagemSemPet.setVisibility(View.INVISIBLE);
                 }
+                progressBar.setVisibility(View.GONE);
             }
 
             @Override
             public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-                progressBar.setVisibility(View.GONE);
+                counter = 1;
                 myPetsRVAdapter.notifyDataSetChanged();
 
                 if(petArrayList.size() == 0){
-                    progressBar.setVisibility(View.GONE);
                     imagemSemPet.setVisibility(View.VISIBLE);
                     mensagemSemPet.setVisibility(View.VISIBLE);
 
                 }
                 else{
-                    progressBar.setVisibility(View.GONE);
                     imagemSemPet.setVisibility(View.INVISIBLE);
                     mensagemSemPet.setVisibility(View.INVISIBLE);
                 }
+                progressBar.setVisibility(View.GONE);
             }
 
             @Override
             public void onChildRemoved(@NonNull DataSnapshot snapshot) {
-                progressBar.setVisibility(View.GONE);
+                counter = 1;
                 myPetsRVAdapter.notifyDataSetChanged();
 
                 if(petArrayList.size() == 0){
-                    progressBar.setVisibility(View.GONE);
                     imagemSemPet.setVisibility(View.VISIBLE);
                     mensagemSemPet.setVisibility(View.VISIBLE);
 
                 }
                 else{
-                    progressBar.setVisibility(View.GONE);
                     imagemSemPet.setVisibility(View.INVISIBLE);
                     mensagemSemPet.setVisibility(View.INVISIBLE);
                 }
+                progressBar.setVisibility(View.GONE);
             }
 
             @Override
             public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-                progressBar.setVisibility(View.GONE);
+                counter = 1;
                 myPetsRVAdapter.notifyDataSetChanged();
 
                 if(petArrayList.size() == 0){
-                    progressBar.setVisibility(View.GONE);
                     imagemSemPet.setVisibility(View.VISIBLE);
                     mensagemSemPet.setVisibility(View.VISIBLE);
 
                 }
                 else{
-                    progressBar.setVisibility(View.GONE);
                     imagemSemPet.setVisibility(View.INVISIBLE);
                     mensagemSemPet.setVisibility(View.INVISIBLE);
                 }
+                progressBar.setVisibility(View.GONE);
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
+                counter = 1;
+                myPetsRVAdapter.notifyDataSetChanged();
 
+                if(petArrayList.size() == 0){
+                    imagemSemPet.setVisibility(View.VISIBLE);
+                    mensagemSemPet.setVisibility(View.VISIBLE);
+
+                }
+                else{
+                    imagemSemPet.setVisibility(View.INVISIBLE);
+                    mensagemSemPet.setVisibility(View.INVISIBLE);
+                }
+                progressBar.setVisibility(View.GONE);
             }
         });
+
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            public void run() {
+                if(petArrayList.size() == 0){
+                    imagemSemPet.setVisibility(View.VISIBLE);
+                    mensagemSemPet.setVisibility(View.VISIBLE);
+
+                }
+                else{
+                    imagemSemPet.setVisibility(View.INVISIBLE);
+                    mensagemSemPet.setVisibility(View.INVISIBLE);
+                }
+                progressBar.setVisibility(View.GONE);
+            }
+        }, 1000);
+
 
     }
 

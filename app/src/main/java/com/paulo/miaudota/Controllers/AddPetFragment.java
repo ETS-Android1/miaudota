@@ -79,12 +79,12 @@ public class AddPetFragment extends Fragment implements View.OnClickListener {
 
     @Override
     public void onStart() {
-        Log.e("Warning_Activity","onStart addPet -> ");
+        Log.i("Warning_Activity","onStart addPet -> ");
         super.onStart();
         mAuth = FirebaseAuth.getInstance();
         user = mAuth.getCurrentUser();
         if (user == null) {
-            Log.e("Warning_Activity","onStart EditProfile userNull-> ");
+            Log.i("Warning_Activity","onStart EditProfile userNull-> ");
             startActivity(new Intent(getActivity(), WelcomeScreen.class));
         }
     }
@@ -92,7 +92,7 @@ public class AddPetFragment extends Fragment implements View.OnClickListener {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        Log.e("Warning_Activity","onCreateView -> MessageFragment");
+        Log.i("Warning_Activity","onCreateView -> MessageFragment");
 
         View view = inflater.inflate(R.layout.fragment_add_pet, container, false);
         petImage = view.findViewById(R.id.petImageAdd);
@@ -251,7 +251,7 @@ public class AddPetFragment extends Fragment implements View.OnClickListener {
         try {
             respostaIbge = segundoPlano.execute(params).get();
         }catch (ExecutionException | InterruptedException e){
-            Log.d("onPost", "Erro resposta IBGE: " + e);
+            Log.e("onPost", "Erro resposta IBGE: " + e);
         }
 
         return respostaIbge;
@@ -477,10 +477,8 @@ public class AddPetFragment extends Fragment implements View.OnClickListener {
         ddd = dddEditText.getText().toString().trim();
         celular = celularEditText.getText().toString().trim();
 
-        Log.e("addPetDb", "petId: " + petId);
-
         if(!validarPreenchimento(nomePet, idadeAnos, idadeMeses, descricao, ddd, celular)){
-            Toast.makeText(getContext(), "Por favor preencha todos os campos !", Toast.LENGTH_LONG).show();
+            Toast.makeText(getContext(), "Por favor preencha todos os campos !", Toast.LENGTH_SHORT).show();
             progressBar.setVisibility(View.GONE);
             return;
         }
@@ -493,23 +491,20 @@ public class AddPetFragment extends Fragment implements View.OnClickListener {
     }
 
     private void AddPetDb(){
-
-        Log.d("onPost", "petImageStr " + petImageStr);
         Pet petModel = new Pet(petImageStr ,nomePet, tipoPet, idadeAnos, idadeMeses ,generoPet, tamanhoPet, ufPet, cidadePet, descricao, petId, dataCadastro, userId, ddd, celular, isAdotado);
-        Log.d("onPost", "pet model: " + petModel);
 
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 databaseReference.child(petId).setValue(petModel);
                 progressBar.setVisibility(View.GONE);
-                Toast.makeText(getContext(), "Pet adicionado com sucesso !", Toast.LENGTH_LONG).show();
+                Toast.makeText(getContext(), "Pet adicionado com sucesso !", Toast.LENGTH_SHORT).show();
                 startActivity(new Intent(getActivity(), Home.class));
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                Toast.makeText(getContext(), "Erro ao enviar dados do pet !", Toast.LENGTH_LONG).show();
+                Toast.makeText(getContext(), "Erro ao enviar dados do pet !", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -532,7 +527,7 @@ public class AddPetFragment extends Fragment implements View.OnClickListener {
     private void getDownloadUrl(StorageReference sReference){
         sReference.getDownloadUrl()
                 .addOnSuccessListener(uri -> {
-                    Log.e("TAG","onSuccess: " + uri );
+                    Log.i("TAG","onSuccess: " + uri );
                     petImageStr = uri.toString();
                     AddPetDb();
                 });
@@ -603,13 +598,13 @@ public class AddPetFragment extends Fragment implements View.OnClickListener {
         }
 
         if(descricao.length() > 240){
-            Toast.makeText(getContext(), "A descrição deve conter no máximo 240 caracteres!", Toast.LENGTH_LONG).show();
+            Toast.makeText(getContext(), "A descrição deve conter no máximo 240 caracteres!", Toast.LENGTH_SHORT).show();
             descricaoEditText.requestFocus();
             return false;
         }
 
         if(petImageUri == null){
-            Toast.makeText(getContext(), "Por favor adicione uma imagem do pet !", Toast.LENGTH_LONG).show();
+            Toast.makeText(getContext(), "Por favor adicione uma imagem do pet !", Toast.LENGTH_SHORT).show();
             return false;
         }
 

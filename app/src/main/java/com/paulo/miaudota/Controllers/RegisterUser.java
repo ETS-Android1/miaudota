@@ -234,7 +234,7 @@ public class RegisterUser extends AppCompatActivity implements View.OnClickListe
         }
 
         if(dataNascimento.equals(dataAtual)){
-            Toast.makeText(RegisterUser.this,"Você não nasceu hoje porra",Toast.LENGTH_LONG).show();
+            Toast.makeText(RegisterUser.this,"Você não nasceu hoje porra",Toast.LENGTH_SHORT).show();
             editTextDataNascimento.setError("Campo obrigatório !!");
             editTextDataNascimento.requestFocus();
             return;
@@ -255,16 +255,16 @@ public class RegisterUser extends AppCompatActivity implements View.OnClickListe
                                 @Override
                                 public void onComplete(@NonNull Task<Void> task) {
                                     if(task.isSuccessful()){
-                                        Toast.makeText(RegisterUser.this, "Usuário cadastrado com sucesso !", Toast.LENGTH_LONG).show();
+                                        Toast.makeText(RegisterUser.this, "Usuário cadastrado com sucesso !", Toast.LENGTH_SHORT).show();
                                         progressBar.setVisibility(View.GONE);
                                         startActivity(new Intent(RegisterUser.this, Login.class));
                                         RegisterUser.this.finish();
                                     }else{
                                         if(task.getException().toString().equals("ERROR_EMAIL_ALREADY_IN_USE")){
                                             Log.e("Warning_Activity","Else task.excpetiuon -> " + task.getException().toString());
-                                            Toast.makeText(RegisterUser.this, "Este email já está sendo utilizado !", Toast.LENGTH_LONG).show();
+                                            Toast.makeText(RegisterUser.this, "Este email já está sendo utilizado !", Toast.LENGTH_SHORT).show();
                                         }
-                                        Toast.makeText(RegisterUser.this, "Falha ao cadastrar usuário ! Tente novamente !", Toast.LENGTH_LONG).show();
+                                        Toast.makeText(RegisterUser.this, "Falha ao cadastrar usuário ! Tente novamente !", Toast.LENGTH_SHORT).show();
                                         Log.e("Warning_Activity","Else task.isSucesseful -> Erro ao Registrar");
                                         progressBar.setVisibility(View.GONE);
                                     }
@@ -274,9 +274,9 @@ public class RegisterUser extends AppCompatActivity implements View.OnClickListe
                         else {
                             if(task.getException().toString().equals("ERROR_EMAIL_ALREADY_IN_USE")){
                                 Log.e("Warning_Activity","Else task.excpetiuon -> " + task.getException());
-                                Toast.makeText(RegisterUser.this, "Este email já está sendo utilizado !", Toast.LENGTH_LONG).show();
+                                Toast.makeText(RegisterUser.this, "Este email já está sendo utilizado !", Toast.LENGTH_SHORT).show();
                             }
-                            Toast.makeText(RegisterUser.this, "Falha ao cadastrar usuário ! Tente novamente !", Toast.LENGTH_LONG).show();
+                            Toast.makeText(RegisterUser.this, "Falha ao cadastrar usuário ! Tente novamente !", Toast.LENGTH_SHORT).show();
                             progressBar.setVisibility(View.GONE);
                         }
                     }

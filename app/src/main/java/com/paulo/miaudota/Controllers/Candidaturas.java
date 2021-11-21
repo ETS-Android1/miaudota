@@ -11,9 +11,12 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
@@ -38,12 +41,13 @@ import java.util.ArrayList;
 
 public class Candidaturas extends AppCompatActivity implements CandidaturaRVAdapter.CandidaturaClickInterface{
 
-    private RecyclerView candidaturaRV;
     private ProgressBar progressBar;
     private ArrayList<Candidatura> candidaturaArrayList;
     private CandidaturaRVAdapter candidaturaRVAdapter;
     SwipeRefreshLayout swipeRefreshLayout;
-    private String userId, nomeUsuario, emailUsuario, localizacaoUsuario, profilePicUsuario, idPetCandidatura, celularUsuario;
+    private String idPetCandidatura;
+    private TextView mensagemSemCandidatura;
+    private ImageView imagemSemCandidatura;
 
     private FirebaseDatabase firebaseDatabase;
     private DatabaseReference databaseReference;
@@ -62,7 +66,7 @@ public class Candidaturas extends AppCompatActivity implements CandidaturaRVAdap
             startActivity(new Intent(Candidaturas.this, WelcomeScreen.class));
         }
 
-        candidaturaRV = findViewById(R.id.idRvCandidaturas);
+        RecyclerView candidaturaRV = findViewById(R.id.idRvCandidaturas);
         candidaturaArrayList = new ArrayList<>();
         firebaseDatabase = FirebaseDatabase.getInstance();
         databaseReference = firebaseDatabase.getReference("Candidaturas");
@@ -71,6 +75,8 @@ public class Candidaturas extends AppCompatActivity implements CandidaturaRVAdap
         candidaturaRV.setAdapter(candidaturaRVAdapter);
         progressBar = findViewById(R.id.progressBarCandidaturas);
         progressBar.setVisibility(View.VISIBLE);
+        imagemSemCandidatura = findViewById(R.id.imagemSemCandidatura);
+        mensagemSemCandidatura = findViewById(R.id.mensagemSemCandidatura);
         swipeRefreshLayout = findViewById(R.id.swipeRefreshCandidaturas);
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -79,7 +85,7 @@ public class Candidaturas extends AppCompatActivity implements CandidaturaRVAdap
                 swipeRefreshLayout.setRefreshing(false);
             }
         });
-        userId = mAuth.getCurrentUser().getUid();
+
         if (getIntent().hasExtra("petId")) {
             idPetCandidatura = getIntent().getStringExtra("petId");
         }
@@ -99,35 +105,110 @@ public class Candidaturas extends AppCompatActivity implements CandidaturaRVAdap
                 Log.e("PET", "pet nao adotado-> ");
                 candidaturaArrayList.add(snapshot.getValue(Candidatura.class));
                 candidaturaRVAdapter.notifyDataSetChanged();
+
+                if(candidaturaArrayList.size() == 0){
+                    progressBar.setVisibility(View.GONE);
+                    imagemSemCandidatura.setVisibility(View.VISIBLE);
+                    mensagemSemCandidatura.setVisibility(View.VISIBLE);
+
+                }
+                else{
+                    progressBar.setVisibility(View.GONE);
+                    imagemSemCandidatura.setVisibility(View.INVISIBLE);
+                    mensagemSemCandidatura.setVisibility(View.INVISIBLE);
+                }
             }
 
             @Override
             public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
                 candidaturaArrayList.add(snapshot.getValue(Candidatura.class));
                 candidaturaRVAdapter.notifyDataSetChanged();
+
+                if(candidaturaArrayList.size() == 0){
+                    progressBar.setVisibility(View.GONE);
+                    imagemSemCandidatura.setVisibility(View.VISIBLE);
+                    mensagemSemCandidatura.setVisibility(View.VISIBLE);
+
+                }
+                else{
+                    progressBar.setVisibility(View.GONE);
+                    imagemSemCandidatura.setVisibility(View.INVISIBLE);
+                    mensagemSemCandidatura.setVisibility(View.INVISIBLE);
+                }
             }
 
             @Override
             public void onChildRemoved(@NonNull DataSnapshot snapshot) {
                 candidaturaArrayList.add(snapshot.getValue(Candidatura.class));
                 candidaturaRVAdapter.notifyDataSetChanged();
+
+                if(candidaturaArrayList.size() == 0){
+                    progressBar.setVisibility(View.GONE);
+                    imagemSemCandidatura.setVisibility(View.VISIBLE);
+                    mensagemSemCandidatura.setVisibility(View.VISIBLE);
+
+                }
+                else{
+                    progressBar.setVisibility(View.GONE);
+                    imagemSemCandidatura.setVisibility(View.INVISIBLE);
+                    mensagemSemCandidatura.setVisibility(View.INVISIBLE);
+                }
             }
 
             @Override
             public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
                 candidaturaArrayList.add(snapshot.getValue(Candidatura.class));
                 candidaturaRVAdapter.notifyDataSetChanged();
+
+                if(candidaturaArrayList.size() == 0){
+                    progressBar.setVisibility(View.GONE);
+                    imagemSemCandidatura.setVisibility(View.VISIBLE);
+                    mensagemSemCandidatura.setVisibility(View.VISIBLE);
+
+                }
+                else{
+                    progressBar.setVisibility(View.GONE);
+                    imagemSemCandidatura.setVisibility(View.INVISIBLE);
+                    mensagemSemCandidatura.setVisibility(View.INVISIBLE);
+                }
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
 
+                if(candidaturaArrayList.size() == 0){
+                    progressBar.setVisibility(View.GONE);
+                    imagemSemCandidatura.setVisibility(View.VISIBLE);
+                    mensagemSemCandidatura.setVisibility(View.VISIBLE);
+
+                }
+                else{
+                    progressBar.setVisibility(View.GONE);
+                    imagemSemCandidatura.setVisibility(View.INVISIBLE);
+                    mensagemSemCandidatura.setVisibility(View.INVISIBLE);
+                }
+
             }
         });
 
-        if(candidaturaArrayList.size() == 0){
-            progressBar.setVisibility(View.GONE);
-        }
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            public void run() {
+                if(candidaturaArrayList.size() == 0){
+                    progressBar.setVisibility(View.GONE);
+                    imagemSemCandidatura.setVisibility(View.VISIBLE);
+                    mensagemSemCandidatura.setVisibility(View.VISIBLE);
+
+                }
+                else{
+                    progressBar.setVisibility(View.GONE);
+                    imagemSemCandidatura.setVisibility(View.INVISIBLE);
+                    mensagemSemCandidatura.setVisibility(View.INVISIBLE);
+                }
+
+                progressBar.setVisibility(View.GONE);
+            }
+        }, 1000);
 
     }
 
@@ -142,7 +223,7 @@ public class Candidaturas extends AppCompatActivity implements CandidaturaRVAdap
         try {
             startActivity(i);
         }catch (Exception ex){
-            Toast.makeText(Candidaturas.this, "Ocorreu um erro ao tentar abrir o whastsapp !!", Toast.LENGTH_LONG).show();
+            Toast.makeText(Candidaturas.this, "Ocorreu um erro ao tentar abrir o whastsapp !!", Toast.LENGTH_SHORT).show();
         }
     }
 

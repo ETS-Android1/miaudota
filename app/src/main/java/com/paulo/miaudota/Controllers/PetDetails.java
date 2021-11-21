@@ -183,13 +183,13 @@ public class PetDetails extends AppCompatActivity implements View.OnClickListene
                     }, 1000);
 
                 } else {
-                    Toast.makeText(PetDetails.this, "Ocorreu um erro ao carregar a página !", Toast.LENGTH_LONG).show();
+                    Toast.makeText(PetDetails.this, "Ocorreu um erro ao carregar a página !", Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                Toast.makeText(PetDetails.this, "Ocorreu um erro ao carregar a página !!", Toast.LENGTH_LONG).show();
+                Toast.makeText(PetDetails.this, "Ocorreu um erro ao carregar a página !!", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -235,18 +235,18 @@ public class PetDetails extends AppCompatActivity implements View.OnClickListene
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if(usuarioIncompleto == true){
                     startActivity(new Intent(PetDetails.this, EditProfile.class));
-                    Toast.makeText(PetDetails.this, "Você deve completar seu perfil para se candidatar !", Toast.LENGTH_LONG).show();
+                    Toast.makeText(PetDetails.this, "Você deve completar seu perfil para se candidatar !", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 candidaturasRef.child(candidaturaId).setValue(candidaturaModel);
                 progressBar.setVisibility(View.GONE);
-                Toast.makeText(PetDetails.this, "Candidatura feita com sucesso !", Toast.LENGTH_LONG).show();
+                Toast.makeText(PetDetails.this, "Candidatura feita com sucesso !", Toast.LENGTH_SHORT).show();
                 checkUserCandidatou(petId, userId);
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                Toast.makeText(PetDetails.this, "Erro ao enviar dados do pet !", Toast.LENGTH_LONG).show();
+                Toast.makeText(PetDetails.this, "Erro ao enviar dados do pet !", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -261,7 +261,7 @@ public class PetDetails extends AppCompatActivity implements View.OnClickListene
         try {
             startActivity(i);
         }catch (Exception ex){
-            Toast.makeText(PetDetails.this, "Ocorreu um erro ao tentar abrir o whastsapp !!", Toast.LENGTH_LONG).show();
+            Toast.makeText(PetDetails.this, "Ocorreu um erro ao tentar abrir o whastsapp !!", Toast.LENGTH_SHORT).show();
         }
     }
 

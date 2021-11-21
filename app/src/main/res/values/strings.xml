@@ -23,6 +23,9 @@
     <string name="continuar">Continuar</string>
     <string name="proximo">Próximo</string>
 
+    <string name="facebook_app_id">496892601357195</string>
+    <string name="fb_login_protocol_scheme">fb496892601357195</string>
+
     <string-array name="pets_types">
         <item>Tipo</item>
         <item>Gato(a)</item>

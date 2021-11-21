@@ -34,7 +34,6 @@
 
     <Button
         android:id="@+id/btnCancelarAdopt"
-        style="@style/dialog_theme"
         android:layout_width="130dp"
         android:layout_height="wrap_content"
         android:background="@drawable/button_bg"
@@ -54,6 +53,7 @@
 
     <Button
         android:id="@+id/btnConfirmarAdopt"
+        style="@style/dialog_theme"
         android:layout_width="140dp"
         android:layout_height="wrap_content"
         android:background="@drawable/button_bg"

@@ -12,6 +12,13 @@
         <entry key="..\:/6-Projetos/Android Studio/Miaudota/app/src/main/res/drawable/circle_border.xml" value="0.37864583333333335" />
         <entry key="..\:/6-Projetos/Android Studio/Miaudota/app/src/main/res/drawable/circle_picture.xml" value="0.16875" />
         <entry key="..\:/6-Projetos/Android Studio/Miaudota/app/src/main/res/drawable/edit_text_bg.xml" value="0.35743589743589743" />
+        <entry key="..\:/6-Projetos/Android Studio/Miaudota/app/src/main/res/drawable/filter_bg_all.xml" value="0.184375" />
+        <entry key="..\:/6-Projetos/Android Studio/Miaudota/app/src/main/res/drawable/filter_bg_bird.xml" value="0.184375" />
+        <entry key="..\:/6-Projetos/Android Studio/Miaudota/app/src/main/res/drawable/filter_bg_cat.xml" value="0.184375" />
+        <entry key="..\:/6-Projetos/Android Studio/Miaudota/app/src/main/res/drawable/filter_bg_dog.xml" value="0.184375" />
+        <entry key="..\:/6-Projetos/Android Studio/Miaudota/app/src/main/res/drawable/filter_bg_outros.xml" value="0.184375" />
+        <entry key="..\:/6-Projetos/Android Studio/Miaudota/app/src/main/res/drawable/filter_bg_roedores.xml" value="0.184375" />
+        <entry key="..\:/6-Projetos/Android Studio/Miaudota/app/src/main/res/drawable/filter_bg_trans.xml" value="0.3458333333333333" />
         <entry key="..\:/6-Projetos/Android Studio/Miaudota/app/src/main/res/drawable/ic_add.xml" value="0.37864583333333335" />
         <entry key="..\:/6-Projetos/Android Studio/Miaudota/app/src/main/res/drawable/ic_delete.xml" value="0.24270833333333333" />
         <entry key="..\:/6-Projetos/Android Studio/Miaudota/app/src/main/res/drawable/ic_delete_red.xml" value="0.24270833333333333" />
@@ -55,7 +62,8 @@
         <entry key="..\:/6-Projetos/Android Studio/Miaudota/app/src/main/res/layout/login_tab_fragment.xml" value="0.33" />
         <entry key="..\:/6-Projetos/Android Studio/Miaudota/app/src/main/res/layout/myPets_rv_item.xml" value="0.67" />
         <entry key="..\:/6-Projetos/Android Studio/Miaudota/app/src/main/res/layout/my_pets_rv_item.xml" value="0.5" />
-        <entry key="..\:/6-Projetos/Android Studio/Miaudota/app/src/main/res/layout/pet_rv_item.xml" value="0.5" />
+        <entry key="..\:/6-Projetos/Android Studio/Miaudota/app/src/main/res/layout/pet_rv_item.xml" value="0.33" />
+        <entry key="..\:/6-Projetos/Android Studio/Miaudota/app/src/main/res/layout/pets_filter_rv_item.xml" value="0.9" />
         <entry key="..\:/6-Projetos/Android Studio/Miaudota/app/src/main/res/layout/register_tab.xml" value="0.2869791666666667" />
         <entry key="..\:/6-Projetos/Android Studio/Miaudota/app/src/main/res/layout/register_tab_fragment.xml" value="0.33" />
         <entry key="..\:/6-Projetos/Android Studio/Miaudota/app/src/main/res/layout/register_user.xml" value="0.23385416666666667" />

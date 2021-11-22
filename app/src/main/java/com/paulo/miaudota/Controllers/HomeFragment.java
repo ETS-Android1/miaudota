@@ -2,6 +2,7 @@ package com.paulo.miaudota.Controllers;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,18 +30,22 @@ import com.google.firebase.database.Query;
 import com.google.firebase.storage.StorageReference;
 import com.paulo.miaudota.Models.Pet;
 import com.paulo.miaudota.PetRVAdapter;
+import com.paulo.miaudota.PetsFilterAdapter;
 import com.paulo.miaudota.R;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 
-public class HomeFragment extends Fragment implements PetRVAdapter.PetClickInterface {
+public class HomeFragment extends Fragment implements PetRVAdapter.PetClickInterface, PetsFilterAdapter.PetFilterClickInterface {
 
-    private RecyclerView petRV;
+    private RecyclerView petRV, filterRv;
     private ProgressBar progressBar;
     private ArrayList<Pet> petArrayList;
     private PetRVAdapter petRVAdapter;
+    private PetsFilterAdapter petsFilterAdapter;
+    private ArrayList<String> mNames = new ArrayList<>();
+    private ArrayList<Integer> mImageUrls = new ArrayList<>();
     private String petId;
     private TextView mensagemSemPet;
     private ImageView imagemSemPet;
@@ -87,6 +92,7 @@ public class HomeFragment extends Fragment implements PetRVAdapter.PetClickInter
         imagemSemPet = view.findViewById(R.id.imagemSemPet);
 
         getAllPets();
+        getImages(view);
 
         return view;
     }
@@ -99,6 +105,34 @@ public class HomeFragment extends Fragment implements PetRVAdapter.PetClickInter
         petId = petModel.getPetId();
         intent.putExtra("petId", petId);
         startActivity(intent);
+    }
+
+    @Override
+    public void onPetFilterClick(int position) {
+        Log.d("Home-filterClick", "position: " + position);
+        switch (position){
+            case 0:
+                getAllPets();
+                break;
+            case 1:
+                getFiltered("Cachorro(a)");
+                break;
+            case 2:
+                getFiltered("Gato(a)");
+                break;
+            case 3:
+                getFiltered("Aves");
+                break;
+            case 4:
+                getFiltered("Roedores");
+                break;
+            case 5:
+                getFiltered("Outros");
+                break;
+            default:
+                getAllPets();
+                break;
+        }
     }
 
     private void getAllPets() {
@@ -189,87 +223,156 @@ public class HomeFragment extends Fragment implements PetRVAdapter.PetClickInter
 
     }
 
-    private void getOnlyMales() {
+    private void getFiltered(String tipo) {
         petArrayList.clear();
+        progressBar.setVisibility(View.VISIBLE);
 
-        Query query = databaseReference.orderByChild("generoPet").equalTo("Masculino");
+        Query query = databaseReference.orderByChild("tipoPet").equalTo(tipo);
         query.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
                 progressBar.setVisibility(View.GONE);
-                petArrayList.add(snapshot.getValue(Pet.class));
-                petRVAdapter.notifyDataSetChanged();
+                if(snapshot.getValue(Pet.class).getIsAdotado().equals("false")){
+                    petArrayList.add(snapshot.getValue(Pet.class));
+                    petRVAdapter.notifyDataSetChanged();
+                }
+
+                if(petArrayList.size() == 0){
+                    progressBar.setVisibility(View.GONE);
+                    imagemSemPet.setVisibility(View.VISIBLE);
+                    mensagemSemPet.setVisibility(View.VISIBLE);
+                }
+                else{
+                    progressBar.setVisibility(View.GONE);
+                    imagemSemPet.setVisibility(View.INVISIBLE);
+                    mensagemSemPet.setVisibility(View.INVISIBLE);
+                }
             }
 
             @Override
             public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
                 progressBar.setVisibility(View.GONE);
-                petRVAdapter.notifyDataSetChanged();
+                if(snapshot.getValue(Pet.class).getIsAdotado().equals("false")){
+                    petRVAdapter.notifyDataSetChanged();
+                }
+
+                if(petArrayList.size() == 0){
+                    progressBar.setVisibility(View.GONE);
+                    imagemSemPet.setVisibility(View.VISIBLE);
+                    mensagemSemPet.setVisibility(View.VISIBLE);
+                }
+                else{
+                    progressBar.setVisibility(View.GONE);
+                    imagemSemPet.setVisibility(View.INVISIBLE);
+                    mensagemSemPet.setVisibility(View.INVISIBLE);
+                }
             }
 
             @Override
             public void onChildRemoved(@NonNull DataSnapshot snapshot) {
                 progressBar.setVisibility(View.GONE);
-                petRVAdapter.notifyDataSetChanged();
+                if(snapshot.getValue(Pet.class).getIsAdotado().equals("false")){
+                    petRVAdapter.notifyDataSetChanged();
+                }
+                if(petArrayList.size() == 0){
+                    progressBar.setVisibility(View.GONE);
+                    imagemSemPet.setVisibility(View.VISIBLE);
+                    mensagemSemPet.setVisibility(View.VISIBLE);
+                }
+                else{
+                    progressBar.setVisibility(View.GONE);
+                    imagemSemPet.setVisibility(View.INVISIBLE);
+                    mensagemSemPet.setVisibility(View.INVISIBLE);
+                }
             }
 
             @Override
             public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
                 progressBar.setVisibility(View.GONE);
-                petRVAdapter.notifyDataSetChanged();
+                if(snapshot.getValue(Pet.class).getIsAdotado().equals("false")){
+                    petRVAdapter.notifyDataSetChanged();
+                }
+                if(petArrayList.size() == 0){
+                    progressBar.setVisibility(View.GONE);
+                    imagemSemPet.setVisibility(View.VISIBLE);
+                    mensagemSemPet.setVisibility(View.VISIBLE);
+                }
+                else{
+                    progressBar.setVisibility(View.GONE);
+                    imagemSemPet.setVisibility(View.INVISIBLE);
+                    mensagemSemPet.setVisibility(View.INVISIBLE);
+                }
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-
+                if(petArrayList.size() == 0){
+                    progressBar.setVisibility(View.GONE);
+                    imagemSemPet.setVisibility(View.VISIBLE);
+                    mensagemSemPet.setVisibility(View.VISIBLE);
+                }
+                else{
+                    progressBar.setVisibility(View.GONE);
+                    imagemSemPet.setVisibility(View.INVISIBLE);
+                    mensagemSemPet.setVisibility(View.INVISIBLE);
+                }
             }
         });
 
-        if(petArrayList.size() == 0){
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            public void run() {
+                if(petArrayList.size() == 0){
+                    petRVAdapter.notifyDataSetChanged();
+                    progressBar.setVisibility(View.GONE);
+                    imagemSemPet.setVisibility(View.VISIBLE);
+                    mensagemSemPet.setVisibility(View.VISIBLE);
+                }
+                else{
+                    progressBar.setVisibility(View.GONE);
+                    imagemSemPet.setVisibility(View.INVISIBLE);
+                    mensagemSemPet.setVisibility(View.INVISIBLE);
+                }
+            }
+        }, 1000);
 
-            progressBar.setVisibility(View.GONE);
-        }
+        petRVAdapter.notifyDataSetChanged();
+
     }
 
-    private void getOnlyFemales() {
-        petArrayList.clear();
+    private void getImages(View view){
+        Log.d("Home-GetImages", "initImageBitmaps: preparing bitmaps.");
 
-        Query query = databaseReference.orderByChild("generoPet").equalTo("Feminino");
-        query.addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-                progressBar.setVisibility(View.GONE);
-                petArrayList.add(snapshot.getValue(Pet.class));
-                petRVAdapter.notifyDataSetChanged();
-            }
+        mImageUrls.add(R.drawable.ic_all);
+        mNames.add("Todos");
 
-            @Override
-            public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-                progressBar.setVisibility(View.GONE);
-                petRVAdapter.notifyDataSetChanged();
-            }
+        mImageUrls.add(R.drawable.ic_dogsvg);
+        mNames.add("Cachorros");
 
-            @Override
-            public void onChildRemoved(@NonNull DataSnapshot snapshot) {
-                progressBar.setVisibility(View.GONE);
-                petRVAdapter.notifyDataSetChanged();
-            }
+        mImageUrls.add(R.drawable.ic_cat);
+        mNames.add("Gatos");
 
-            @Override
-            public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-                progressBar.setVisibility(View.GONE);
-                petRVAdapter.notifyDataSetChanged();
-            }
+        mImageUrls.add(R.drawable.ic_bird);
+        mNames.add("Aves");
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
+        mImageUrls.add(R.drawable.ic_hamster);
+        mNames.add("Roedores");
 
-            }
-        });
+        mImageUrls.add(R.drawable.ic_otherssvg);
+        mNames.add("Outros");
 
-        if(petArrayList.size() == 0){
-            progressBar.setVisibility(View.GONE);
-        }
+        initRecyclerView(view);
+
+    }
+
+    private void initRecyclerView(View v){
+        Log.d("HomeFragment", "initRecyclerView: init recyclerview");
+
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
+        filterRv = v.findViewById(R.id.idRvFilterPets);
+        filterRv.setLayoutManager(layoutManager);
+        petsFilterAdapter = new PetsFilterAdapter(getContext(), mNames, mImageUrls,this);
+        filterRv.setAdapter(petsFilterAdapter);
     }
 
 }

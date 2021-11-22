@@ -18,4 +18,11 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+    <color name="dogRed">#f75252</color>
+    <color name="catGreen">#87db56</color>
+    <color name="birdPurple">#b578eb</color>
+    <color name="hamsterPink">#FF4584</color>
+    <color name="outrosYellow">#FF8A3D</color>
+
 </resources>

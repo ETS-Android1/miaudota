@@ -42,7 +42,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.paulo.miaudota.InputFilterMinMax;
+import com.paulo.miaudota.Utils.InputFilterMinMax;
 import com.paulo.miaudota.Models.Cidade;
 import com.paulo.miaudota.Models.Estado;
 import com.paulo.miaudota.Models.Pet;
@@ -187,9 +187,9 @@ public class AddPetFragment extends Fragment implements View.OnClickListener {
         Cidade[] cidades = jsonCidades.fromJson(String.valueOf(ibgeCidades), Cidade[].class);
 
         ArrayList<String> cidadesSpinner = new ArrayList<>();
-
+        String regex = "(?<!^)([A-Z])";
         for(Cidade cidade: cidades){
-            cidadesSpinner.add(cidade.getNome());
+            cidadesSpinner.add(cidade.getNome().replaceAll(regex, " $1"));
         }
 
         cidadesSpinner.add(0,"Cidade");
@@ -255,7 +255,6 @@ public class AddPetFragment extends Fragment implements View.OnClickListener {
         }
 
         return respostaIbge;
-
     }
 
     private void loadSpinners(){
@@ -493,12 +492,12 @@ public class AddPetFragment extends Fragment implements View.OnClickListener {
     private void AddPetDb(){
         Pet petModel = new Pet(petImageStr ,nomePet, tipoPet, idadeAnos, idadeMeses ,generoPet, tamanhoPet, ufPet, cidadePet, descricao, petId, dataCadastro, userId, ddd, celular, isAdotado);
 
-        databaseReference.addValueEventListener(new ValueEventListener() {
+        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 databaseReference.child(petId).setValue(petModel);
                 progressBar.setVisibility(View.GONE);
-                Toast.makeText(getContext(), "Pet adicionado com sucesso !", Toast.LENGTH_SHORT).show();
+                Toast.makeText(AddPetFragment.this.getContext(), "Pet adicionado com sucesso !", Toast.LENGTH_SHORT).show();
                 startActivity(new Intent(getActivity(), Home.class));
             }
 

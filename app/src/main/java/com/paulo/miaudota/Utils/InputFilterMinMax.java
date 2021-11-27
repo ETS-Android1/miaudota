@@ -1,4 +1,4 @@
-package com.paulo.miaudota;
+package com.paulo.miaudota.Utils;
 
 import android.text.InputFilter;
 import android.text.Spanned;

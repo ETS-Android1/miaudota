@@ -45,7 +45,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.paulo.miaudota.InputFilterMinMax;
+import com.paulo.miaudota.Utils.InputFilterMinMax;
 import com.paulo.miaudota.Models.Cidade;
 import com.paulo.miaudota.Models.Estado;
 import com.paulo.miaudota.R;
@@ -314,8 +314,9 @@ public class EditProfile extends AppCompatActivity implements View.OnClickListen
 
         ArrayList<String> cidadesSpinner = new ArrayList<>();
 
+        String regex = "(?<!^)([A-Z])";
         for(Cidade cidade: cidades){
-            cidadesSpinner.add(cidade.getNome());
+            cidadesSpinner.add(cidade.getNome().replaceAll(regex, " $1"));
         }
 
         cidadesSpinner.add(0,"Cidade");

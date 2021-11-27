@@ -3,14 +3,12 @@ package com.paulo.miaudota.Controllers;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -18,8 +16,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -33,7 +29,6 @@ import com.paulo.miaudota.Models.Pet;
 import com.paulo.miaudota.Models.User;
 import com.paulo.miaudota.R;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -113,7 +108,7 @@ public class PetDetails extends AppCompatActivity implements View.OnClickListene
 
             @Override
             public void onCancelled(DatabaseError error) {
-                Log.d("TAG",error.getMessage());
+                Log.d("CheckUserCandidatou",error.getMessage());
             }
         };
         candidaturasRef.addListenerForSingleValueEvent(eventListener);
@@ -128,7 +123,6 @@ public class PetDetails extends AppCompatActivity implements View.OnClickListene
                 Log.e("PET", "achou o pet -> " + petId);
 
                 for (DataSnapshot childSnapshot : dataSnapshot.getChildren()) {
-                    Log.e("PET", "Entrou  no data -> ");
                     petModel = childSnapshot.getValue(Pet.class);
                 }
                 if (petModel != null) {
@@ -202,7 +196,6 @@ public class PetDetails extends AppCompatActivity implements View.OnClickListene
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 nomeUsuario = dataSnapshot.getValue().toString();
-                Log.e("fireballe", "n -> " + nomeUsuario);
                 userPetTv.setText(nomeUsuario);
             }
 
@@ -230,7 +223,7 @@ public class PetDetails extends AppCompatActivity implements View.OnClickListene
         DatabaseReference candidaturasRef = firebaseDatabase.getReference("Candidaturas");
         candidaturaId = userId + petId;
 
-        candidaturasRef.addValueEventListener(new ValueEventListener() {
+        candidaturasRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if(usuarioIncompleto == true){
@@ -240,8 +233,13 @@ public class PetDetails extends AppCompatActivity implements View.OnClickListene
                 }
                 candidaturasRef.child(candidaturaId).setValue(candidaturaModel);
                 progressBar.setVisibility(View.GONE);
-                Toast.makeText(PetDetails.this, "Candidatura feita com sucesso !", Toast.LENGTH_SHORT).show();
-                checkUserCandidatou(petId, userId);
+                Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    public void run() {
+                        Toast.makeText(PetDetails.this, "Candidatura feita com sucesso !", Toast.LENGTH_SHORT).show();
+                        checkUserCandidatou(petId, userId);
+                    }
+                }, 500);
             }
 
             @Override

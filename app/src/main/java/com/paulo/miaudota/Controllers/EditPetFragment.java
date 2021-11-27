@@ -35,8 +35,6 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
 import com.bumptech.glide.Glide;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -49,7 +47,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.paulo.miaudota.InputFilterMinMax;
+import com.paulo.miaudota.Utils.InputFilterMinMax;
 import com.paulo.miaudota.Models.Cidade;
 import com.paulo.miaudota.Models.Estado;
 import com.paulo.miaudota.Models.Pet;
@@ -259,8 +257,9 @@ public class EditPetFragment extends Fragment implements View.OnClickListener {
 
         ArrayList<String> cidadesSpinner = new ArrayList<>();
 
+        String regex = "(?<!^)([A-Z])";
         for(Cidade cidade: cidades){
-            cidadesSpinner.add(cidade.getNome());
+            cidadesSpinner.add(cidade.getNome().replaceAll(regex, " $1"));
         }
 
         cidadesSpinner.add(0,"Cidade");
@@ -567,18 +566,20 @@ public class EditPetFragment extends Fragment implements View.OnClickListener {
         Log.e("UPDATEpet","image ->" + petImageStr + " ou" + petImage);
         Pet petModel = new Pet(petImageStr ,nomePet, tipoPet, idadeAnos, idadeMeses ,generoPet, tamanhoPet, ufPet, cidadePet, descricao, petId, dataCadastro, userId, ddd, celular, isAdotado);
 
-        databaseReference.addValueEventListener(new ValueEventListener() {
+        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 databaseReference.child(petId).setValue(petModel);
                 progressBar.setVisibility(View.GONE);
-                Toast.makeText(getContext(), "Pet atualizado com sucesso !", Toast.LENGTH_SHORT).show();
+                Log.e("SUCESSEDIT","Pet adicionado");
+                Toast.makeText(EditPetFragment.this.getContext(), "Pet atualizado com sucesso !", Toast.LENGTH_SHORT).show();
                 Fragment fragmentMyPets =  new MyPetsFragment();
                 FragmentManager fm = getFragmentManager();
                 fm.beginTransaction()
                         .add(R.id.fragment_container, fragmentMyPets)
                         .addToBackStack(fragmentMyPets.getClass().getSimpleName())
                         .commit();
+
             }
 
             @Override

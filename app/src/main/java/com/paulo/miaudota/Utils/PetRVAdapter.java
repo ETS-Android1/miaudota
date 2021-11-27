@@ -1,4 +1,4 @@
-package com.paulo.miaudota;
+package com.paulo.miaudota.Utils;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -16,8 +16,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.paulo.miaudota.Controllers.EditProfile;
 import com.paulo.miaudota.Models.Pet;
+import com.paulo.miaudota.R;
 
 import java.util.ArrayList;
 import java.util.Random;

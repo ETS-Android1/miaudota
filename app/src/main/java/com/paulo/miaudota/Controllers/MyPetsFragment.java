@@ -8,7 +8,6 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -20,11 +19,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
-import android.widget.TextClock;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -38,21 +35,13 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
-import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentChange;
-import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
-import com.google.firebase.firestore.QuerySnapshot;
 import com.paulo.miaudota.Models.Pet;
-import com.paulo.miaudota.MyPetsRVAdapter;
-import com.paulo.miaudota.PetRVAdapter;
+import com.paulo.miaudota.Utils.MyPetsRVAdapter;
 import com.paulo.miaudota.R;
 
-import org.w3c.dom.Text;
-
 import java.util.ArrayList;
+import java.util.Collections;
 
 
 public class MyPetsFragment extends Fragment implements MyPetsRVAdapter.PetClickInterface, MyPetsRVAdapter.PetClickDeleteInterface, MyPetsRVAdapter.PetClickAdoptInterface, MyPetsRVAdapter.PetClickEditInterface {
@@ -275,6 +264,8 @@ public class MyPetsFragment extends Fragment implements MyPetsRVAdapter.PetClick
                     imagemSemPet.setVisibility(View.INVISIBLE);
                     mensagemSemPet.setVisibility(View.INVISIBLE);
                 }
+                Collections.sort(petArrayList, (o1, o2) -> o2.getDataCadastro().compareTo(o1.getDataCadastro()));
+                myPetsRVAdapter.notifyDataSetChanged();
                 progressBar.setVisibility(View.GONE);
             }
 

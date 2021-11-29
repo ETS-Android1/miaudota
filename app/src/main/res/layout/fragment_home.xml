@@ -6,25 +6,25 @@
     android:layout_height="match_parent"
     android:background="@color/mainBackground">
 
-<!--    <TextView-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:text="Filtro por estado"-->
-<!--        android:textAlignment="center"-->
-<!--        android:textColor="@color/rosinha"-->
-<!--        android:textSize="40sp"-->
-<!--        app:layout_constraintBottom_toTopOf="@+id/swipeRefreshHome"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintHorizontal_bias="0.0"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintTop_toTopOf="parent"-->
-<!--        app:layout_constraintVertical_bias="0.444" />-->
+    <ImageView
+        android:id="@+id/imagemSemPet"
+        android:layout_width="405dp"
+        android:layout_height="303dp"
+        android:layout_marginTop="65dp"
+        android:src="@drawable/window_cat"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.404" />
 
     <TextView
         android:id="@+id/mensagemSemPet"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="50dp"
+        android:layout_marginTop="50dp"
         android:text="Não existem pets cadastrados no momento :("
         android:textAlignment="center"
         android:textColor="@color/white"
@@ -38,19 +38,7 @@
         app:layout_constraintTop_toBottomOf="@+id/imagemSemPet"
         app:layout_constraintVertical_bias="0.627" />
 
-    <ImageView
-        android:id="@+id/imagemSemPet"
-        android:layout_width="405dp"
-        android:layout_height="303dp"
-        android:src="@drawable/window_cat"
-        android:visibility="invisible"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.404" />
-
-        <ProgressBar
+    <ProgressBar
         android:id="@+id/progressBarHome"
         style="?android:attr/progressBarStyleLarge"
         android:layout_width="wrap_content"
@@ -69,23 +57,42 @@
         android:id="@+id/idRvFilterPets"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:orientation="horizontal"
         android:layout_marginStart="20dp"
+        android:layout_marginTop="0dp"
         android:layout_marginEnd="25dp"
+        android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:listitem="@layout/pets_filter_rv_item" />
 
+    <Spinner
+        android:id="@+id/filterUf"
+        android:layout_width="180dp"
+        android:layout_height="46dp"
+        android:layout_marginTop="40dp"
+        android:layout_marginBottom="50dp"
+        android:background="@drawable/edit_text_bg"
+        android:textColor="@color/mainText"
+        android:textColorHint="@color/mainText"
+        android:theme="@style/SpinnerTheme"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.161"
+        app:layout_constraintWidth_percent=".8" />
+
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/swipeRefreshHome"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginStart="10dp"
+        android:layout_marginTop="190dp"
         android:layout_marginEnd="10dp"
-        android:layout_marginTop="140dp"
-        android:layout_marginBottom="5dp"
+        android:layout_marginBottom="2dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -95,9 +102,9 @@
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/idRvPets"
-            android:layout_marginTop="50dp"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
+            android:layout_marginTop="50dp"
             tools:listitem="@layout/pet_rv_item" />
 
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

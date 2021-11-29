@@ -167,14 +167,10 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
                             .override(200, 200) // resizing
                             .centerCrop()
                             .into(profilePicture);  // imageview object
-
-                    //progressBar.setVisibility(View.INVISIBLE);
                 }
                 else{
                     Toast.makeText(getActivity(),"Você precisa finalizar seu cadastro !",Toast.LENGTH_SHORT).show();
-                    Log.e("Warning_Activity","");
                     redireUserToEditProfile();
-                    //progressBar.setVisibility(View.INVISIBLE);
                 }
             }
 

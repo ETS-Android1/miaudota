@@ -1,4 +1,4 @@
-package com.paulo.miaudota;
+package com.paulo.miaudota.Utils;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -9,7 +9,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -19,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.paulo.miaudota.Models.Pet;
+import com.paulo.miaudota.R;
 
 import java.util.ArrayList;
 import java.util.Random;

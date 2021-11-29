@@ -3,7 +3,6 @@ package com.paulo.miaudota.Controllers;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -19,7 +18,6 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
@@ -28,15 +26,12 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
-import com.google.firebase.database.ValueEventListener;
-import com.paulo.miaudota.CandidaturaRVAdapter;
+import com.paulo.miaudota.Utils.CandidaturaRVAdapter;
 import com.paulo.miaudota.Models.Candidatura;
-import com.paulo.miaudota.Models.Pet;
-import com.paulo.miaudota.Models.User;
-import com.paulo.miaudota.PetRVAdapter;
 import com.paulo.miaudota.R;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 
 public class Candidaturas extends AppCompatActivity implements CandidaturaRVAdapter.CandidaturaClickInterface{
@@ -117,6 +112,8 @@ public class Candidaturas extends AppCompatActivity implements CandidaturaRVAdap
                     imagemSemCandidatura.setVisibility(View.INVISIBLE);
                     mensagemSemCandidatura.setVisibility(View.INVISIBLE);
                 }
+
+                Collections.sort(candidaturaArrayList, (o1, o2) -> o1.getDataCandidatura().compareTo(o2.getDataCandidatura()));
             }
 
             @Override
@@ -215,7 +212,7 @@ public class Candidaturas extends AppCompatActivity implements CandidaturaRVAdap
     @Override
     public void onCandidaturaClick(int position) {
         Candidatura candidaturaModel = candidaturaArrayList.get(position);
-        String texto = "Olá, vi no Miaudota que você tem interesse em adotar o meu pet";
+        String texto = "Olá, vi no Miaudota que você tem interesse em adotar o meu pet, podemos conversar melhor ?";
         String numCelular = "55" +  candidaturaModel.getCelularUsuario();
         String url="https://api.whatsapp.com/send?phone="+ numCelular + "&text=" + texto;
         Intent i = new Intent(Intent.ACTION_VIEW);

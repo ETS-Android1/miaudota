@@ -30,7 +30,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.paulo.miaudota.InputFilterMinMax;
+import com.paulo.miaudota.Utils.InputFilterMinMax;
 import com.paulo.miaudota.Models.Cidade;
 import com.paulo.miaudota.Models.Estado;
 import com.paulo.miaudota.R;
@@ -187,18 +187,6 @@ public class RegisterUser extends AppCompatActivity implements View.OnClickListe
             return;
         }
 
-        if(cpf.isEmpty()){
-            editTextCPF.setError("Campo obrigatório !!");
-            editTextCPF.requestFocus();
-            return;
-        }
-
-        if(validateCPF(cpf) == false){
-            editTextCPF.setError("CPF inválido !!");
-            editTextCPF.requestFocus();
-            return;
-        }
-
         if(email.isEmpty()){
             editTextEmail.setError("Campo obrigatório !!");
             editTextEmail.requestFocus();
@@ -208,6 +196,18 @@ public class RegisterUser extends AppCompatActivity implements View.OnClickListe
         if(!Patterns.EMAIL_ADDRESS.matcher(email).matches()){
             editTextEmail.setError("Por favor digite um email válido!");
             editTextEmail.requestFocus();
+            return;
+        }
+
+        if(cpf.isEmpty()){
+            editTextCPF.setError("Campo obrigatório !!");
+            editTextCPF.requestFocus();
+            return;
+        }
+
+        if(validateCPF(cpf) == false){
+            editTextCPF.setError("CPF inválido !!");
+            editTextCPF.requestFocus();
             return;
         }
 
@@ -369,8 +369,9 @@ public class RegisterUser extends AppCompatActivity implements View.OnClickListe
 
         ArrayList<String> cidadesSpinner = new ArrayList<>();
 
+        String regex = "(?<!^)([A-Z])";
         for(Cidade cidade: cidades){
-            cidadesSpinner.add(cidade.getNome());
+            cidadesSpinner.add(cidade.getNome().replaceAll(regex, " $1"));
         }
 
         cidadesSpinner.add(0,"Cidade");
